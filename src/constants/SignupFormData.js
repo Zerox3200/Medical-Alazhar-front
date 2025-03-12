@@ -1,3 +1,5 @@
+import * as yup from "yup";
+
 // Universities
 const egyptianMedicalUniversities = [
   "Cairo University",
@@ -45,7 +47,7 @@ const egyptianMedicalUniversities = [
   "Military Medical Academy",
 ];
 
-export const facultyList = () => {
+export const facultiesList = () => {
   let list = [];
   for (let university of egyptianMedicalUniversities) {
     list.push({
@@ -58,7 +60,7 @@ export const facultyList = () => {
 };
 
 // Year Of Graduation
-export const graduationYear = () => {
+export const graduationYears = () => {
   let years = [];
   for (let year = 2025; year >= 2000; year--) {
     years.push({ value: year, label: year });
@@ -74,4 +76,75 @@ export const grades = () => {
     theGrades.push({ value: grade, label: grade });
   }
   return theGrades;
+};
+
+export const signupValidationSchema = (selectedIDType) => {
+  return yup
+    .object({
+      fullname: yup
+        .string()
+        .trim()
+        .required("Fullname is required")
+        .matches(
+          /^[A-Za-z-]{2,}(\s[A-Za-z-]{2,}){3,}$/,
+          "Please enter your name as in your national ID"
+        ),
+      orderOfGraduate: yup
+        .number()
+        .required()
+        .positive("Order must be positive")
+        .typeError("Order is required"),
+      facultyIDNumber: yup
+        .number()
+        .required()
+        .positive("Faculty ID must be positive")
+        .typeError("Faculty is required"),
+      idOrPassport:
+        selectedIDType === "nationalID"
+          ? yup
+              .string()
+              .required("National ID is required")
+              .length(17, "National ID must be 14 digits")
+          : yup
+              .string()
+              .required("Passport Number is required")
+              .min(
+                6,
+                "Please enter a valid passport number (6-12 alphanumeric characters)"
+              )
+              .max(
+                12,
+                "Please enter a valid passport number (6-12 alphanumeric characters)"
+              ),
+      nationality: yup.object().required("Nationality is required"),
+      facultyOfGraduation: yup
+        .object()
+        .required("Faculty of graduation is required"),
+      hospital: yup.object().required("Hospital is required"),
+      yearOfGraduation: yup.object().required("Graduation year is required"),
+      grade: yup.object().required("Grade is required"),
+      email: yup.string().email().required("Email is required"),
+      phone: yup
+        .string()
+        .required("Phone is required")
+        .matches(/^\+?[0-9]{7,14}$/, "Phone number is not valid"),
+      password: yup
+        .string()
+        .required("Password is required")
+        .min(6, "Password must be at least 6 characters")
+        .matches(
+          /[A-Z]/,
+          "Password must contain uppercase and lowercase letters."
+        )
+        .matches(
+          /[a-z]/,
+          "Password must contain uppercase and lowercase letters."
+        )
+        .matches(/[1-9]/, "Password must contain at least one number.")
+        .matches(
+          /[!@#$%^&*(),.?"_:{}|<>]/,
+          "Password must contain at least one special character."
+        ),
+    })
+    .required();
 };

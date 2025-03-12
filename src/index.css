@@ -10,6 +10,7 @@
   --color-coral: #ff6f61;
   --color-teal: #2d9c9c;
   --color-emeraldGreen: #4caf50;
+  --color-error: #f44336;
 }
 
 input::-webkit-outer-spin-button,

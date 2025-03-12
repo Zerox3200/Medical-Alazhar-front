@@ -1,37 +1,30 @@
 import React from "react";
-import RoundSelector from "../components/RoundSelector";
-import UnitSelector from "../components/UnitSelector";
-import CaseDatePicker from "../components/CaseDatePicker";
-import SeenAt from "../components/SeenAt";
+import RoundSelector from "../../components/RoundSelector";
+import CaseDatePicker from "../../components/CaseDatePicker";
+import SeenAt from "../../components/SeenAt";
 import Select from "react-select";
-
-const generateEPAGrades = () => {
-  let epa = [];
-  for (let i = 1; i <= 20; i++) {
-    epa.push({ value: i, label: i });
-  }
-  return epa;
-};
 
 const MainInfo = () => {
   return (
     <>
-      <h3 className="col-span-full text-xl font-semibold text-mediumGray mb-4 ">
+      <h3 className="col-span-full text-xl font-semibold text-mediumGray mb-4">
         Main Information
       </h3>
       {/* Intern Round */}
       <div className="col-span-2">
-        <label className="text-sm font-medium block mb-2">
-          Choose your round
-        </label>
         <RoundSelector />
       </div>
-      {/* Intern Unit */}
+      {/* Gender */}
       <div className="col-span-2">
-        <label className="text-sm font-medium block mb-2">
-          Choose your unit
+        <label htmlFor="patient-age" className="text-sm font-medium block mb-2">
+          Patient Gender
         </label>
-        <UnitSelector />
+        <Select
+          options={[
+            { value: "Male", label: "Male" },
+            { value: "Female", label: "Female" },
+          ]}
+        />
       </div>
 
       {/* Patient serial */}
@@ -50,6 +43,7 @@ const MainInfo = () => {
           min={0}
         />
       </div>
+
       {/* Age */}
       <div className="col-span-2">
         <label htmlFor="patient-age" className="text-sm font-medium block mb-2">
@@ -63,18 +57,7 @@ const MainInfo = () => {
           min={0}
         />
       </div>
-      {/* Gender */}
-      <div className="col-span-2">
-        <label htmlFor="patient-age" className="text-sm font-medium block mb-2">
-          Patient Gender
-        </label>
-        <Select
-          options={[
-            { value: "Male", label: "Male" },
-            { value: "Female", label: "Female" },
-          ]}
-        />
-      </div>
+
       {/* Seen At */}
       <div className="col-span-2">
         <label htmlFor="seen-at" className="text-sm font-medium block mb-2">
@@ -88,13 +71,6 @@ const MainInfo = () => {
           Date
         </label>
         <CaseDatePicker />
-      </div>
-      {/* Case Summary */}
-      <div className="col-span-2">
-        <label htmlFor="main-theme" className="text-sm font-medium block mb-2">
-          What EPA you have learned?
-        </label>
-        <Select options={generateEPAGrades()} />
       </div>
     </>
   );

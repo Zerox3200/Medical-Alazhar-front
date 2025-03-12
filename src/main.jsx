@@ -21,6 +21,10 @@ import ContactUs from "./pages/ContactUs.jsx";
 
 // Not Found Page
 import NotFound from "./pages/NotFound.jsx";
+import Procedures from "./pages/record_training/procedures/index.jsx";
+import AddCase from "./pages/record_training/cases/add-case/AddCase.jsx";
+import CasesSummary from "./pages/record_training/cases/cases-summary/CasesSummary.jsx";
+import Profile from "./pages/profile/Index.jsx";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
@@ -29,7 +33,18 @@ createRoot(document.getElementById("root")).render(
         <Route path="/" element={<MainLayout />}>
           <Route path="*" element={<NotFound />} />
           <Route path="/" index element={<Home />} />
-          <Route path="/record_training" element={<RecordTraining />} />
+          <Route path="/profile" element={<Profile />} />
+          <Route path="/record_training" element={<RecordTraining />}>
+            <Route path="/record_training/cases" element={<CasesSummary />} />
+            <Route
+              path="/record_training/cases/add-case"
+              element={<AddCase />}
+            />
+            <Route
+              path="/record_training/procedures"
+              element={<Procedures />}
+            />
+          </Route>
           <Route path="assessment" element={<Assessment />} />
           <Route path="courses" element={<Courses />} />
           <Route

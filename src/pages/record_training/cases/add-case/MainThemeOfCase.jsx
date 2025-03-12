@@ -1,74 +1,65 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Select from "react-select";
+import { CasesProvider, useCasesContext } from "../CasesProvider";
 
 // Dropdown options
-const caseTypeOptions = [
-  { value: "wounds_and_ulcers", label: "Wounds and Ulcers" },
-  {
-    value: "swellings_and_inguino-scrotal_swellings",
-    label: "Swellings and inguino-scrotal swellings",
-  },
-  {
-    value: "common_neck_swellings",
-    label: "Common neck swellings (thyroid, lymph nodes)",
-  },
-  {
-    value: "common_infections",
-    label:
-      "Common infections (e.g., peri-anal infection, breast infection, hand infection, face infection, erysipelas)",
-  },
-  {
-    value: "burns",
-    label: "Burns",
-  },
-  {
-    value: "anal_disorders",
-    label: "Anal Disorders",
-  },
-  {
-    value: "hernias",
-    label: "Hernias",
-  },
-  {
-    value: "breast_masses",
-    label: "Breast Masses",
-  },
-  {
-    value: "janudice",
-    label: "Jaundice",
-  },
-  {
-    value: "acute_abdomen",
-    label: "Acute abdomen",
-  },
-  {
-    value: "varicose_veins",
-    label: "Varicose Veins",
-  },
-  {
-    value: "ischemic_limb",
-    label: "Ischemic Limb",
-  },
-  {
-    value: "diabetic_foot",
-    label: "Diabetic Foot",
-  },
-  {
-    value: "dyspepsia",
-    label: "Dyspepsia",
-  },
-];
-
-const procedureOptions = [
-  { value: "wound_dressing", label: "Wound Dressing" },
-  {
-    value: "wound_stitching",
-    label: "Wound Stitching and Removal of Stitches",
-  },
-  { value: "physical_examination", label: "Physical examination" },
-  { value: "justify_the_diagnosis ", label: "Justify the diagnosis " },
-  { value: "abscess_drainage ", label: "Abscess Drainage " },
-];
+// const caseTypeOptions = [
+//   { value: "wounds_and_ulcers", label: "Wounds and Ulcers" },
+//   {
+//     value: "swellings_and_inguino-scrotal_swellings",
+//     label: "Swellings and inguino-scrotal swellings",
+//   },
+//   {
+//     value: "common_neck_swellings",
+//     label: "Common neck swellings (thyroid, lymph nodes)",
+//   },
+//   {
+//     value: "common_infections",
+//     label:
+//       "Common infections (e.g., peri-anal infection, breast infection, hand infection, face infection, erysipelas)",
+//   },
+//   {
+//     value: "burns",
+//     label: "Burns",
+//   },
+//   {
+//     value: "anal_disorders",
+//     label: "Anal Disorders",
+//   },
+//   {
+//     value: "hernias",
+//     label: "Hernias",
+//   },
+//   {
+//     value: "breast_masses",
+//     label: "Breast Masses",
+//   },
+//   {
+//     value: "janudice",
+//     label: "Jaundice",
+//   },
+//   {
+//     value: "acute_abdomen",
+//     label: "Acute abdomen",
+//   },
+//   {
+//     value: "varicose_veins",
+//     label: "Varicose Veins",
+//   },
+//   {
+//     value: "ischemic_limb",
+//     label: "Ischemic Limb",
+//   },
+//   {
+//     value: "diabetic_foot",
+//     label: "Diabetic Foot",
+//   },
+//   {
+//     value: "dyspepsia",
+//     label: "Dyspepsia",
+//   },
+// ];
+// const caseTypeOptions = [];
 
 const epaOptions = Array.from({ length: 20 }, (_, i) => ({
   value: `EPA ${i + 1}`,
@@ -81,11 +72,21 @@ const expectedLevelOptions = [
 ];
 
 const MainThemeOfCase = () => {
-  const [caseType, setCaseType] = useState(null);
-  const [procedure, setProcedure] = useState(null);
+  const [caseType, setCaseType] = useState("");
+
+  console.log("caseType", caseType);
   const [epas, setEpas] = useState([]);
   const [expectedLevel, setExpectedLevel] = useState(null);
   const [frequency, setFrequency] = useState();
+
+  // Consume Cases Context
+  const { filteredCases, selectedRound } = useCasesContext();
+
+  useEffect(() => {
+    if (selectedRound) {
+      setCaseType("");
+    }
+  }, [selectedRound]);
 
   return (
     <div className="col-span-full grid grid-cols-4 gap-6 items-center">
@@ -97,21 +98,11 @@ const MainThemeOfCase = () => {
       <div className="col-span-full">
         <label className="block text-sm font-medium mb-2">Case Type</label>
         <Select
-          options={caseTypeOptions}
+          options={filteredCases}
           value={caseType}
+          isOptionSelected={{ caseType }}
           onChange={setCaseType}
           placeholder="Select Case Type"
-        />
-      </div>
-
-      {/* Procedure */}
-      <div className="col-span-full">
-        <label className="block text-sm font-medium mb-2">Procedure</label>
-        <Select
-          options={procedureOptions}
-          value={procedure}
-          onChange={setProcedure}
-          placeholder="Select Procedure"
         />
       </div>
 

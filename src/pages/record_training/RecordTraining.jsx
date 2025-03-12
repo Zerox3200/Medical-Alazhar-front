@@ -1,6 +1,6 @@
 import React from "react";
 import RecordTrainingNavbar from "./components/RecordTrainingNavbar";
-import CasesTab from "./CasesTab";
+import { Outlet } from "react-router";
 
 const RecordTraining = () => {
   return (
@@ -9,7 +9,8 @@ const RecordTraining = () => {
         <RecordTrainingNavbar />
       </div>
       <div className="col-span-5">
-        <CasesTab />
+        {/* <p>Cases Summary</p> */}
+        <Outlet />
       </div>
     </div>
   );
