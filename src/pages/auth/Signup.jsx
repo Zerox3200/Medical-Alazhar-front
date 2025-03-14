@@ -1,4 +1,5 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
+import { FaEye, FaEyeSlash } from "react-icons/fa6";
 import countryList from "react-select-country-list";
 import { Controller, useForm } from "react-hook-form";
 import { Link } from "react-router";
@@ -14,6 +15,7 @@ import SelectBox from "./components/SelectBox";
 
 const Signup = () => {
   const [selectedIDType, setSelectedIDType] = useState("nationalID");
+  const [visiblePassword, setVisiblePassword] = useState(false);
 
   const countryListOptions = useMemo(() => countryList().getData(), []);
 
@@ -37,14 +39,98 @@ const Signup = () => {
     handleSubmit,
     control,
     setValue,
-    formState: { errors },
+    setError,
+    reset,
+    formState: { errors, isSubmitSuccessful, isLoading, isSubmitting },
   } = useForm({
     resolver: yupResolver(signupValidationSchema(selectedIDType)),
   });
-  const onSubmit = (data) => console.log(data);
 
+  const onSubmit = async ({
+    fullname,
+    facultyIDNumber,
+    orderOfGraduate,
+    idOrPassportNumber,
+    email,
+    phone,
+    password,
+    grade,
+    facultyOfGraduation,
+    hospital,
+    nationality,
+    yearOfGraduation,
+  }) => {
+    try {
+      const response = await fetch("http://localhost:3000/api/v1/auth/signup", {
+        method: "POST",
+        body: JSON.stringify({
+          fullname,
+          facultyIDNumber,
+          orderOfGraduate,
+          idOrPassport: {
+            type: selectedIDType,
+            number: +idOrPassportNumber.replaceAll("-", ""),
+          },
+          email,
+          phone,
+          password,
+          grade: grade.value,
+          facultyOfGraduation: facultyOfGraduation.value,
+          hospital: hospital.value,
+          nationality: nationality.value,
+          yearOfGraduation: yearOfGraduation.value,
+        }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      const result = await response.json();
+
+      if (!response.ok) {
+        // Map backend errors to form fields
+        Object.keys(result.errors).forEach((field) => {
+          setError(result.errors[field]?.path, {
+            type: "manual",
+            message: result.errors[field]?.msg,
+          });
+        });
+        return;
+      }
+    } catch (error) {
+      setError("general", {
+        type: "manual",
+        error: error,
+        message: "Network error, please try again",
+      });
+    }
+  };
+
+  // Reset form fields after Successful submission
+  useEffect(() => {
+    if (isSubmitSuccessful) {
+      reset({
+        fullname: "",
+        facultyIDNumber: "",
+        orderOfGraduate: "",
+        idOrPassportNumber: "",
+        email: "",
+        phone: "",
+        password: "",
+        grade: null,
+        facultyOfGraduation: null,
+        hospital: null,
+        nationality: null,
+        yearOfGraduation: null,
+      });
+    }
+  }, [reset, isSubmitSuccessful, setValue]);
+  console.log(errors);
+  console.log(errors.manual);
   return (
     <div className="bg-crispWhite md:w-2/3 lg:w-5/8 p-12">
+      {errors.general && (
+        <p className="text-red-500 text-sm">{alert(errors.general.message)}</p>
+      )}
       <h1 className="text-teal text-4xl mb-8 font-semibold">
         Create Your Account to Begin
       </h1>
@@ -57,6 +143,11 @@ const Signup = () => {
               {...register("fullname")}
               error={errors.fullname?.message}
             />
+            {errors && (
+              <p className="text-red-500 text-sm">
+                {errors.idOrPassport?.fullname?.message}
+              </p>
+            )}
           </div>
           <div className="col-span-1 flex justify-between items-start gap-x-2">
             <Input
@@ -65,12 +156,22 @@ const Signup = () => {
               {...register("orderOfGraduate")}
               error={errors.orderOfGraduate?.message}
             />
+            {errors && (
+              <p className="text-red-500 text-sm">
+                {errors.idOrPassport?.orderOfGraduate?.message}
+              </p>
+            )}
             <Input
               placeholder="Faculty ID Number"
               type="number"
               {...register("facultyIDNumber")}
               error={errors.facultyIDNumber?.message}
             />
+            {errors && (
+              <p className="text-red-500 text-sm">
+                {errors.idOrPassport?.facultyIDNumber?.message}
+              </p>
+            )}
           </div>
         </div>
         {/* Nation ID / Passport Number */}
@@ -87,9 +188,11 @@ const Signup = () => {
                 value="nationalID"
                 checked={selectedIDType === "nationalID"}
                 onChange={() => {
-                  setValue("idOrPassport", "");
-                  errors.idOrPassport.message = "";
+                  setValue("idOrPassportNumber", "");
                   setSelectedIDType("nationalID");
+                  if (errors.idOrPassportNumber) {
+                    errors.idOrPassportNumber.message = "";
+                  }
                 }}
               />
             </div>
@@ -104,12 +207,19 @@ const Signup = () => {
                 checked={selectedIDType === "passport"}
                 value="passport"
                 onChange={() => {
-                  setValue("idOrPassport", "");
-                  errors.idOrPassport.message = "";
+                  setValue("idOrPassportNumber", "");
                   setSelectedIDType("passport");
+                  if (errors.idOrPassportNumber) {
+                    errors.idOrPassportNumber.message = "";
+                  }
                 }}
               />
             </div>
+            {errors && (
+              <p className="text-red-500 text-sm">
+                {errors.idOrPassport?.type?.message}
+              </p>
+            )}
           </div>
 
           <Input
@@ -121,9 +231,14 @@ const Signup = () => {
             }`}
             type="text"
             maxLength={selectedIDType === "nationalID" ? 17 : 12}
-            {...register("idOrPassport")}
-            error={errors.idOrPassport?.message}
+            {...register("idOrPassportNumber")}
+            error={errors.idOrPassportNumber?.message}
           />
+          {errors && (
+            <p className="text-red-500 text-sm">
+              {errors.idOrPassport?.number?.message}
+            </p>
+          )}
         </div>
 
         <div className="flex justify-between items-start gap-x-2">
@@ -141,6 +256,11 @@ const Signup = () => {
                 />
               )}
             />
+            {errors && (
+              <p className="text-red-500 text-sm">
+                {errors.idOrPassport?.nationality?.message}
+              </p>
+            )}
           </div>
 
           {/* Faculty of Graduation */}
@@ -157,6 +277,11 @@ const Signup = () => {
                 />
               )}
             />
+            {errors && (
+              <p className="text-red-500 text-sm">
+                {errors.idOrPassport?.facultyOfGraduation?.message}
+              </p>
+            )}
           </div>
         </div>
         <div className="flex justify-between items-start gap-x-2">
@@ -169,14 +294,19 @@ const Signup = () => {
                 <SelectBox
                   {...field}
                   options={[
-                    { value: "sayed_galal", label: "Sayed Galal Hospital" },
-                    { value: "alhussein", label: "Al-Hussein Hospital" },
+                    { value: "Sayed Galal", label: "Sayed Galal Hospital" },
+                    { value: "Al-Hussein", label: "Al-Hussein Hospital" },
                   ]}
                   placeholder="Hospital"
                   error={errors.hospital}
                 />
               )}
             />
+            {errors && (
+              <p className="text-red-500 text-sm">
+                {errors.idOrPassport?.hospital?.message}
+              </p>
+            )}
           </div>
           <div className="w-full">
             {/* Year of graduation */}
@@ -192,6 +322,11 @@ const Signup = () => {
                 />
               )}
             />
+            {errors && (
+              <p className="text-red-500 text-sm">
+                {errors.idOrPassport?.yearOfGraduation?.message}
+              </p>
+            )}
           </div>
           <div className="w-full">
             {/* Grade */}
@@ -207,6 +342,11 @@ const Signup = () => {
                 />
               )}
             />
+            {errors && (
+              <p className="text-red-500 text-sm">
+                {errors.idOrPassport?.grade?.message}
+              </p>
+            )}
           </div>
         </div>
 
@@ -217,26 +357,52 @@ const Signup = () => {
             {...register("email")}
             error={errors.email?.message}
           />
+          {errors && (
+            <p className="text-red-500 text-sm">
+              {errors.idOrPassport?.email?.message}
+            </p>
+          )}
           <Input
             placeholder="Phone Number"
             type="tel"
             {...register("phone")}
             error={errors.phone?.message}
           />
+          {errors && (
+            <p className="text-red-500 text-sm">
+              {errors.idOrPassport?.phone?.message}
+            </p>
+          )}
         </div>
-        <div>
+        <div className="relative">
           <Input
             placeholder="Password"
-            type="text"
+            type={!visiblePassword ? "password" : "text"}
             {...register("password")}
             error={errors.password?.message}
           />
+          <p
+            className="absolute right-2 top-3 cursor-pointer text-lg"
+            onClick={() => setVisiblePassword(!visiblePassword)}
+          >
+            {visiblePassword ? <FaEyeSlash /> : <FaEye />}
+          </p>
+          {errors && (
+            <p className="text-red-500 text-sm">
+              {errors.idOrPassport?.password?.message}
+            </p>
+          )}
         </div>
 
         <div className="w-full mt-2">
           <button
             type="submit"
-            className="w-full cursor-pointer bg-deepBlue text-crispWhite p-2 rounded-md"
+            className={`w-full bg-deepBlue text-crispWhite p-2 rounded-md ${
+              isLoading || isSubmitting
+                ? "bg-lightBlue cursor-not-allowed"
+                : "cursor-pointer"
+            }`}
+            disabled={isLoading || isSubmitting}
           >
             Signup
           </button>

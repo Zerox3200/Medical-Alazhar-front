@@ -13,6 +13,7 @@ const SelectBox = ({
 
   const changeHandler = (value) => {
     setValue(value);
+    console.log("additionParams", value);
   };
 
   return (

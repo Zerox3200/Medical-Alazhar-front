@@ -99,7 +99,7 @@ export const signupValidationSchema = (selectedIDType) => {
         .required()
         .positive("Faculty ID must be positive")
         .typeError("Faculty is required"),
-      idOrPassport:
+      idOrPassportNumber:
         selectedIDType === "nationalID"
           ? yup
               .string()
