@@ -1,6 +1,8 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Link, NavLink } from "react-router";
+import { AuthContext } from "../context/AuthContext";
 import logo from "../assets/images/logo.jpg";
+import UserProfile from "./UserProfile";
 
 const navLinks = [
   {
@@ -61,6 +63,8 @@ const navLinks = [
 // };
 
 const Navbar = () => {
+  const { authState } = useContext(AuthContext);
+
   return (
     <div className="px-8 p-2 fixed z-50 bg-teal text-crispWhite w-full min-h-[80px] flex justify-between items-center">
       <h2 className="font-semibold text-2xl">
@@ -70,7 +74,7 @@ const Navbar = () => {
       </h2>
 
       {/* Links */}
-      <div>
+      {authState.isLoggedIn && authState.accessToken && (
         <ul className="flex gap-8 text-softGray">
           {navLinks.map((navLink, i) => {
             return (
@@ -89,18 +93,24 @@ const Navbar = () => {
             );
           })}
         </ul>
-      </div>
+      )}
 
       {/* Authentication Links */}
-      <div className="flex">
-        <Link to="/auth/login" className="hover:underline">
-          Login
-        </Link>
-        <p className="mx-2">/</p>
-        <Link to="/auth/signup" className="hover:underline">
-          Signup
-        </Link>
-      </div>
+      {authState.isLoggedIn && authState.accessToken ? (
+        <div>
+          <UserProfile />
+        </div>
+      ) : (
+        <div className="flex">
+          <Link to="/auth/login" className="hover:underline">
+            Login
+          </Link>
+          <p className="mx-2">/</p>
+          <Link to="/auth/signup" className="hover:underline">
+            Signup
+          </Link>
+        </div>
+      )}
     </div>
   );
 };

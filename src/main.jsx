@@ -3,7 +3,7 @@ import { createRoot } from "react-dom/client";
 import { BrowserRouter, Route, Routes } from "react-router";
 
 import "./index.css";
-import Home from "./Home.jsx";
+import Home from "./pages/Home.jsx";
 
 // Auth Routes
 import AuthLayout from "./layouts/AuthLayout.jsx";
@@ -24,42 +24,55 @@ import NotFound from "./pages/NotFound.jsx";
 import Procedures from "./pages/record_training/procedures/index.jsx";
 import AddCase from "./pages/record_training/cases/add-case/AddCase.jsx";
 import CasesSummary from "./pages/record_training/cases/cases-summary/CasesSummary.jsx";
-import Profile from "./pages/profile/Index.jsx";
+import Profile from "./pages/profile/Profile.jsx";
+
+import { AuthProvider } from "./context/AuthContextProvider.jsx";
+
+import ProtectedRoute from "./utils/ProtectedRoute.jsx";
+import ResetPassword from "./pages/auth/ResetPassword.jsx";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<MainLayout />}>
-          <Route path="*" element={<NotFound />} />
-          <Route path="/" index element={<Home />} />
-          <Route path="/profile" element={<Profile />} />
-          <Route path="/record_training" element={<RecordTraining />}>
-            <Route path="/record_training/cases" element={<CasesSummary />} />
-            <Route
-              path="/record_training/cases/add-case"
-              element={<AddCase />}
-            />
-            <Route
-              path="/record_training/procedures"
-              element={<Procedures />}
-            />
+    <AuthProvider>
+      <BrowserRouter>
+        <Routes>
+          <Route element={<ProtectedRoute />}>
+            <Route path="/" element={<MainLayout />}>
+              <Route path="*" element={<NotFound />} />
+              <Route path="/" index element={<Home />} />
+              <Route path="/profile" element={<Profile />} />
+              <Route path="/record_training" element={<RecordTraining />}>
+                <Route
+                  path="/record_training/cases"
+                  element={<CasesSummary />}
+                />
+                <Route
+                  path="/record_training/cases/add-case"
+                  element={<AddCase />}
+                />
+                <Route
+                  path="/record_training/procedures"
+                  element={<Procedures />}
+                />
+              </Route>
+              <Route path="assessment" element={<Assessment />} />
+              <Route path="courses" element={<Courses />} />
+              <Route
+                path="end_round_reflections"
+                element={<EndRoundReflections />}
+              />
+              <Route path="courses" element={<Courses />} />
+              <Route path="portfolio" element={<Portfolio />} />
+              <Route path="contact_us" element={<ContactUs />} />
+            </Route>
           </Route>
-          <Route path="assessment" element={<Assessment />} />
-          <Route path="courses" element={<Courses />} />
-          <Route
-            path="end_round_reflections"
-            element={<EndRoundReflections />}
-          />
-          <Route path="courses" element={<Courses />} />
-          <Route path="portfolio" element={<Portfolio />} />
-          <Route path="contact_us" element={<ContactUs />} />
-        </Route>
-        <Route path="auth" element={<AuthLayout />}>
-          <Route path="signup" element={<Signup />} />
-          <Route path="login" element={<Login />} />
-        </Route>
-      </Routes>
-    </BrowserRouter>
+          <Route path="auth" element={<AuthLayout />}>
+            <Route path="signup" element={<Signup />} />
+            <Route path="login" element={<Login />} />
+            <Route path="reset" element={<ResetPassword />} />
+          </Route>
+        </Routes>
+      </BrowserRouter>
+    </AuthProvider>
   </StrictMode>
 );

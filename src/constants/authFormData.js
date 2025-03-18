@@ -148,3 +148,12 @@ export const signupValidationSchema = (selectedIDType) => {
     })
     .required();
 };
+
+export const loginValidationSchema = () => {
+  return yup
+    .object({
+      email: yup.string().email().required("Email is required"),
+      password: yup.string().required("Password is required"),
+    })
+    .required();
+};

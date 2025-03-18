@@ -14,8 +14,8 @@ const NotFound = () => {
         </h2>
 
         <p>
-          <Link className="bg-teal text-crispWhite text-lg py-1 px-3 rounded-md">
-            Go Homepage
+          <Link className=" text-coral text-lg hover:underline" to="/">
+            Go to home
           </Link>
         </p>
       </div>

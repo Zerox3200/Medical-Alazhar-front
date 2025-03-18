@@ -1,8 +1,9 @@
 import React, { useState, useMemo, useEffect } from "react";
+import { ToastContainer, toast } from "react-toastify";
 import { FaEye, FaEyeSlash } from "react-icons/fa6";
 import countryList from "react-select-country-list";
 import { Controller, useForm } from "react-hook-form";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 import Input from "./components/Input";
 import { yupResolver } from "@hookform/resolvers/yup";
 import {
@@ -10,12 +11,14 @@ import {
   grades,
   graduationYears,
   signupValidationSchema,
-} from "../../constants/signupFormData";
+} from "../../constants/authFormData";
 import SelectBox from "./components/SelectBox";
 
 const Signup = () => {
   const [selectedIDType, setSelectedIDType] = useState("nationalID");
   const [visiblePassword, setVisiblePassword] = useState(false);
+
+  const navigate = useNavigate();
 
   const countryListOptions = useMemo(() => countryList().getData(), []);
 
@@ -86,8 +89,14 @@ const Signup = () => {
       });
       const result = await response.json();
 
+      if (response.ok) {
+        toast.success(result?.message);
+        setTimeout(() => navigate("/auth/login"), 2000);
+      } else {
+        toast.error("Signup failed. Please check your details.");
+      }
+
       if (!response.ok) {
-        // Map backend errors to form fields
         Object.keys(result.errors).forEach((field) => {
           setError(result.errors[field]?.path, {
             type: "manual",
@@ -100,7 +109,7 @@ const Signup = () => {
       setError("general", {
         type: "manual",
         error: error,
-        message: "Network error, please try again",
+        message: toast.error("Network error, please try again."),
       });
     }
   };
@@ -123,20 +132,22 @@ const Signup = () => {
         yearOfGraduation: null,
       });
     }
-  }, [reset, isSubmitSuccessful, setValue]);
-  console.log(errors);
-  console.log(errors.manual);
+  }, [reset, isSubmitSuccessful, setValue, navigate]);
+
   return (
-    <div className="bg-crispWhite md:w-2/3 lg:w-5/8 p-12">
-      {errors.general && (
-        <p className="text-red-500 text-sm">{alert(errors.general.message)}</p>
+    <div className="bg-crispWhite w-full md:w-2/3 lg:w-4/6 p-6 md:p-12">
+      <ToastContainer />
+      {errors?.general && (
+        <p className="text-red-500 text-sm">
+          {toast(errors?.general?.message)}
+        </p>
       )}
-      <h1 className="text-teal text-4xl mb-8 font-semibold">
+      <h1 className="text-teal text-2xl md:text-4xl mb-6 md:mb-8 font-semibold">
         Create Your Account to Begin
       </h1>
       <div className="h-[1px] w-full bg-mediumGray my-8"></div>
       <form className="" onSubmit={handleSubmit(onSubmit)}>
-        <div className="grid grid-cols-2 justify-between items-start gap-x-2">
+        <div className="grid grid-cols-2 justify-between items-start gap-4">
           <div className="col-span-1">
             <Input
               placeholder="Name in English"
@@ -149,7 +160,7 @@ const Signup = () => {
               </p>
             )}
           </div>
-          <div className="col-span-1 flex justify-between items-start gap-x-2">
+          <div className="col-span-1 flex justify-between items-start">
             <Input
               placeholder="Order of graduate"
               type="Number"
@@ -161,6 +172,7 @@ const Signup = () => {
                 {errors.idOrPassport?.orderOfGraduate?.message}
               </p>
             )}
+            <div className="mx-2"></div>
             <Input
               placeholder="Faculty ID Number"
               type="number"
@@ -241,7 +253,7 @@ const Signup = () => {
           )}
         </div>
 
-        <div className="flex justify-between items-start gap-x-2">
+        <div className="flex justify-between items-start gap-4">
           {/* Nationality */}
           <div className="w-full">
             <Controller
@@ -284,7 +296,7 @@ const Signup = () => {
             )}
           </div>
         </div>
-        <div className="flex justify-between items-start gap-x-2">
+        <div className="flex justify-between items-start gap-4">
           {/* Hospital */}
           <div className="w-full">
             <Controller
@@ -350,7 +362,7 @@ const Signup = () => {
           </div>
         </div>
 
-        <div className="flex justify-between items-start gap-x-2">
+        <div className="flex justify-between items-start">
           <Input
             placeholder="Email"
             type="email"
@@ -362,6 +374,7 @@ const Signup = () => {
               {errors.idOrPassport?.email?.message}
             </p>
           )}
+          <div className="mx-2"></div>
           <Input
             placeholder="Phone Number"
             type="tel"
@@ -382,7 +395,7 @@ const Signup = () => {
             error={errors.password?.message}
           />
           <p
-            className="absolute right-2 top-3 cursor-pointer text-lg"
+            className="absolute right-2 top-3 cursor-pointer text-lg text-mediumGray/80"
             onClick={() => setVisiblePassword(!visiblePassword)}
           >
             {visiblePassword ? <FaEyeSlash /> : <FaEye />}
@@ -394,10 +407,10 @@ const Signup = () => {
           )}
         </div>
 
-        <div className="w-full mt-2">
+        <div className="w-full mt-6">
           <button
             type="submit"
-            className={`w-full bg-deepBlue text-crispWhite p-2 rounded-md ${
+            className={`w-full transition-colors duration-200 bg-deepBlue hover:bg-teal text-crispWhite p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-teal ${
               isLoading || isSubmitting
                 ? "bg-lightBlue cursor-not-allowed"
                 : "cursor-pointer"
