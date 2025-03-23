@@ -9,8 +9,6 @@ const Home = () => {
   const date = new Date();
   const today = date.toDateString();
 
-  console.log("username", username);
-
   return (
     <div className="p-6">
       {/* Personalized Greeting */}

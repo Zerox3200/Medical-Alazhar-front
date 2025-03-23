@@ -1,24 +1,25 @@
 import React, { useState, useMemo, useEffect } from "react";
-import { ToastContainer, toast } from "react-toastify";
+import { ToastContainer } from "react-toastify";
 import { FaEye, FaEyeSlash } from "react-icons/fa6";
 import countryList from "react-select-country-list";
 import { Controller, useForm } from "react-hook-form";
-import { Link, useNavigate } from "react-router";
-import Input from "./components/Input";
+import { Link } from "react-router";
+import Input from "../components/Input";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { useInternSignupMutation } from "../../../services/api/apiSlice";
 import {
   facultiesList,
   grades,
   graduationYears,
-  signupValidationSchema,
-} from "../../constants/authFormData";
-import SelectBox from "./components/SelectBox";
+  internSignupValidationSchema,
+} from "../../../constants/authFormData";
+import SelectBox from "../components/SelectBox";
 
-const Signup = () => {
+const InternSignupForm = () => {
+  const [internSignup] = useInternSignupMutation();
+
   const [selectedIDType, setSelectedIDType] = useState("nationalID");
   const [visiblePassword, setVisiblePassword] = useState(false);
-
-  const navigate = useNavigate();
 
   const countryListOptions = useMemo(() => countryList().getData(), []);
 
@@ -46,7 +47,7 @@ const Signup = () => {
     reset,
     formState: { errors, isSubmitSuccessful, isLoading, isSubmitting },
   } = useForm({
-    resolver: yupResolver(signupValidationSchema(selectedIDType)),
+    resolver: yupResolver(internSignupValidationSchema(selectedIDType)),
   });
 
   const onSubmit = async ({
@@ -64,52 +65,29 @@ const Signup = () => {
     yearOfGraduation,
   }) => {
     try {
-      const response = await fetch("http://localhost:3000/api/v1/auth/signup", {
-        method: "POST",
-        body: JSON.stringify({
-          fullname,
-          facultyIDNumber,
-          orderOfGraduate,
-          idOrPassport: {
-            type: selectedIDType,
-            number: +idOrPassportNumber.replaceAll("-", ""),
-          },
-          email,
-          phone,
-          password,
-          grade: grade.value,
-          facultyOfGraduation: facultyOfGraduation.value,
-          hospital: hospital.value,
-          nationality: nationality.value,
-          yearOfGraduation: yearOfGraduation.value,
-        }),
-        headers: {
-          "Content-Type": "application/json",
+      await internSignup({
+        fullname,
+        facultyIDNumber,
+        orderOfGraduate,
+        idOrPassport: {
+          type: selectedIDType,
+          number: +idOrPassportNumber.replaceAll("-", ""),
         },
-      });
-      const result = await response.json();
-
-      if (response.ok) {
-        toast.success(result?.message);
-        setTimeout(() => navigate("/auth/login"), 2000);
-      } else {
-        toast.error("Signup failed. Please check your details.");
-      }
-
-      if (!response.ok) {
-        Object.keys(result.errors).forEach((field) => {
-          setError(result.errors[field]?.path, {
-            type: "manual",
-            message: result.errors[field]?.msg,
-          });
-        });
-        return;
-      }
+        email,
+        phone: "+20" + phone,
+        password,
+        grade: grade.value,
+        facultyOfGraduation: facultyOfGraduation.value,
+        hospital: hospital.value,
+        nationality: nationality.value,
+        yearOfGraduation: yearOfGraduation.value,
+      }).unwrap();
     } catch (error) {
-      setError("general", {
-        type: "manual",
-        error: error,
-        message: toast.error("Network error, please try again."),
+      Object.keys(error.data?.errors).forEach((field) => {
+        setError(error.data?.errors[field]?.path, {
+          type: "manual",
+          message: error.data?.errors[field]?.msg,
+        });
       });
     }
   };
@@ -132,20 +110,12 @@ const Signup = () => {
         yearOfGraduation: null,
       });
     }
-  }, [reset, isSubmitSuccessful, setValue, navigate]);
+  }, [reset, isSubmitSuccessful, setValue]);
 
   return (
-    <div className="bg-crispWhite w-full md:w-2/3 lg:w-4/6 p-6 md:p-12">
-      <ToastContainer />
-      {errors?.general && (
-        <p className="text-red-500 text-sm">
-          {toast(errors?.general?.message)}
-        </p>
-      )}
-      <h1 className="text-teal text-2xl md:text-4xl mb-6 md:mb-8 font-semibold">
-        Create Your Account to Begin
-      </h1>
-      <div className="h-[1px] w-full bg-mediumGray my-8"></div>
+    <div>
+      <ToastContainer position="bottom-left" />
+
       <form className="" onSubmit={handleSubmit(onSubmit)}>
         <div className="grid grid-cols-2 justify-between items-start gap-4">
           <div className="col-span-1">
@@ -163,7 +133,7 @@ const Signup = () => {
           <div className="col-span-1 flex justify-between items-start">
             <Input
               placeholder="Order of graduate"
-              type="Number"
+              type="number"
               {...register("orderOfGraduate")}
               error={errors.orderOfGraduate?.message}
             />
@@ -362,30 +332,44 @@ const Signup = () => {
           </div>
         </div>
 
-        <div className="flex justify-between items-start">
-          <Input
-            placeholder="Email"
-            type="email"
-            {...register("email")}
-            error={errors.email?.message}
-          />
-          {errors && (
-            <p className="text-red-500 text-sm">
-              {errors.idOrPassport?.email?.message}
+        <div className="grid grid-cols-2 gap-3">
+          <div className="col-span-1">
+            <Input
+              placeholder="Email"
+              type="email"
+              {...register("email")}
+              error={errors.email?.message}
+            />
+            {errors && (
+              <p className="text-red-500 text-sm">
+                {errors.idOrPassport?.email?.message}
+              </p>
+            )}
+          </div>
+
+          <div className="relative col-span-1">
+            <p className="absolute w-fit left-0 top-2 bg-mediumGray/30 rounded-l-sm border-1 border-mediumGray/30 p-2 text-mediumGray">
+              +20
             </p>
-          )}
-          <div className="mx-2"></div>
-          <Input
-            placeholder="Phone Number"
-            type="tel"
-            {...register("phone")}
-            error={errors.phone?.message}
-          />
-          {errors && (
-            <p className="text-red-500 text-sm">
-              {errors.idOrPassport?.phone?.message}
-            </p>
-          )}
+            <Input
+              customStyle="indent-12"
+              placeholder="Phone Number"
+              type="tel"
+              {...register("phone", {
+                required: "Phone number is required",
+                pattern: {
+                  value: /^01[0-2,5-5]\d{8}$/,
+                  message: "Invalid Egyptian mobile number (e.g., 0101234567)",
+                },
+              })}
+              error={errors.phone?.message}
+            />
+            {errors && (
+              <p className="text-red-500 text-sm">
+                {errors.idOrPassport?.phone?.message}
+              </p>
+            )}
+          </div>
         </div>
         <div className="relative">
           <Input
@@ -410,10 +394,10 @@ const Signup = () => {
         <div className="w-full mt-6">
           <button
             type="submit"
-            className={`w-full transition-colors duration-200 bg-deepBlue hover:bg-teal text-crispWhite p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-teal ${
+            className={`w-full transition-colors duration-200 text-crispWhite p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-teal ${
               isLoading || isSubmitting
-                ? "bg-lightBlue cursor-not-allowed"
-                : "cursor-pointer"
+                ? "bg-lightBlue cursor-not-allowed hover:bg-lightBlue"
+                : "cursor-pointer hover:bg-teal bg-deepBlue"
             }`}
             disabled={isLoading || isSubmitting}
           >
@@ -431,4 +415,4 @@ const Signup = () => {
   );
 };
 
-export default Signup;
+export default InternSignupForm;

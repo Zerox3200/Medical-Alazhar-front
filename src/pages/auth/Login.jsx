@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState } from "react";
 import { AuthContext } from "../../context/AuthContext";
 import { ToastContainer, toast } from "react-toastify";
 import { FaEye, FaEyeSlash } from "react-icons/fa6";
@@ -9,7 +9,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { loginValidationSchema } from "../../constants/authFormData";
 
 const Login = () => {
-  const { updateAuth } = useContext(AuthContext);
+  // const { updateAuth } = useContext(AuthContext);
 
   const [visiblePassword, setVisiblePassword] = useState(false);
 
@@ -28,21 +28,24 @@ const Login = () => {
 
   const onSubmit = async ({ email, password }) => {
     try {
-      const response = await fetch("http://localhost:3000/api/v1/auth/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        credentials: "include",
-        body: JSON.stringify({ email, password }),
-      });
+      const response = await fetch(
+        "http://localhost:3000/api/v1/intern/auth/login",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          credentials: "include",
+          body: JSON.stringify({ email, password }),
+        }
+      );
 
       const result = await response.json();
 
       if (response.ok) {
         toast.success(result.message);
-        updateAuth({
-          accessToken: result.accessToken,
-          user: result.data?.user,
-        });
+        // updateAuth({
+        //   accessToken: result.accessToken,
+        //   user: result.data?.user,
+        // });
         setTimeout(() => navigate("/"), 200);
       } else {
         if (result.message.includes("locked")) {

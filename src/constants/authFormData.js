@@ -78,7 +78,7 @@ export const grades = () => {
   return theGrades;
 };
 
-export const signupValidationSchema = (selectedIDType) => {
+export const internSignupValidationSchema = (selectedIDType) => {
   return yup
     .object({
       fullname: yup
@@ -127,7 +127,58 @@ export const signupValidationSchema = (selectedIDType) => {
       phone: yup
         .string()
         .required("Phone is required")
-        .matches(/^\+?[0-9]{7,14}$/, "Phone number is not valid"),
+        .matches(
+          /^01[0-2,5-5]\d{8}$/,
+          "Invalid Egyptian mobile number (e.g., 0101234567)"
+        ),
+      password: yup
+        .string()
+        .required("Password is required")
+        .min(6, "Password must be at least 6 characters")
+        .matches(
+          /[A-Z]/,
+          "Password must contain uppercase and lowercase letters."
+        )
+        .matches(
+          /[a-z]/,
+          "Password must contain uppercase and lowercase letters."
+        )
+        .matches(/[1-9]/, "Password must contain at least one number.")
+        .matches(
+          /[!@#$%^&*(),.?"_:{}|<>]/,
+          "Password must contain at least one special character."
+        ),
+    })
+    .required();
+};
+
+export const supervisorSignupValidationSchema = () => {
+  return yup
+    .object({
+      firstname: yup
+        .string()
+        .trim()
+        .required("Firstname is required")
+        .matches(
+          /^[A-Za-z-]{2,}$/,
+          "Please enter your name as in your national ID"
+        ),
+      lastname: yup
+        .string()
+        .trim()
+        .required("Lastname is required")
+        .matches(
+          /^[A-Za-z-]{2,}/,
+          "Please enter your name as in your national ID"
+        ),
+      email: yup.string().email().required("Email is required"),
+      phone: yup
+        .string()
+        .required("Phone is required")
+        .matches(
+          /^01[0-2,5-5]\d{8}$/,
+          "Invalid Egyptian mobile number (e.g., 0101234567)"
+        ),
       password: yup
         .string()
         .required("Password is required")
@@ -152,7 +203,11 @@ export const signupValidationSchema = (selectedIDType) => {
 export const loginValidationSchema = () => {
   return yup
     .object({
-      email: yup.string().email().required("Email is required"),
+      email: yup
+        .string()
+        .email()
+        .transform((value) => value.toLowerCase())
+        .required("Email is required"),
       password: yup.string().required("Password is required"),
     })
     .required();

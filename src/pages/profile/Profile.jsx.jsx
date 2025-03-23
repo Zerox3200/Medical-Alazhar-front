@@ -8,9 +8,7 @@ const Profile = () => {
       <div className="col-span-2">
         <ProfileSidebar />
       </div>
-      <div className="col-span-6">
-        <Content />
-      </div>
+      <div className="col-span-6">{/* <Content /> */}</div>
     </div>
   );
 };

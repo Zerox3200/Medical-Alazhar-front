@@ -4,15 +4,15 @@ import { AuthContext } from "../context/AuthContext";
 import { FaUserCircle } from "react-icons/fa";
 
 const UserProfile = () => {
-  const { authState, logout } = useContext(AuthContext);
-  const username = authState.user.fullname?.split(" ", 2).join(" ");
+  // const { authState, logout } = useContext(AuthContext);
+  // const username = authState.user.fullname?.split(" ", 2).join(" ");
 
   const [opened, setOpened] = useState(false);
 
   const navigate = useNavigate();
 
   const handleLogout = () => {
-    logout();
+    // logout();
     navigate("/auth/login");
   };
 
@@ -29,7 +29,7 @@ const UserProfile = () => {
         <p className="text-3xl">
           <FaUserCircle />
         </p>
-        <p className="font-semibold">{username}</p>
+        {/* <p className="font-semibold">{username}</p> */}
       </div>
 
       <div

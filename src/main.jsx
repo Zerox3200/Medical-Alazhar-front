@@ -7,7 +7,7 @@ import Home from "./pages/Home.jsx";
 
 // Auth Routes
 import AuthLayout from "./layouts/AuthLayout.jsx";
-import Signup from "./pages/auth/Signup.jsx";
+import Signup from "./pages/auth/signup/Signup.jsx";
 import Login from "./pages/auth/Login.jsx";
 
 // Main Routes
@@ -26,14 +26,14 @@ import AddCase from "./pages/record_training/cases/add-case/AddCase.jsx";
 import CasesSummary from "./pages/record_training/cases/cases-summary/CasesSummary.jsx";
 import Profile from "./pages/profile/Profile.jsx";
 
-import { AuthProvider } from "./context/AuthContextProvider.jsx";
-
 import ProtectedRoute from "./utils/ProtectedRoute.jsx";
 import ResetPassword from "./pages/auth/ResetPassword.jsx";
+import { Provider } from "react-redux";
+import { store } from "./store/store.js";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
-    <AuthProvider>
+    <Provider store={store}>
       <BrowserRouter>
         <Routes>
           <Route element={<ProtectedRoute />}>
@@ -73,6 +73,6 @@ createRoot(document.getElementById("root")).render(
           </Route>
         </Routes>
       </BrowserRouter>
-    </AuthProvider>
+    </Provider>
   </StrictMode>
 );

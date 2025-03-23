@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React from "react";
 import { Link, NavLink } from "react-router";
 import { AuthContext } from "../context/AuthContext";
 import logo from "../assets/images/logo.jpg";
@@ -63,7 +63,7 @@ const navLinks = [
 // };
 
 const Navbar = () => {
-  const { authState } = useContext(AuthContext);
+  // const { authState } = useContext(AuthContext);
 
   return (
     <div className="px-8 p-2 fixed z-50 bg-teal text-crispWhite w-full min-h-[80px] flex justify-between items-center">
@@ -74,7 +74,7 @@ const Navbar = () => {
       </h2>
 
       {/* Links */}
-      {authState.isLoggedIn && authState.accessToken && (
+      {true && (
         <ul className="flex gap-8 text-softGray">
           {navLinks.map((navLink, i) => {
             return (
@@ -96,7 +96,7 @@ const Navbar = () => {
       )}
 
       {/* Authentication Links */}
-      {authState.isLoggedIn && authState.accessToken ? (
+      {true && true ? (
         <div>
           <UserProfile />
         </div>
