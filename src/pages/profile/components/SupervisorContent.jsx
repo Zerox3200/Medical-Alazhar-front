@@ -1,23 +1,8 @@
-import React, { useContext } from "react";
-import { AuthContext } from "../../../context/AuthContext";
+import React from "react";
 import InfoBox from "./InfoBox";
 
-const Content = () => {
-  const { authState } = useContext(AuthContext);
-
-  const {
-    fullname,
-    email,
-    phone,
-    nationality,
-    facultyOfGraduation,
-    yearOfGraduation,
-    orderOfGraduate,
-    grade,
-    facultyIDNumber,
-    idOrPassport,
-    hospital,
-  } = authState.user;
+const SupervisorContent = ({ data: { user } }) => {
+  const { firstname, lastname, email, phone } = user;
 
   return (
     <div className="mt-8">
@@ -28,10 +13,10 @@ const Content = () => {
         </h2>
         <div className="mt-6">
           <ul className="text-md grid grid-cols-2">
-            <InfoBox label="Fullname" value={fullname} />
+            <InfoBox label="First Name" value={firstname} />
+            <InfoBox label="Last Name" value={lastname} />
             <InfoBox label="Email" value={email} />
             <InfoBox label="Phone" value={"+20" + phone} />
-            <InfoBox label="Nationality" value={nationality} />
           </ul>
         </div>
       </div>
@@ -42,7 +27,7 @@ const Content = () => {
           Academic Information
         </h2>
         <div className="mt-6">
-          <ul className="text-md grid grid-cols-2">
+          {/* <ul className="text-md grid grid-cols-2">
             <InfoBox
               label="Faculty of Graduation"
               value={facultyOfGraduation}
@@ -50,7 +35,7 @@ const Content = () => {
             <InfoBox label="Year of Graduation" value={yearOfGraduation} />
             <InfoBox label="Order of Graduate" value={orderOfGraduate} />
             <InfoBox label="Grade" value={grade} />
-          </ul>
+          </ul> */}
         </div>
       </div>
 
@@ -60,7 +45,7 @@ const Content = () => {
           Identification Details
         </h2>
         <div className="mt-6">
-          <ul className="text-md grid grid-cols-2">
+          {/* <ul className="text-md grid grid-cols-2">
             <InfoBox label="Hospital ID Number" value={facultyIDNumber} />
             <InfoBox
               label={
@@ -71,11 +56,11 @@ const Content = () => {
               value={idOrPassport?.number}
             />
             <InfoBox label="Hospital" value={hospital + " Hospital"} />
-          </ul>
+          </ul> */}
         </div>
       </div>
     </div>
   );
 };
 
-export default Content;
+export default SupervisorContent;

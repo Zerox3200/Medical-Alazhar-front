@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { AuthContext } from "../../context/AuthContext";
 import { ToastContainer, toast } from "react-toastify";
 import { FaEye, FaEyeSlash } from "react-icons/fa6";
 import Input from "./components/Input";
@@ -7,60 +6,51 @@ import { Link, useNavigate } from "react-router";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { loginValidationSchema } from "../../constants/authFormData";
+import { useDispatch } from "react-redux";
+import { useLoginMutation } from "../../services/api/apiSlice";
+import { setAuth } from "../../services/slices/authSlice";
 
 const Login = () => {
-  // const { updateAuth } = useContext(AuthContext);
-
   const [visiblePassword, setVisiblePassword] = useState(false);
+
+  const [login] = useLoginMutation();
+
+  const dispatch = useDispatch();
 
   const navigate = useNavigate();
 
   const {
     register,
     handleSubmit,
-    setError,
     formState: { errors, isLoading, isSubmitting },
   } = useForm({
     resolver: yupResolver(loginValidationSchema()),
   });
 
-  console.log("errors", errors);
-
   const onSubmit = async ({ email, password }) => {
     try {
-      const response = await fetch(
-        "http://localhost:3000/api/v1/intern/auth/login",
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          credentials: "include",
-          body: JSON.stringify({ email, password }),
-        }
-      );
+      const response = await login({
+        email,
+        password,
+      }).unwrap();
 
-      const result = await response.json();
+      const { data, accessToken, message, status } = response;
 
-      if (response.ok) {
-        toast.success(result.message);
-        // updateAuth({
-        //   accessToken: result.accessToken,
-        //   user: result.data?.user,
-        // });
+      if (status === "success") {
+        toast.success(message);
+        dispatch(setAuth({ token: accessToken, ...data }));
         setTimeout(() => navigate("/"), 200);
-      } else {
-        if (result.message.includes("locked")) {
-          toast.error(result.message);
-        } else {
-          toast.warn(result.message);
-        }
       }
-    } catch (error) {
-      console.log("error", error);
-      setError("general", {
-        type: "manual",
-        error: error,
-        message: toast.error("Network error, please try again"),
-      });
+    } catch (err) {
+      if (err.status === 403) {
+        toast.error("Account locked due to too many failed attempts.");
+      } else if (err.status === 422) {
+        toast.warn(err.data?.message);
+      } else if (err.status >= 500) {
+        toast.error("Server error, please try again later.");
+      } else {
+        toast.error(err.data?.message || "An unexpected error occurred.");
+      }
     }
   };
 

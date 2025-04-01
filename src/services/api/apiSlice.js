@@ -1,15 +1,63 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import { setAuth, clearAuth } from "../slices/authSlice";
 
-export const apiSlice = createApi({
-  reducerPath: "api",
-  baseQuery: fetchBaseQuery({ baseUrl: "http://localhost:3000/api/v1" }),
+// Custom baseQuery with refresh token logic
+const baseQuery = fetchBaseQuery({
+  baseUrl: "http://localhost:3000/api/v1",
+  credentials: "include",
   prepareHeaders: (headers, { getState }) => {
-    const token = getState().auth?.token;
+    const token = getState().auth.token;
     if (token) {
       headers.set("Authorization", `Bearer ${token}`);
     }
     return headers;
   },
+});
+
+const baseQueryWithReauth = async (args, api, extraOptions) => {
+  let result = await baseQuery(args, api, extraOptions);
+  if (result.error?.status === 401) {
+    const { token } = api.getState().auth;
+    if (!token) {
+      api.dispatch(clearAuth());
+      window.location.href = "/auth/login";
+      return result;
+    }
+    try {
+      const refreshResult = await baseQuery(
+        {
+          url: "/auth/refresh-token",
+          method: "POST",
+          credentials: "include",
+        },
+        api,
+        extraOptions
+      );
+      if (refreshResult.data) {
+        const currentAuth = api.getState().auth;
+        const { accessToken, user = currentAuth.user } = refreshResult.data;
+        api.dispatch(setAuth({ token: accessToken, user }));
+
+        result = await baseQuery(args, api, extraOptions);
+      } else {
+        api.dispatch(clearAuth());
+        window.location.href = "/auth/login";
+        return result;
+      }
+    } catch (error) {
+      console.error("Refresh token attempt failed:", error);
+      api.dispatch(clearAuth());
+      window.location.href = "/auth/login";
+      return result;
+    }
+  }
+  return result;
+};
+
+export const apiSlice = createApi({
+  reducerPath: "api",
+  baseQuery: baseQueryWithReauth,
+  tagTypes: ["User", "Account"],
   endpoints: (builder) => ({
     // Intern Signup
     internSignup: builder.mutation({
@@ -30,20 +78,102 @@ export const apiSlice = createApi({
     }),
 
     // Login
-    internLogin: builder.mutation({
+    login: builder.mutation({
       query: ({ ...formData }) => ({
-        url: `/intern/auth/login`,
+        url: `/auth/login`,
         method: "POST",
         body: formData,
+        credentials: "include",
       }),
     }),
 
-    internLogout: builder.mutation({
-      query: ({ ...formData }) => ({
-        url: `intern/auth/logout`,
+    // Logout
+    logout: builder.mutation({
+      query: () => ({
+        url: `/auth/logout`,
         method: "POST",
-        body: formData,
+        credentials: "include", // Send refresh token cookie
       }),
+      onQueryStarted: async (_, { dispatch, queryFulfilled }) => {
+        try {
+          const response = await queryFulfilled;
+          console.log("Logout successful, server response:", response);
+          dispatch(clearAuth());
+          dispatch(apiSlice.util.resetApiState());
+        } catch (error) {
+          console.error("Logout failed:", error);
+        }
+      },
+    }),
+
+    // Get User
+    getUser: builder.query({
+      query: ({ userId, role }) => {
+        const roles = ["admin", "coordinator", "supervisor"];
+        if (!userId) {
+          throw new Error("ID are required");
+        }
+        return {
+          url: roles.includes(role)
+            ? `/supervisor/${userId}`
+            : `/intern/${userId}`,
+          method: "GET",
+          credentials: "include",
+        };
+      },
+      providesTags: ["User"],
+    }),
+
+    // Get all supervisors
+    getAllSupervisors: builder.query({
+      query: () => {
+        return {
+          url: "/admin/supervisors",
+          method: "GET",
+          credentials: "include",
+        };
+      },
+
+      providesTags: ["Account"],
+    }),
+
+    // Get all interns
+    getAllInterns: builder.query({
+      query: () => {
+        return {
+          url: "/admin/interns",
+          method: "GET",
+          credentials: "include",
+        };
+      },
+
+      providesTags: ["Account"],
+    }),
+
+    // Get single intern
+    getSingleIntern: builder.query({
+      query: ({ internId }) => {
+        return {
+          url: `/admin/interns/${internId}`,
+          method: "GET",
+          credentials: "include",
+        };
+      },
+      providesTags: ["Intern"],
+    }),
+
+    // Account Approval
+    approveAccount: builder.mutation({
+      query: ({ userId, ...approved }) => {
+        return {
+          url: `/admin/account-status/${userId}`,
+          method: "POST",
+          body: approved,
+          credentials: "include",
+        };
+      },
+
+      invalidatesTags: ["Account"],
     }),
 
     // Profile Image Upload
@@ -52,7 +182,30 @@ export const apiSlice = createApi({
         url: `/intern/${internId}/uploads/profile-image`,
         method: "POST",
         body: imageFile,
+        credentials: "include",
       }),
+      invalidatesTags: ["User"],
+    }),
+
+    // NationalID Image Upload
+    uploadNationalIDImage: builder.mutation({
+      query: ({ internId, imageFile }) => ({
+        url: `/intern/${internId}/uploads/nationalID-image`,
+        method: "POST",
+        body: imageFile,
+        credentials: "include",
+      }),
+      invalidatesTags: ["User"],
+    }),
+    // MBBCH Certificate Image Upload
+    uploadMBBCHCertificateImage: builder.mutation({
+      query: ({ internId, imageFile }) => ({
+        url: `/intern/${internId}/uploads/mbbch-certificate-image`,
+        method: "POST",
+        body: imageFile,
+        credentials: "include",
+      }),
+      invalidatesTags: ["User"],
     }),
   }),
 });
@@ -60,7 +213,14 @@ export const apiSlice = createApi({
 export const {
   useInternSignupMutation,
   useSupervisorSignupMutation,
-  useInternLoginMutation,
-  useInternLogoutMutation,
+  useLoginMutation,
+  useLogoutMutation,
+  useApproveAccountMutation,
+  useGetUserQuery,
+  useGetAllInternsQuery,
+  useGetAllSupervisorsQuery,
+  useGetSingleInternQuery,
   useUploadProfileImageMutation,
+  useUploadNationalIDImageMutation,
+  useUploadMBBCHCertificateImageMutation,
 } = apiSlice;

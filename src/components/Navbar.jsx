@@ -1,8 +1,29 @@
 import React from "react";
 import { Link, NavLink } from "react-router";
-import { AuthContext } from "../context/AuthContext";
+import { useSelector } from "react-redux";
+
 import logo from "../assets/images/logo.jpg";
-import UserProfile from "./UserProfile";
+import UserProfileMenu from "./UserProfileMenu";
+
+// Supervisors Navbar
+const supervisorsNavLinks = [
+  {
+    title: "home",
+    label: "Home",
+  },
+  {
+    title: "interns",
+    label: "Interns",
+  },
+  {
+    title: "supervisors",
+    label: "Supervisors",
+  },
+  {
+    title: "coordinators",
+    label: "Coordinators",
+  },
+];
 
 const navLinks = [
   {
@@ -35,35 +56,10 @@ const navLinks = [
   },
 ];
 
-// const subLinksMenu = () => {
-//   return (
-//     <div className="bg-crispWhite text-mediumGray p-2 rounded-sm absolute ">
-//       <ul>
-//         <li>
-//           WPBL
-//           <ul className="">
-//             <li>
-//               <NavLink to="/cases">Cases</NavLink>
-//             </li>
-//             <li>
-//               <NavLink to="/procedures">Procedures</NavLink>
-//             </li>
-//           </ul>
-//         </li>
-
-//         <li>
-//           <NavLink to="self_learning">Self Learning</NavLink>
-//         </li>
-//         <li>
-//           <NavLink to="direct_learning">Direct Learning</NavLink>
-//         </li>
-//       </ul>
-//     </div>
-//   );
-// };
-
 const Navbar = () => {
-  // const { authState } = useContext(AuthContext);
+  const { token, user } = useSelector((state) => state.auth);
+
+  const isAuthenticated = !!token && !!user;
 
   return (
     <div className="px-8 p-2 fixed z-50 bg-teal text-crispWhite w-full min-h-[80px] flex justify-between items-center">
@@ -74,31 +70,54 @@ const Navbar = () => {
       </h2>
 
       {/* Links */}
-      {true && (
+      {isAuthenticated && (
         <ul className="flex gap-8 text-softGray">
-          {navLinks.map((navLink, i) => {
-            return (
-              <React.Fragment key={i}>
-                <li className="hover:text-lightBlue">
-                  <NavLink
-                    className={({ isActive }) =>
-                      isActive ? "text-lightBlue" : null
-                    }
-                    to={navLink.title === "home" ? "/" : `/${navLink.title}`}
-                  >
-                    {navLink.label}
-                  </NavLink>
-                </li>
-              </React.Fragment>
-            );
-          })}
+          {user.role === "admin"
+            ? supervisorsNavLinks.map((navLink, i) => {
+                return (
+                  <React.Fragment key={i}>
+                    <li className="hover:text-lightBlue">
+                      <NavLink
+                        className={({ isActive }) =>
+                          isActive ? "text-lightBlue" : null
+                        }
+                        to={
+                          navLink.title === "home"
+                            ? "/"
+                            : `/admin/${navLink.title}`
+                        }
+                      >
+                        {navLink.label}
+                      </NavLink>
+                    </li>
+                  </React.Fragment>
+                );
+              })
+            : navLinks.map((navLink, i) => {
+                return (
+                  <React.Fragment key={i}>
+                    <li className="hover:text-lightBlue">
+                      <NavLink
+                        className={({ isActive }) =>
+                          isActive ? "text-lightBlue" : null
+                        }
+                        to={
+                          navLink.title === "home" ? "/" : `/${navLink.title}`
+                        }
+                      >
+                        {navLink.label}
+                      </NavLink>
+                    </li>
+                  </React.Fragment>
+                );
+              })}
         </ul>
       )}
 
       {/* Authentication Links */}
-      {true && true ? (
+      {isAuthenticated ? (
         <div>
-          <UserProfile />
+          <UserProfileMenu />
         </div>
       ) : (
         <div className="flex">

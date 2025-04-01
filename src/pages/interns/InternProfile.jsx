@@ -1,14 +1,16 @@
 import React from "react";
 import ProfileSidebar from "./components/ProfileSidebar";
-import SupervisorContent from "./components/SupervisorContent";
 import InternContent from "./components/InternContent";
 import { useSelector } from "react-redux";
-import { useGetUserQuery } from "../../services/api/apiSlice";
-const Profile = () => {
+import { useGetSingleInternQuery } from "../../services/api/apiSlice";
+import { useParams } from "react-router";
+const InternProfile = () => {
+  const { internId } = useParams();
+
   const { id, role } = useSelector((state) => state.auth.user || {});
 
-  const { data, error, isLoading } = useGetUserQuery(
-    { userId: id, role },
+  const { data, error, isLoading } = useGetSingleInternQuery(
+    { internId, role },
     { skip: !id }
   );
 
@@ -23,14 +25,10 @@ const Profile = () => {
         <ProfileSidebar data={data} />
       </div>
       <div className="col-span-6">
-        {role === "intern" ? (
-          <InternContent data={data} />
-        ) : (
-          <SupervisorContent data={data} />
-        )}
+        <InternContent data={data} />
       </div>
     </div>
   );
 };
 
-export default Profile;
+export default InternProfile;

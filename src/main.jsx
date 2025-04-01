@@ -1,9 +1,12 @@
 import React, { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { BrowserRouter, Route, Routes } from "react-router";
+import { Provider } from "react-redux";
+import { store, persistor } from "./store/store.js";
+import { PersistGate } from "redux-persist/integration/react";
 
 import "./index.css";
-import Home from "./pages/Home.jsx";
+import Home from "./pages/home/Home.jsx";
 
 // Auth Routes
 import AuthLayout from "./layouts/AuthLayout.jsx";
@@ -18,61 +21,67 @@ import Assessment from "./pages/Assessment.jsx";
 import EndRoundReflections from "./pages/EndRoundReflections.jsx";
 import Portfolio from "./pages/Portfolio.jsx";
 import ContactUs from "./pages/ContactUs.jsx";
-
-// Not Found Page
 import NotFound from "./pages/NotFound.jsx";
 import Procedures from "./pages/record_training/procedures/index.jsx";
 import AddCase from "./pages/record_training/cases/add-case/AddCase.jsx";
 import CasesSummary from "./pages/record_training/cases/cases-summary/CasesSummary.jsx";
 import Profile from "./pages/profile/Profile.jsx";
+import Interns from "./pages/interns/Interns.jsx";
 
+// Utils
 import ProtectedRoute from "./utils/ProtectedRoute.jsx";
 import ResetPassword from "./pages/auth/ResetPassword.jsx";
-import { Provider } from "react-redux";
-import { store } from "./store/store.js";
+import InternProfile from "./pages/interns/InternProfile.jsx";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
     <Provider store={store}>
-      <BrowserRouter>
-        <Routes>
-          <Route element={<ProtectedRoute />}>
-            <Route path="/" element={<MainLayout />}>
-              <Route path="*" element={<NotFound />} />
-              <Route path="/" index element={<Home />} />
-              <Route path="/profile" element={<Profile />} />
-              <Route path="/record_training" element={<RecordTraining />}>
+      <PersistGate loading={<div>Loading...</div>} persistor={persistor}>
+        <BrowserRouter>
+          <Routes>
+            <Route element={<ProtectedRoute />}>
+              <Route path="/" element={<MainLayout />}>
+                <Route path="*" element={<NotFound />} />
+                <Route path="/" index element={<Home />} />
+                <Route path="/profile" element={<Profile />} />
+                <Route path="/admin/interns" element={<Interns />} />
                 <Route
-                  path="/record_training/cases"
-                  element={<CasesSummary />}
+                  path="/admin/interns/:internId"
+                  element={<InternProfile />}
                 />
+                <Route path="/record_training" element={<RecordTraining />}>
+                  <Route
+                    path="/record_training/cases"
+                    element={<CasesSummary />}
+                  />
+                  <Route
+                    path="/record_training/cases/add-case"
+                    element={<AddCase />}
+                  />
+                  <Route
+                    path="/record_training/procedures"
+                    element={<Procedures />}
+                  />
+                </Route>
+                <Route path="assessment" element={<Assessment />} />
+                <Route path="courses" element={<Courses />} />
                 <Route
-                  path="/record_training/cases/add-case"
-                  element={<AddCase />}
+                  path="end_round_reflections"
+                  element={<EndRoundReflections />}
                 />
-                <Route
-                  path="/record_training/procedures"
-                  element={<Procedures />}
-                />
+                <Route path="courses" element={<Courses />} />
+                <Route path="portfolio" element={<Portfolio />} />
+                <Route path="contact_us" element={<ContactUs />} />
               </Route>
-              <Route path="assessment" element={<Assessment />} />
-              <Route path="courses" element={<Courses />} />
-              <Route
-                path="end_round_reflections"
-                element={<EndRoundReflections />}
-              />
-              <Route path="courses" element={<Courses />} />
-              <Route path="portfolio" element={<Portfolio />} />
-              <Route path="contact_us" element={<ContactUs />} />
             </Route>
-          </Route>
-          <Route path="auth" element={<AuthLayout />}>
-            <Route path="signup" element={<Signup />} />
-            <Route path="login" element={<Login />} />
-            <Route path="reset" element={<ResetPassword />} />
-          </Route>
-        </Routes>
-      </BrowserRouter>
+            <Route path="auth" element={<AuthLayout />}>
+              <Route path="signup" element={<Signup />} />
+              <Route path="login" element={<Login />} />
+              <Route path="reset" element={<ResetPassword />} />
+            </Route>
+          </Routes>
+        </BrowserRouter>
+      </PersistGate>
     </Provider>
   </StrictMode>
 );
