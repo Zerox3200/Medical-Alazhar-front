@@ -7,7 +7,7 @@ const Signup = () => {
 
   return (
     <div className="flex flex-col bg-crispWhite w-full md:w-2/3 lg:w-4/6 p-4 md:p-10">
-      <h1 className="text-teal text-2xl md:text-3xl mb-6 md:mb-8 font-semibold">
+      <h1 className="text-teal text-2xl md:text-3xl mb-6 md:mb-4 font-semibold">
         Create Your Account to Begin
       </h1>
       {/* Select Type of User */}
@@ -38,7 +38,7 @@ const Signup = () => {
           />
         </div>
       </div>
-      <div className="h-[1px] w-full bg-mediumGray my-8"></div>
+      <div className="h-[1px] w-full bg-mediumGray my-4"></div>
 
       {selectedUser === "intern" ? (
         <InternSignupForm />

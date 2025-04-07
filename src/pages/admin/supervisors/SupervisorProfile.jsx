@@ -1,21 +1,21 @@
 import React from "react";
 import ProfileSidebar from "./components/ProfileSidebar";
-import InternContent from "./components/InternContent";
+import SupervisorContent from "./components/SupervisorContent";
 import { useSelector } from "react-redux";
 import { useParams } from "react-router";
-import Loader from "../../components/Loader";
-import { useGetSingleInternQuery } from "../../services/api/apiSlice";
-
-const InternProfile = () => {
-  const { internId } = useParams();
+import { useGetSingleSupervisorQuery } from "../../../services/api/apiSlice";
+import Loader from "../../../components/Loader";
+const SupervisorProfile = () => {
+  const { supervisorId } = useParams();
 
   const { id, role } = useSelector((state) => state.auth.user || {});
 
-  const { data, error, isLoading } = useGetSingleInternQuery(
-    { internId, role },
+  const { data, error, isLoading } = useGetSingleSupervisorQuery(
+    { supervisorId, role },
     { skip: !id }
   );
 
+  console.log("data", data);
   if (!id) return <div>Please log in.</div>;
   if (isLoading) return <Loader />;
   if (error)
@@ -27,10 +27,10 @@ const InternProfile = () => {
         <ProfileSidebar data={data} />
       </div>
       <div className="col-span-6">
-        <InternContent data={data} />
+        <SupervisorContent data={data} />
       </div>
     </div>
   );
 };
 
-export default InternProfile;
+export default SupervisorProfile;

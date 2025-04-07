@@ -1,12 +1,16 @@
 import React, { useState, useEffect } from "react";
 import { toast, ToastContainer } from "react-toastify";
 import { FaEye, FaEyeSlash } from "react-icons/fa6";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import { Link } from "react-router";
 import Input from "../components/Input";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useSupervisorSignupMutation } from "../../../services/api/apiSlice";
-import { supervisorSignupValidationSchema } from "../../../constants/authFormData";
+import {
+  specialities,
+  supervisorSignupValidationSchema,
+} from "../../../constants/authFormData";
+import SelectBox from "../components/SelectBox";
 
 const SupervisorSignupForm = () => {
   const [supervisorSignup, { isLoading, isSuccess }] =
@@ -18,20 +22,30 @@ const SupervisorSignupForm = () => {
     register,
     handleSubmit,
     setValue,
+    control,
     setError,
     reset,
     formState: { errors, isSubmitSuccessful, isSubmitting },
   } = useForm({
     resolver: yupResolver(supervisorSignupValidationSchema()),
   });
-  console.log("errors", errors);
 
-  const onSubmit = async ({ firstname, lastname, email, phone, password }) => {
+  const onSubmit = async ({
+    firstname,
+    lastname,
+    speciality,
+    hospital,
+    email,
+    phone,
+    password,
+  }) => {
     try {
       const response = await supervisorSignup({
         firstname,
         lastname,
         email,
+        hospital: hospital.value,
+        speciality: speciality.value,
         phone: "+20" + phone,
         password,
       }).unwrap();
@@ -43,7 +57,7 @@ const SupervisorSignupForm = () => {
       Object.keys(error.data?.errors).forEach((field) => {
         setError(error.data?.errors[field]?.path, {
           type: "manual",
-          message: error.data?.errors[field]?.msg,
+          message: toast.error(error.data?.errors[field]?.msg),
         });
       });
     }
@@ -58,33 +72,81 @@ const SupervisorSignupForm = () => {
         email: "",
         phone: "",
         password: "",
+        hospital: null,
+        speciality: null,
       });
     }
   }, [reset, isSubmitSuccessful, setValue]);
 
   return (
-    <div className="w-80 m-auto">
+    <div className="m-auto">
       <ToastContainer position="bottom-left" />
-      <form className="" onSubmit={handleSubmit(onSubmit)}>
-        {/* Firstname */}
-        <div className="">
-          <Input
-            placeholder="Firstname"
-            {...register("firstname")}
-            error={errors.firstname?.message}
-          />
+      <form className="w-full" onSubmit={handleSubmit(onSubmit)}>
+        <div className="flex items-center gap-4 w-full">
+          {/* Firstname */}
+          <div>
+            <Input
+              placeholder="Firstname"
+              {...register("firstname")}
+              error={errors.firstname?.message}
+            />
+          </div>
+          {/* Lastname */}
+          <div>
+            <Input
+              placeholder="Lastname"
+              type="text"
+              {...register("lastname")}
+              error={errors.lastname?.message}
+            />
+          </div>
         </div>
-        {/* Lastname */}
-        <div className="">
-          <Input
-            placeholder="Lastname"
-            type="text"
-            {...register("lastname")}
-            error={errors.lastname?.message}
-          />
+
+        <div className="flex items-center gap-4 w-full">
+          {/* Hospital */}
+          <div className="w-full">
+            <Controller
+              name="hospital"
+              control={control}
+              render={({ field }) => (
+                <SelectBox
+                  {...field}
+                  options={[
+                    { label: "Al-Hussein", value: "al_hussein" },
+                    { label: "Sayed Galal", value: "sayed_galal" },
+                  ]}
+                  placeholder="Hospital"
+                  error={errors.hospital?.message}
+                />
+              )}
+            />
+            {errors && (
+              <p className="text-red-500 text-md">{errors.hospital?.message}</p>
+            )}
+          </div>{" "}
+          {/* Speciality */}
+          <div className="w-full">
+            <Controller
+              name="speciality"
+              control={control}
+              render={({ field }) => (
+                <SelectBox
+                  {...field}
+                  options={specialities}
+                  placeholder="Speciality"
+                  error={errors.speciality?.message}
+                />
+              )}
+            />
+            {errors && (
+              <p className="text-red-500 text-md">
+                {errors.speciality?.message}
+              </p>
+            )}
+          </div>
         </div>
         {/* Email */}
-        <div className="">
+        <div>
           <Input
             placeholder="Email"
             type="email"

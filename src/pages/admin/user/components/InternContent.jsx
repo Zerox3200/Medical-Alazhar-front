@@ -5,8 +5,7 @@ import { PiCertificateLight } from "react-icons/pi";
 import {
   useUploadMBBCHCertificateImageMutation,
   useUploadNationalIDImageMutation,
-  // useUploadMBBCHCertificateImageMutation,
-} from "../../../services/api/apiSlice";
+} from "../../../../services/api/apiSlice";
 import { toast, ToastContainer } from "react-toastify";
 import ImageUpload from "./ImageUpload";
 

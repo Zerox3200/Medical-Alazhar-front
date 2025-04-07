@@ -19,6 +19,7 @@ import {
   FaUserDoctor,
   FaUsers,
 } from "react-icons/fa6";
+import Loader from "../../components/Loader";
 
 const Home = () => {
   const [approvedInterns, setApprovedInterns] = useState([]);
@@ -35,7 +36,6 @@ const Home = () => {
   );
 
   const { currentData, isSuccess } = useGetAllInternsQuery({ skip: !id });
-
   const supervisors = useGetAllSupervisorsQuery({ skip: !id });
 
   useEffect(() => {
@@ -69,7 +69,12 @@ const Home = () => {
   }, [supervisors?.currentData?.supervisors, supervisors.isSuccess]);
 
   if (!id) return <div>Please log in.</div>;
-  if (isLoading) return <div>Loading...</div>;
+  if (isLoading)
+    return (
+      <div>
+        <Loader />
+      </div>
+    );
   if (error)
     return <div>Error: {error.data?.message || "Failed to load user"}</div>;
 
@@ -165,9 +170,10 @@ const Home = () => {
                 Interns
               </h3>
               {unapprovedInterns.length > 0 ? (
-                unapprovedInterns.map((unapprovedIntern) => {
+                unapprovedInterns.map((unapprovedIntern, i) => {
                   return (
                     <UnapprovedAccountBox
+                      key={i}
                       fullname={unapprovedIntern.fullname
                         .split(" ")
                         .slice(0, 3)
@@ -187,9 +193,10 @@ const Home = () => {
                 Supervisors
               </h3>
               {unapprovedSupervisors.length > 0 ? (
-                unapprovedSupervisors.map((unapprovedSupervisor) => {
+                unapprovedSupervisors.map((unapprovedSupervisor, i) => {
                   return (
                     <UnapprovedAccountBox
+                      key={i}
                       fullname={
                         unapprovedSupervisor.firstname +
                         " " +

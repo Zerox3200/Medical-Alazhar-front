@@ -137,6 +137,19 @@ export const apiSlice = createApi({
       providesTags: ["Account"],
     }),
 
+    // Get all coordinators
+    getAllCoordinators: builder.query({
+      query: () => {
+        return {
+          url: "/admin/coordinators",
+          method: "GET",
+          credentials: "include",
+        };
+      },
+
+      providesTags: ["Account"],
+    }),
+
     // Get all interns
     getAllInterns: builder.query({
       query: () => {
@@ -146,8 +159,7 @@ export const apiSlice = createApi({
           credentials: "include",
         };
       },
-
-      providesTags: ["Account"],
+      providesTags: ["Account", "Rounds"],
     }),
 
     // Get single intern
@@ -162,24 +174,59 @@ export const apiSlice = createApi({
       providesTags: ["Intern"],
     }),
 
+    // Get single supervisor
+    getSingleSupervisor: builder.query({
+      query: ({ supervisorId }) => {
+        return {
+          url: `/admin/supervisors/${supervisorId}`,
+          method: "GET",
+          credentials: "include",
+        };
+      },
+      providesTags: ["Supervisor"],
+    }),
+
+    // Get single coordinator
+    getSingleCoordinator: builder.query({
+      query: ({ coordinatorId }) => {
+        return {
+          url: `/admin/coordinators/${coordinatorId}`,
+          method: "GET",
+          credentials: "include",
+        };
+      },
+      providesTags: ["Coordinator"],
+    }),
+
     // Account Approval
     approveAccount: builder.mutation({
       query: ({ userId, ...approved }) => {
         return {
           url: `/admin/account-status/${userId}`,
-          method: "POST",
+          method: "PUT",
           body: approved,
           credentials: "include",
         };
       },
-
       invalidatesTags: ["Account"],
     }),
 
+    // Add an intern to round
+    addInternToRound: builder.mutation({
+      query: ({ internId, ...currentRound }) => {
+        return {
+          url: `/admin/interns/assign-round?internId=${internId}`,
+          method: "PUT",
+          body: currentRound,
+          credentials: "include",
+        };
+      },
+      invalidatesTags: ["Rounds"],
+    }),
     // Profile Image Upload
     uploadProfileImage: builder.mutation({
-      query: ({ internId, imageFile }) => ({
-        url: `/intern/${internId}/uploads/profile-image`,
+      query: ({ role, internId, imageFile }) => ({
+        url: `/${role}/${internId}/uploads/profile-image`,
         method: "POST",
         body: imageFile,
         credentials: "include",
@@ -219,7 +266,11 @@ export const {
   useGetUserQuery,
   useGetAllInternsQuery,
   useGetAllSupervisorsQuery,
+  useGetAllCoordinatorsQuery,
+  useGetSingleSupervisorQuery,
+  useGetSingleCoordinatorQuery,
   useGetSingleInternQuery,
+  useAddInternToRoundMutation,
   useUploadProfileImageMutation,
   useUploadNationalIDImageMutation,
   useUploadMBBCHCertificateImageMutation,

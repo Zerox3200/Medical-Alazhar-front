@@ -1,12 +1,24 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router";
-import { useLogoutMutation } from "../services/api/apiSlice";
+import { useGetUserQuery, useLogoutMutation } from "../services/api/apiSlice";
 import { clearAuth } from "../services/slices/authSlice";
 import { persistor } from "../store/store";
 import { FaUserCircle } from "react-icons/fa";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { toast, ToastContainer } from "react-toastify";
 
 const UserProfile = () => {
+  const { id, role } = useSelector((state) => state.auth.user || {});
+
+  const { data } = useGetUserQuery({ userId: id, role }, { skip: !id });
+
+  const username =
+    (data?.user?.fullname?.split(" ").slice(0, 2).join(" ") ??
+      `${data?.user?.firstname ?? ""} ${data?.user?.lastname ?? ""}`.trim()) ||
+    "Guest";
+
+  const userImage = data?.user.profileImage;
+
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [logout, { isLoading }] = useLogoutMutation();
@@ -20,7 +32,7 @@ const UserProfile = () => {
       await persistor.purge();
       navigate("/login");
     } catch (err) {
-      console.error("Logout error:", err);
+      toast.error("Logout error:", err);
     }
   };
 
@@ -29,19 +41,31 @@ const UserProfile = () => {
       className={`relative text-center ${!opened ? "overflow-hidden " : null}`}
       onClick={() => setOpened(!opened)}
     >
+      <ToastContainer />
       <div
-        className={`text-softGray flex justify-between items-center gap-4 cursor-pointer p-2 ${
+        className={`text-softGray flex justify-between items-center cursor-pointer p-2 ${
           !opened ? "rounded-md" : "rounded-t-md"
         }`}
       >
-        <p className="text-3xl">
-          <FaUserCircle />
+        <p>
+          {userImage ? (
+            <img
+              src={"http://localhost:3000/" + userImage}
+              alt="Profile"
+              className="w-14 h-14 border-mediumGray/10 cursor-pointer rounded-full p-2 object-cover"
+            />
+          ) : (
+            <FaUserCircle />
+          )}
         </p>
-        {/* <p className="font-semibold">{username}</p> */}
+        <div className="">
+          <p className="text-sm font-medium">{username}</p>
+          <p className="text-xs text-left text-softGray">{role}</p>
+        </div>
       </div>
 
       <div
-        className={`absolute translate-y-[26px] right-0 bg-crispWhite shadow-2xl rounded-b-md w-52 min-h-20 p-2 text-darkGray ${
+        className={`absolute translate-y-[12px] -right-2 bg-crispWhite shadow-2xl rounded-b-md w-52 min-h-20 p-2 text-darkGray ${
           opened ? "min-h-20" : "h-0"
         }`}
       >

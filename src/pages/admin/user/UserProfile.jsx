@@ -1,11 +1,18 @@
 import React from "react";
-import Loader from "../../components/Loader";
-import ProfileSidebar from "./components/ProfileSidebar";
-import SupervisorContent from "./components/SupervisorContent";
-import InternContent from "./components/InternContent";
 import { useSelector } from "react-redux";
-import { useGetUserQuery } from "../../services/api/apiSlice";
-const Profile = () => {
+import { useGetUserQuery } from "../../../services/api/apiSlice";
+import Loader from "../../../components/Loader";
+import ProfileSidebar from "./components/ProfileSidebar";
+import SupervisorContent from "../../profile/components/SupervisorContent";
+import InternContent from "./components/InternContent";
+import { useSearchParams } from "react-router";
+
+const UserProfile = () => {
+  const [searchParams] = useSearchParams();
+  const userId = searchParams.get("userId");
+
+  console.log("userId", userId);
+
   const { id, role } = useSelector((state) => state.auth.user || {});
 
   const { data, error, isLoading } = useGetUserQuery(
@@ -30,15 +37,15 @@ const Profile = () => {
       <div className="col-span-2">
         <ProfileSidebar data={data} />
       </div>
-      <div className="col-span-6">
+      {/* <div className="col-span-6">
         {role === "intern" ? (
           <InternContent data={data} />
         ) : (
           <SupervisorContent data={data} />
         )}
-      </div>
+      </div> */}
     </div>
   );
 };
 
-export default Profile;
+export default UserProfile;

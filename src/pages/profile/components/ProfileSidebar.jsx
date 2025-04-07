@@ -28,6 +28,9 @@ const ProfileSidebar = ({ data: { user } }) => {
 
     try {
       const response = await uploadProfileImage({
+        role: ["supervisor", "coordinator", "admin"].includes(user.role)
+          ? "supervisor"
+          : user.role,
         internId: user._id,
         imageFile: formData,
       }).unwrap();

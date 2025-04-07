@@ -4,20 +4,36 @@ import { TbMoodCry } from "react-icons/tb";
 import { FaCheckCircle, FaSearch } from "react-icons/fa";
 import { Link } from "react-router";
 import { useSelector } from "react-redux";
-import { useGetAllInternsQuery } from "../../services/api/apiSlice";
-import Input from "../auth/components/Input";
 import _ from "lodash";
+import { useGetAllSupervisorsQuery } from "../../../services/api/apiSlice";
+import Input from "../../auth/components/Input";
 
 const columns = [
   {
-    field: "fullname",
-    headerName: "Fullname",
+    field: "firstname",
+    headerName: "Firstname",
     width: 200,
     flex: 1,
     renderCell: (cell) => {
       return (
         <Link
-          to={`/admin/interns/${cell.row._id}`}
+          to={`/admin/supervisors/${cell.row._id}`}
+          className="hover:text-mediumBlue"
+        >
+          {cell.value}
+        </Link>
+      );
+    },
+  },
+  {
+    field: "lastname",
+    headerName: "Lastname",
+    width: 200,
+    flex: 1,
+    renderCell: (cell) => {
+      return (
+        <Link
+          to={`/admin/supervisors/${cell.row._id}`}
           className="hover:text-mediumBlue"
         >
           {cell.value}
@@ -30,20 +46,6 @@ const columns = [
     headerName: "Phone",
     width: 140,
   },
-  { field: "nationality", headerName: "Nationality", width: 100 },
-  {
-    field: "facultyOfGraduation",
-    headerName: "Faculty Of Graduation",
-    width: 120,
-  },
-  { field: "yearOfGraduation", headerName: "Year Of Graduation", width: 90 },
-  {
-    field: "facultyIDNumber",
-    headerName: "Faculty ID Number",
-    width: 120,
-  },
-  { field: "grade", headerName: "Grade", width: 120 },
-  { field: "orderOfGraduate", headerName: "Order Of Graduate", width: 120 },
   { field: "hospital", headerName: "Hospital", width: 120 },
   { field: "currentRound", headerName: "Current Round", width: 120 },
   {
@@ -92,28 +94,29 @@ const EmptyData = () => {
   );
 };
 
-const Interns = () => {
+const Supervisors = () => {
   const {
     user: { id },
   } = useSelector((state) => state.auth);
 
-  const { data, isLoading } = useGetAllInternsQuery({ skip: !id });
+  const { data, isLoading } = useGetAllSupervisorsQuery({ skip: !id });
 
-  let interns = data?.interns?.map((intern) => {
+  console.log("data", data);
+
+  let supervisors = data?.supervisors?.map((supervisor) => {
     return {
-      ...intern,
-      currentRound: intern.currentRound.title,
-      id: intern._id,
-      hospital: _.startCase(intern.hospital),
+      ...supervisor,
+      id: supervisor._id,
+      hospital: _.startCase(supervisor.hospital),
     };
   });
 
   return (
     <>
-      {interns?.length > 0 && !isLoading ? (
+      {supervisors?.length > 0 && !isLoading ? (
         <div className="shadow-md p-10">
           <div className="flex justify-between items-center mb-8">
-            <h2 className="text-4xl text-mediumGray">Interns</h2>
+            <h2 className="text-4xl text-mediumGray">Supervisors</h2>
             <div className="relative w-2/3">
               <Input
                 placeholder="search"
@@ -129,7 +132,7 @@ const Interns = () => {
           <div className="grid grid-cols-6 w-full">
             <div className="!w-full col-span-full">
               <DataGrid
-                rows={interns}
+                rows={supervisors}
                 columns={columns}
                 disableColumnMenu
                 disableColumnSorting
@@ -160,4 +163,4 @@ const Interns = () => {
   );
 };
 
-export default Interns;
+export default Supervisors;

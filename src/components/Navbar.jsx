@@ -12,6 +12,10 @@ const supervisorsNavLinks = [
     label: "Home",
   },
   {
+    title: "rounds?round_name=internal_medicine",
+    label: "Rounds",
+  },
+  {
     title: "interns",
     label: "Interns",
   },

@@ -47,6 +47,36 @@ const egyptianMedicalUniversities = [
   "Military Medical Academy",
 ];
 
+// Medical Specialities
+export const specialities = [
+  { label: "Family Medicine", value: "family_medicine" },
+  { label: "Internal Medicine", value: "internal_medicine" },
+  { label: "Pediatrics", value: "pediatrics" },
+  { label: "Geriatrics", value: "geriatrics" },
+  { label: "Cardiology", value: "cardiology" },
+  { label: "Endocrinology", value: "endocrinology" },
+  { label: "Neurology", value: "neurology" },
+  { label: "Oncology", value: "oncology" },
+  { label: "Pulmonology", value: "pulmonology" },
+  { label: "Rheumatology", value: "rheumatology" },
+  { label: "General Surgery", value: "general_surgery" },
+  { label: "Cardiothoracic Surgery", value: "cardiothoracic_surgery" },
+  { label: "Neurosurgery", value: "neurosurgery" },
+  { label: "Orthopedic Surgery", value: "orthopedic_surgery" },
+  { label: "Plastic Surgery", value: "plastic_surgery" },
+  { label: "Urology", value: "urology" },
+  { label: "Vascular Surgery", value: "vascular_surgery" },
+  { label: "Otolaryngology (ENT)", value: "ent" },
+  { label: "Anesthesiology and ICU", value: "anesthesiology_icu" },
+  { label: "Emergency Medicine", value: "emergency_medicine" },
+  { label: "Radiology", value: "radiology" },
+  { label: "Clinical Pathology", value: "clinical_pathology" },
+  { label: "Dermatology", value: "dermatology" },
+  { label: "Psychiatry", value: "psychiatry" },
+  { label: "Obstetrics & Gynecology", value: "obgyn" },
+  { label: "Ophthalmology", value: "ophthalmology" },
+];
+
 export const facultiesList = () => {
   let list = [];
   for (let university of egyptianMedicalUniversities) {
@@ -171,6 +201,8 @@ export const supervisorSignupValidationSchema = () => {
           /^[A-Za-z-]{2,}/,
           "Please enter your name as in your national ID"
         ),
+      hospital: yup.object().required("Hospital is required"),
+      speciality: yup.object().required("Speciality is required"),
       email: yup.string().email().required("Email is required"),
       phone: yup
         .string()
