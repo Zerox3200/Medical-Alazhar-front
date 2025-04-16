@@ -276,8 +276,8 @@ const InternSignupForm = () => {
                 <SelectBox
                   {...field}
                   options={[
-                    { value: "Sayed Galal", label: "Sayed Galal Hospital" },
-                    { value: "Al-Hussein", label: "Al-Hussein Hospital" },
+                    { value: "sayed_galal", label: "Sayed Galal Hospital" },
+                    { value: "al_hussein", label: "Al Hussein Hospital" },
                   ]}
                   placeholder="Hospital"
                   error={errors.hospital}

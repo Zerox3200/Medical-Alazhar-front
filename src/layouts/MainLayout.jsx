@@ -6,7 +6,7 @@ import ProfileApproval from "../utils/ProfileApproval.jsx";
 
 const MainLayout = () => {
   return (
-    <div className="font-ubuntu">
+    <div className="font-ubuntu flex flex-col justify-between h-screen">
       {/* <ProfileApproval /> */}
       <Navbar />
       <div className="pt-[96px]">

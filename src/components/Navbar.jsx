@@ -35,20 +35,12 @@ const navLinks = [
     label: "Home",
   },
   {
-    title: "record_training",
-    label: "Record Training",
-  },
-  {
-    title: "assessment",
-    label: "Assessment",
+    title: "training",
+    label: "Training",
   },
   {
     title: "courses",
     label: "Courses",
-  },
-  {
-    title: "end_round_reflections",
-    label: "End Round Reflections",
   },
   {
     title: "portfolio",
