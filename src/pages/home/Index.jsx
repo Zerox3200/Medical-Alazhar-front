@@ -8,16 +8,10 @@ import {
 import UnapprovedAccountBox from "./components/UnapprovedAccountBox";
 import StatsBox from "./components/StatsBox";
 import {
-  FaBed,
   FaBedPulse,
-  FaBook,
   FaChalkboardUser,
-  FaCloudSunRain,
-  FaEnvelope,
   FaHospital,
-  FaUser,
   FaUserDoctor,
-  FaUsers,
 } from "react-icons/fa6";
 import Loader from "../../components/Loader";
 

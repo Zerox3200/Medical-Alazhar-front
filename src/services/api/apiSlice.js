@@ -26,7 +26,7 @@ const baseQueryWithReauth = async (args, api, extraOptions) => {
     try {
       const refreshResult = await baseQuery(
         {
-          url: "/auth/refresh-token",
+          url: "/auth/refresh",
           method: "POST",
           credentials: "include",
         },
@@ -77,152 +77,6 @@ export const apiSlice = createApi({
       }),
     }),
 
-    // Login
-    login: builder.mutation({
-      query: ({ ...formData }) => ({
-        url: `/auth/login`,
-        method: "POST",
-        body: formData,
-        credentials: "include",
-      }),
-    }),
-
-    // Logout
-    logout: builder.mutation({
-      query: () => ({
-        url: `/auth/logout`,
-        method: "POST",
-        credentials: "include", // Send refresh token cookie
-      }),
-      onQueryStarted: async (_, { dispatch, queryFulfilled }) => {
-        try {
-          const response = await queryFulfilled;
-          console.log("Logout successful, server response:", response);
-          dispatch(clearAuth());
-          dispatch(apiSlice.util.resetApiState());
-        } catch (error) {
-          console.error("Logout failed:", error);
-        }
-      },
-    }),
-
-    // Get User
-    getUser: builder.query({
-      query: ({ userId, role }) => {
-        const roles = ["admin", "coordinator", "supervisor"];
-        if (!userId) {
-          throw new Error("ID are required");
-        }
-        return {
-          url: roles.includes(role)
-            ? `/supervisor/${userId}`
-            : `/intern/${userId}`,
-          method: "GET",
-          credentials: "include",
-        };
-      },
-      providesTags: ["User"],
-    }),
-
-    // Get all supervisors
-    getAllSupervisors: builder.query({
-      query: () => {
-        return {
-          url: "/admin/supervisors",
-          method: "GET",
-          credentials: "include",
-        };
-      },
-
-      providesTags: ["Account"],
-    }),
-
-    // Get all coordinators
-    getAllCoordinators: builder.query({
-      query: () => {
-        return {
-          url: "/admin/coordinators",
-          method: "GET",
-          credentials: "include",
-        };
-      },
-
-      providesTags: ["Account"],
-    }),
-
-    // Get all interns
-    getAllInterns: builder.query({
-      query: () => {
-        return {
-          url: "/admin/interns",
-          method: "GET",
-          credentials: "include",
-        };
-      },
-      providesTags: ["Account", "Rounds"],
-    }),
-
-    // Get single intern
-    getSingleIntern: builder.query({
-      query: ({ internId }) => {
-        return {
-          url: `/admin/interns/${internId}`,
-          method: "GET",
-          credentials: "include",
-        };
-      },
-      providesTags: ["Intern"],
-    }),
-
-    // Get single supervisor
-    getSingleSupervisor: builder.query({
-      query: ({ supervisorId }) => {
-        return {
-          url: `/admin/supervisors/${supervisorId}`,
-          method: "GET",
-          credentials: "include",
-        };
-      },
-      providesTags: ["Supervisor"],
-    }),
-
-    // Get single coordinator
-    getSingleCoordinator: builder.query({
-      query: ({ coordinatorId }) => {
-        return {
-          url: `/admin/coordinators/${coordinatorId}`,
-          method: "GET",
-          credentials: "include",
-        };
-      },
-      providesTags: ["Coordinator"],
-    }),
-
-    // Account Approval
-    approveAccount: builder.mutation({
-      query: ({ userId, ...approved }) => {
-        return {
-          url: `/admin/account-status/${userId}`,
-          method: "PUT",
-          body: approved,
-          credentials: "include",
-        };
-      },
-      invalidatesTags: ["Account"],
-    }),
-
-    // Add an intern to round
-    addInternToRound: builder.mutation({
-      query: ({ internId, ...currentRound }) => {
-        return {
-          url: `/admin/interns/assign-round?internId=${internId}`,
-          method: "PUT",
-          body: currentRound,
-          credentials: "include",
-        };
-      },
-      invalidatesTags: ["Rounds"],
-    }),
     // Profile Image Upload
     uploadProfileImage: builder.mutation({
       query: ({ role, internId, imageFile }) => ({
@@ -260,17 +114,6 @@ export const apiSlice = createApi({
 export const {
   useInternSignupMutation,
   useSupervisorSignupMutation,
-  useLoginMutation,
-  useLogoutMutation,
-  useApproveAccountMutation,
-  useGetUserQuery,
-  useGetAllInternsQuery,
-  useGetAllSupervisorsQuery,
-  useGetAllCoordinatorsQuery,
-  useGetSingleSupervisorQuery,
-  useGetSingleCoordinatorQuery,
-  useGetSingleInternQuery,
-  useAddInternToRoundMutation,
   useUploadProfileImageMutation,
   useUploadNationalIDImageMutation,
   useUploadMBBCHCertificateImageMutation,

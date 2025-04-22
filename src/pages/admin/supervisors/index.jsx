@@ -5,7 +5,7 @@ import { FaCheckCircle, FaSearch } from "react-icons/fa";
 import { Link } from "react-router";
 import { useSelector } from "react-redux";
 import _ from "lodash";
-import { useGetAllSupervisorsQuery } from "../../../services/api/apiSlice";
+import { useGetAllSupervisorsQuery } from "../../../services/api/adminApiSlice";
 import Input from "../../auth/components/Input";
 
 const columns = [

@@ -7,16 +7,14 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { loginValidationSchema } from "../../constants/authFormData";
 import { useDispatch } from "react-redux";
-import { useLoginMutation } from "../../services/api/apiSlice";
+import { useLoginMutation } from "../../services/api/authApiSlice";
 import { setAuth } from "../../services/slices/authSlice";
 
 const Login = () => {
   const [visiblePassword, setVisiblePassword] = useState(false);
 
   const [login] = useLoginMutation();
-
   const dispatch = useDispatch();
-
   const navigate = useNavigate();
 
   const {

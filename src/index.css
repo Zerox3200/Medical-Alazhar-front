@@ -3,24 +3,44 @@
 @import "tailwindcss";
 @theme {
   --color-deepBlue: #2e5a88;
-  --color-lightBlue: #a6d5e8;
+  /* --color-lightBlue: #a6d5e8; */
   --color-crispWhite: #ffffff;
   --color-softGray: #f5f5f5;
   --color-darkGray: #333333;
   --color-mediumGray: #666666;
   --color-coral: #ff6f61;
   --color-teal: #2d9c9c;
-  --color-emeraldGreen: #4caf50;
   --color-error: #f44336;
+  /* --color-emeraldGreen: #4caf50;
 
-  /*Separartor*/
-  --color-primary: #191c24;
+  /*Admin Dashboard*/
+  --color-primary: #1a2d42;
+  --color-secondary: #2e4156;
+  --color-silverFrost: #c0c8ca;
+  --color-mistyMorning: #aab7b7;
+  --color-cloudVeil: #d4d8dd;
+  --color-flashWhite: #f0f1f5;
+
+  --color-pink: #ffc0cb;
+  --color-hotPink: #ff69b4;
+
+  --color-mediumBlue: #0d6efd;
+  --color-lightBlue: #0dcaf0;
+
+  --color-emeraldGreen: #4caf50;
+  --color-mediumGreen: #198754;
+
+  --color-darkRed: #ab2e3c;
+  --color-lightRed: #ff999c;
+
+  /* Separator */
+  /* --color-primary: #191c24;
   --color-secondary: #af1763;
   --color-mediumBlue: #0d6efd;
   --color-mediumGreen: #198754;
   --color-lightBlue2: #0dcaf0;
   --color-darkRed: #ab2e3c;
-  --color-mediumYellow: #ffc107;
+  --color-mediumYellow: #ffc107; */
 
   --font-ubuntu: "Ubuntu", sans-serif;
   --font-poppins: "Poppins", sans-serif;

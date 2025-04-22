@@ -1,23 +1,33 @@
 import React, { lazy } from "react";
-import authRoutes from "./auth.routes.jsx";
-import internRoutes from "./intern.routes.jsx";
-// import appRoutes from './app.routes';
-// import profileRoutes from './profile.routes';
+import AuthRoutes from "./auth.routes.jsx";
+import AdminRoutes from "./admin.routes.jsx";
+import InternRoutes from "./intern.routes.jsx";
+import NotAuthorized from "../pages/NotAuthorized.jsx";
+import ProtectedRoute from "../utils/ProtectedRoute.jsx";
+import { Navigate } from "react-router";
 
+const ErrorBoundary = lazy(() => import("../pages/ErrorBoundary.jsx"));
 const NotFound = lazy(() => import("../pages/NotFound.jsx"));
-const Home = lazy(() => import("../pages/home/Index.jsx"));
 
-const routes = [
-  authRoutes,
-  ...internRoutes,
-  //   adminRoutes,
-  //   appRoutes,
-  //   profileRoutes,
+const createRoutes = (userRole, token) => {
+  return [
+    AuthRoutes,
+    {
+      element: <ProtectedRoute allowedRoles={["admin", "intern"]} />,
+      children: [
+        ...(token && userRole === "admin" ? AdminRoutes : []),
+        ...(token && userRole === "intern" ? InternRoutes : []),
+      ],
+    },
+    {
+      path: "*",
+      element: token ? (
+        <NotAuthorized />
+      ) : (
+        <Navigate to="/auth/login" replace />
+      ),
+    },
+  ];
+};
 
-  {
-    path: "*",
-    element: <NotFound />,
-  },
-];
-
-export default routes;
+export default createRoutes;

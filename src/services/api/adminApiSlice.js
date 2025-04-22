@@ -2,6 +2,26 @@ import { baseApiSlice } from "./baseApiSlice";
 
 export const adminApiSlice = baseApiSlice.injectEndpoints({
   endpoints: (builder) => ({
+    getAdmin: builder.query({
+      query: ({ adminId }) => ({
+        url: `/admin/${adminId}/profile`,
+        method: "GET",
+        credentials: "include",
+      }),
+      transformErrorResponse: (response) =>
+        response.data?.error || "Unknown error",
+      providesTags: ["User"],
+    }),
+
+    approveAccount: builder.mutation({
+      query: ({ userId, ...approved }) => ({
+        url: `/admin/account-status/${userId}`,
+        method: "PUT",
+        body: approved,
+        credentials: "include",
+      }),
+      invalidatesTags: ["Account"],
+    }),
     // Admin management endpoints
     getAllSupervisors: builder.query({
       query: () => ({
@@ -57,16 +77,6 @@ export const adminApiSlice = baseApiSlice.injectEndpoints({
       providesTags: ["Coordinator"],
     }),
 
-    approveAccount: builder.mutation({
-      query: ({ userId, ...approved }) => ({
-        url: `/admin/account-status/${userId}`,
-        method: "PUT",
-        body: approved,
-        credentials: "include",
-      }),
-      invalidatesTags: ["Account"],
-    }),
-
     addInternToRound: builder.mutation({
       query: ({ internId, ...currentRound }) => ({
         url: `/admin/interns/assign-round?internId=${internId}`,
@@ -77,9 +87,11 @@ export const adminApiSlice = baseApiSlice.injectEndpoints({
       invalidatesTags: ["Rounds"],
     }),
   }),
+  overrideExisting: false,
 });
 
 export const {
+  useGetAdminQuery,
   useGetAllSupervisorsQuery,
   useGetAllCoordinatorsQuery,
   useGetAllInternsQuery,

@@ -1,10 +1,12 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { useSelector } from "react-redux";
-import { useGetAllInternsQuery } from "../../../services/api/apiSlice";
 import { Modal } from "@mui/material";
 import _ from "lodash";
-import { useAddInternToRoundMutation } from "../../../services/api/apiSlice";
 import { Link } from "react-router";
+import {
+  useAddInternToRoundMutation,
+  useGetAllInternsQuery,
+} from "../../../services/api/adminApiSlice";
 
 const AddIntern = ({ roundName, open, handleClose, selectedHospital }) => {
   const [searchValue, setSearchValue] = useState("");

@@ -1,6 +1,6 @@
 import React from "react";
 import { useSelector } from "react-redux";
-import { useGetUserQuery } from "../../../services/api/apiSlice";
+import { useGetUserQuery } from "../../../services/api/authApiSlice";
 import Loader from "../../../components/Loader";
 import ProfileSidebar from "./components/ProfileSidebar";
 import SupervisorContent from "../../profile/components/SupervisorContent";

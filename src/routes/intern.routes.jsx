@@ -28,9 +28,9 @@ const Courses = lazy(() => import("../pages/interns/Courses.jsx"));
 const Portfolio = lazy(() => import("../pages/interns/Courses.jsx"));
 const ContactUs = lazy(() => import("../pages/interns/ContactUs.jsx"));
 
-const internRoutes = [
+const InternRoutes = [
   {
-    element: <ProtectedRoute />,
+    element: <ProtectedRoute allowedRoles={["intern"]} />,
     children: [
       {
         path: "/",
@@ -96,4 +96,4 @@ const internRoutes = [
   },
 ];
 
-export default internRoutes;
+export default InternRoutes;

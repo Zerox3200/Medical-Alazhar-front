@@ -1,6 +1,9 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router";
-import { useGetUserQuery, useLogoutMutation } from "../services/api/apiSlice";
+import {
+  useGetUserQuery,
+  useLogoutMutation,
+} from "../services/api/authApiSlice";
 import { clearAuth } from "../services/slices/authSlice";
 import { persistor } from "../store/store";
 import { FaUserCircle } from "react-icons/fa";

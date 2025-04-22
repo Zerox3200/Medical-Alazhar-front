@@ -31,9 +31,10 @@ export const authApiSlice = baseApiSlice.injectEndpoints({
 
     getUser: builder.query({
       query: ({ userId, role }) => ({
-        url: ["admin", "coordinator", "supervisor"].includes(role)
-          ? `/supervisor/${userId}`
-          : `/intern/${userId}`,
+        url:
+          ((role === "supervisor" || role === "coordinator") &&
+            `/supervisor/${userId}`) ||
+          (role === "intern" && `/intern/${userId}`),
         method: "GET",
         credentials: "include",
       }),

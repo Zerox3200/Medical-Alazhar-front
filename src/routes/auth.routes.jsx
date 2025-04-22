@@ -5,7 +5,7 @@ const Login = lazy(() => import("../pages/auth/Login.jsx"));
 const Signup = lazy(() => import("../pages/auth/signup/Signup.jsx"));
 const ResetPassword = lazy(() => import("../pages/auth/ResetPassword.jsx"));
 
-const authRoutes = {
+const AuthRoutes = {
   path: "/auth",
   element: <AuthLayout />,
   children: [
@@ -16,4 +16,4 @@ const authRoutes = {
   ],
 };
 
-export default authRoutes;
+export default AuthRoutes;

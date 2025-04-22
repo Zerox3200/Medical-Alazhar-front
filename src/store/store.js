@@ -10,7 +10,6 @@ import { adminApiSlice } from "../services/api/adminApiSlice";
 import { internApiSlice } from "../services/api/internApiSlice";
 import { authApiSlice } from "../services/api/authApiSlice";
 import { uploadApiSlice } from "../services/api/uploadApiSlice";
-import { apiSlice } from "../services/api/apiSlice";
 import authReducer from "../services/slices/authSlice";
 
 const persistConfig = {
@@ -27,7 +26,6 @@ const rootReducer = combineReducers({
   [internApiSlice.reducerPath]: internApiSlice.reducer,
   [authApiSlice.reducerPath]: authApiSlice.reducer,
   [uploadApiSlice.reducerPath]: uploadApiSlice.reducer,
-  [apiSlice.reducerPath]: apiSlice.reducer,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
@@ -40,7 +38,6 @@ export const store = configureStore({
         ignoredActions: [PERSIST, REHYDRATE],
       },
     }).concat(
-      apiSlice.middleware,
       adminApiSlice.middleware,
       internApiSlice.middleware,
       authApiSlice.middleware,
