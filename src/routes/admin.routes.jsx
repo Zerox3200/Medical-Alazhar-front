@@ -1,12 +1,11 @@
 import React, { lazy } from "react";
 const ProtectedRoute = lazy(() => import("../utils/ProtectedRoute.jsx"));
 const AdminLayout = lazy(() => import("../layouts/AdminLayout.jsx"));
-const AdminDashboard = lazy(() =>
-  import("../pages/admin/dashboard/Dashboard.jsx")
-);
-import Rounds from "../pages/admin/rounds/index.jsx";
-import Supervisors from "../pages/admin/supervisors";
-import Interns from "../pages/admin/interns";
+const AdminDashboard = lazy(() => import("../admin/dashboard/Dashboard.jsx"));
+import Rounds from "../admin/rounds";
+import Supervisors from "../admin/supervisors";
+import Interns from "../admin/interns";
+import Profile from "../admin/profile";
 
 const AdminRoutes = [
   {
@@ -31,6 +30,10 @@ const AdminRoutes = [
           {
             path: "/interns",
             element: <Interns />,
+          },
+          {
+            path: "/profile",
+            element: <Profile />,
           },
         ],
       },

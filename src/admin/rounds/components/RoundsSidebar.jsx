@@ -58,7 +58,7 @@ const RoundsSidebar = () => {
       <ul className="h-screen overflow-y-scroll bg-softGray p-2">
         {filteredRounds.map((round, i) => {
           return (
-            <NavLink to={`/admin/rounds?round_name=${round.value}`} key={i}>
+            <NavLink to={`/rounds?round_name=${round.value}`} key={i}>
               <li
                 className={`${
                   roundName === round.value ? "text-teal bg-teal/10" : ""

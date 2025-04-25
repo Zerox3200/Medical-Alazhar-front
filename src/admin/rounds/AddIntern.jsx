@@ -6,7 +6,7 @@ import { Link } from "react-router";
 import {
   useAddInternToRoundMutation,
   useGetAllInternsQuery,
-} from "../../../services/api/adminApiSlice";
+} from "../../services/api/adminApiSlice";
 
 const AddIntern = ({ roundName, open, handleClose, selectedHospital }) => {
   const [searchValue, setSearchValue] = useState("");

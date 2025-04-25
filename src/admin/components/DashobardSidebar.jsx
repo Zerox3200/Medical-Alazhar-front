@@ -1,5 +1,5 @@
 import React from "react";
-import logo from "../../../assets/images/logo.jpg";
+import logo from "../../assets/images/logo.jpg";
 import { Link, NavLink } from "react-router";
 import { GoHomeFill } from "react-icons/go";
 import { FaHouseMedical } from "react-icons/fa6";

@@ -10,7 +10,7 @@ import { MdSupervisorAccount } from "react-icons/md";
 import {
   useGetAllInternsQuery,
   useGetAllSupervisorsQuery,
-} from "../../../services/api/adminApiSlice";
+} from "../../services/api/adminApiSlice";
 import CasesLogged from "./charts/CasesLogged";
 import PassedRounds from "./charts/PassedRounds";
 import RecentAccounts from "./components/RecentAccounts";
@@ -20,7 +20,7 @@ const Dashboard = () => {
   const { data: supervisors } = useGetAllSupervisorsQuery();
 
   return (
-    <div className="flex flex-col gap-10">
+    <div className="flex flex-col gap-10 p-6">
       {/* Statistics */}
       <div className="grid grid-cols-4 gap-4">
         {/* Interns */}

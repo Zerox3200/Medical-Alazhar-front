@@ -1,12 +1,10 @@
 import React, { useState } from "react";
-import profileImgIcon from "../../../assets/images/profile.jpg";
 import { Link } from "react-router";
 import { FaUserLarge } from "react-icons/fa6";
 import { MdLogout } from "react-icons/md";
-import { IoToggle } from "react-icons/io5";
 import { BsFillGearFill } from "react-icons/bs";
 
-const AccountMenu = ({ name, role }) => {
+const AccountMenu = ({ name, role, profileImage }) => {
   const [opened, setOpened] = useState(false);
   const [toggleTheme, setToggleTheme] = useState(false);
 
@@ -18,7 +16,7 @@ const AccountMenu = ({ name, role }) => {
       >
         <h2 className="relative">
           <img
-            src={profileImgIcon}
+            src={"http://localhost:3000/" + profileImage}
             alt="profile-image-icon"
             className="w-12 h-12 rounded-full object-cover border-[1px] border-silverFrost"
           />
@@ -41,7 +39,7 @@ const AccountMenu = ({ name, role }) => {
         <ul className="p-4">
           <li>
             <Link
-              to="/admin/profile"
+              to="/profile"
               className="p-2 rounded-md text-secondary flex gap-2 items-center hover:bg-pink"
             >
               <FaUserLarge /> Profile

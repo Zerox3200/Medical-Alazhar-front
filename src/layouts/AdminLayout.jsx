@@ -1,7 +1,7 @@
 import React from "react";
 import { Outlet } from "react-router";
-import DashobardSidebar from "../pages/admin/components/DashobardSidebar.jsx";
-import DashboardHeadbar from "../pages/admin/components/DashboardHeadbar.jsx";
+import DashobardSidebar from "../admin/components/DashobardSidebar.jsx";
+import DashboardHeadbar from "../admin/components/DashboardHeadbar.jsx";
 
 const AdminLayout = () => {
   return (
@@ -12,7 +12,7 @@ const AdminLayout = () => {
         </div>
         <div className="col-span-5">
           <DashboardHeadbar />
-          <div className="p-8">
+          <div className="">
             <Outlet />
           </div>
         </div>

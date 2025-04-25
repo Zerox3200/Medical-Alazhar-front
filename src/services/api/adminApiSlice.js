@@ -2,6 +2,7 @@ import { baseApiSlice } from "./baseApiSlice";
 
 export const adminApiSlice = baseApiSlice.injectEndpoints({
   endpoints: (builder) => ({
+    // Get admin data
     getAdmin: builder.query({
       query: ({ adminId }) => ({
         url: `/admin/${adminId}/profile`,
@@ -10,26 +11,50 @@ export const adminApiSlice = baseApiSlice.injectEndpoints({
       }),
       transformErrorResponse: (response) =>
         response.data?.error || "Unknown error",
-      providesTags: ["User"],
+      providesTags: ["Admin"],
     }),
 
+    // Approve new account
     approveAccount: builder.mutation({
       query: ({ userId, ...approved }) => ({
-        url: `/admin/account-status/${userId}`,
-        method: "PUT",
+        url: `admin/accounts/${userId}/approvals`,
+        method: "PATCH",
         body: approved,
         credentials: "include",
       }),
       invalidatesTags: ["Account"],
     }),
-    // Admin management endpoints
-    getAllSupervisors: builder.query({
+
+    // Get not approved users
+    getNotApprovedUsers: builder.query({
       query: () => ({
-        url: "/admin/supervisors",
+        url: `admin/accounts/approvals`,
         method: "GET",
         credentials: "include",
       }),
       providesTags: ["Account"],
+    }),
+
+    // Profile Image Upload
+    uploadAdminProfileImage: builder.mutation({
+      query: ({ adminId, imageFile }) => ({
+        url: `/admin/${adminId}/uploads/profile`,
+        method: "POST",
+        body: imageFile,
+        credentials: "include",
+      }),
+      invalidatesTags: ["Admin"],
+    }),
+    /***************************************/
+    // Admin management endpoints
+    getAllSupervisors: builder.query({
+      query: (params = {}) => ({
+        url: "/admin/supervisors",
+        method: "GET",
+        params,
+        credentials: "include",
+      }),
+      providesTags: ["Supervisor"],
     }),
 
     getAllCoordinators: builder.query({
@@ -92,6 +117,7 @@ export const adminApiSlice = baseApiSlice.injectEndpoints({
 
 export const {
   useGetAdminQuery,
+  useGetNotApprovedUsersQuery,
   useGetAllSupervisorsQuery,
   useGetAllCoordinatorsQuery,
   useGetAllInternsQuery,

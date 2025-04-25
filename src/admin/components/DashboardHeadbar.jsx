@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { FaCalendarPlus } from "react-icons/fa";
-import { useGetAdminQuery } from "../../../services/api/adminApiSlice";
+import { useGetAdminQuery } from "../../services/api/adminApiSlice";
 import AccountMenu from "./AccountMenu.jsx";
 import { useSelector } from "react-redux";
-import Loader from "../../../components/Loader";
+import Loader from "../../components/Loader";
 
 const DashboardHeadbar = () => {
   const [time, setTime] = useState(new Date().toLocaleTimeString());
@@ -19,7 +19,7 @@ const DashboardHeadbar = () => {
     return () => {
       clearInterval(interval);
     };
-  }, [time]);
+  }, []);
 
   const { id, role } = useSelector((state) => state.auth?.user);
 
@@ -59,6 +59,7 @@ const DashboardHeadbar = () => {
       </div>
       <div className="flex justify-end">
         <AccountMenu
+          profileImage={data?.admin?.profileImage}
           name={adminName.split(" ")[0] + " " + adminName.split(" ")[1]}
           role={role}
         />
