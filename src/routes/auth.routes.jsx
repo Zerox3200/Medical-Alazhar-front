@@ -1,9 +1,9 @@
 import React, { lazy } from "react";
 import AuthLayout from "../layouts/AuthLayout.jsx";
 
-const Login = lazy(() => import("../pages/auth/Login.jsx"));
-const Signup = lazy(() => import("../pages/auth/signup/Signup.jsx"));
-const ResetPassword = lazy(() => import("../pages/auth/ResetPassword.jsx"));
+const Login = lazy(() => import("../auth/Login.jsx"));
+const Signup = lazy(() => import("../auth/signup/Signup.jsx"));
+const ResetPassword = lazy(() => import("../auth/ResetPassword.jsx"));
 
 const AuthRoutes = {
   path: "/auth",

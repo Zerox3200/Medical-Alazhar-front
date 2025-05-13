@@ -3,7 +3,6 @@ import { Link, NavLink } from "react-router";
 import { useSelector } from "react-redux";
 
 import logo from "../assets/images/logo.jpg";
-import UserProfileMenu from "./UserProfileMenu";
 
 // Supervisors Navbar
 const supervisorsNavLinks = [
@@ -58,7 +57,7 @@ const Navbar = () => {
   const isAuthenticated = !!token && !!user;
 
   return (
-    <div className="px-8 p-2 fixed z-50 bg-teal text-crispWhite w-full min-h-[80px] flex justify-between items-center">
+    <div className="px-8 p-2 fixed z-50 bg-white text-secondary border-b-1 border-mistyMorning/40 w-full min-h-[80px] flex justify-between items-center">
       <h2 className="font-semibold text-2xl">
         <Link to="/">
           <img src={logo} className="w-20 h-20 rounded-full" />
@@ -67,7 +66,7 @@ const Navbar = () => {
 
       {/* Links */}
       {isAuthenticated && (
-        <ul className="flex gap-8 text-softGray">
+        <ul className="flex gap-8">
           {user.role === "admin"
             ? supervisorsNavLinks.map((navLink, i) => {
                 return (
@@ -112,9 +111,7 @@ const Navbar = () => {
 
       {/* Authentication Links */}
       {isAuthenticated ? (
-        <div>
-          <UserProfileMenu />
-        </div>
+        <div>{/* <UserProfileMenu /> */}</div>
       ) : (
         <div className="flex">
           <Link to="/auth/login" className="hover:underline">

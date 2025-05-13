@@ -6,11 +6,16 @@ import {
   REHYDRATE,
 } from "redux-persist";
 import storage from "redux-persist/lib/storage";
+
+// Api Slices
 import { adminApiSlice } from "../services/api/adminApiSlice";
 import { internApiSlice } from "../services/api/internApiSlice";
 import { authApiSlice } from "../services/api/authApiSlice";
 import { uploadApiSlice } from "../services/api/uploadApiSlice";
+
+// Slices
 import authReducer from "../services/slices/authSlice";
+import adminSlice from "../services/slices/adminSlice";
 
 const persistConfig = {
   key: "auth",
@@ -22,6 +27,7 @@ const persistConfig = {
 
 const rootReducer = combineReducers({
   auth: authReducer,
+  admin: adminSlice,
   [adminApiSlice.reducerPath]: adminApiSlice.reducer,
   [internApiSlice.reducerPath]: internApiSlice.reducer,
   [authApiSlice.reducerPath]: authApiSlice.reducer,

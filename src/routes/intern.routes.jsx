@@ -1,32 +1,28 @@
 import React, { lazy } from "react";
 const ProtectedRoute = lazy(() => import("../utils/ProtectedRoute.jsx"));
-const MainLayout = lazy(() => import("../layouts/MainLayout.jsx"));
-const InternHome = lazy(() => import("../pages/interns/home"));
+const InternLayout = lazy(() => import("../layouts/InternLayout.jsx"));
+const InternHome = lazy(() => import("../interns/home"));
+const InternProfile = lazy(() => import("../interns/profile"));
+const Courses = lazy(() => import("../interns/courses"));
+const Course = lazy(() => import("../interns/courses/course"));
+
 const TrainingLayout = lazy(() =>
-  import("../pages/interns/training/TrainingLayout.jsx")
+  import("../interns/training/TrainingLayout.jsx")
 );
-const Training = lazy(() => import("../pages/interns/training"));
-const CasesSummary = lazy(() => import("../pages/interns/training/cases"));
-const Procedures = lazy(() => import("../pages/interns/training/procedures"));
-const SelfLearning = lazy(() =>
-  import("../pages/interns/training/selflearning")
-);
+const Training = lazy(() => import("..//interns/training/Index.jsx"));
+const CasesSummary = lazy(() => import("../interns/training/cases"));
+const Procedures = lazy(() => import("../interns/training/procedures"));
+const SelfLearning = lazy(() => import("../interns/training/selflearning"));
 const DirectLearning = lazy(() =>
-  import("../pages/interns/training/DirectLearning.jsx")
+  import("../interns/training/DirectLearning.jsx")
 );
-const Assessments = lazy(() =>
-  import("../pages/interns/training/Assessments.jsx")
-);
+const Assessments = lazy(() => import("../interns/training/Assessments.jsx"));
 const EndRoundReflections = lazy(() =>
-  import("../pages/interns/training/EndRoundReflections.jsx")
-);
-const InternProfile = lazy(() =>
-  import("../pages/interns/profile/InternProfile.jsx")
+  import("../interns/training/EndRoundReflections.jsx")
 );
 
-const Courses = lazy(() => import("../pages/interns/Courses.jsx"));
-const Portfolio = lazy(() => import("../pages/interns/Courses.jsx"));
-const ContactUs = lazy(() => import("../pages/interns/ContactUs.jsx"));
+// const Portfolio = lazy(() => import("../pages/interns/Courses.jsx"));
+// const ContactUs = lazy(() => import("../pages/interns/ContactUs.jsx"));
 
 const InternRoutes = [
   {
@@ -34,7 +30,7 @@ const InternRoutes = [
     children: [
       {
         path: "/",
-        element: <MainLayout />,
+        element: <InternLayout />,
         children: [
           {
             index: true,
@@ -43,6 +39,14 @@ const InternRoutes = [
           {
             path: "profile",
             element: <InternProfile />,
+          },
+          {
+            path: "courses",
+            element: <Courses />,
+          },
+          {
+            path: "courses/:courseId",
+            element: <Course />,
           },
           {
             path: "training",
@@ -78,18 +82,14 @@ const InternRoutes = [
               },
             ],
           },
-          {
-            path: "courses",
-            element: <Courses />,
-          },
-          {
-            path: "portfolio",
-            element: <Portfolio />,
-          },
-          {
-            path: "contact_us",
-            element: <ContactUs />,
-          },
+          // {
+          //   path: "portfolio",
+          //   element: <Portfolio />,
+          // },
+          // {
+          //   path: "contact_us",
+          //   element: <ContactUs />,
+          // },
         ],
       },
     ],

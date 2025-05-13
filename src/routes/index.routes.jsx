@@ -21,11 +21,7 @@ const createRoutes = (userRole, token) => {
     },
     {
       path: "*",
-      element: token ? (
-        <NotAuthorized />
-      ) : (
-        <Navigate to="/auth/login" replace />
-      ),
+      element: token ? <NotFound /> : <Navigate to="/auth/login" replace />,
     },
   ];
 };

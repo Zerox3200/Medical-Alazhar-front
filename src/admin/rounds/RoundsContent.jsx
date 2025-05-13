@@ -1,25 +1,49 @@
 import React, { useState } from "react";
-import RoundHeader from "./components/RoundHeader";
-import RoundDataGrid from "./RoundDataGrid";
-import { useSearchParams } from "react-router";
+import { useDispatch } from "react-redux";
+import { setOpenNewRoundModal } from "../../services/slices/adminSlice";
+import { GiMedicalPackAlt } from "react-icons/gi";
+import RoundsData from "./components/RoundsData";
+import PagesHeader from "../components/PagesHeader";
+import RoundsFilterAndSearchBar from "./components/RoundsFilterAndSearchBar";
 
 const RoundsContent = () => {
-  const [selectedHospital, setSelectedHospital] = useState("al_hussein");
-  const [searchParams] = useSearchParams();
-  const roundName = searchParams.get("round_name");
+  const [stateValue, setStateValue] = useState();
+  const [durationValue, setDurationValue] = useState();
+  const [hospitalValue, setHospitalValue] = useState();
+  const [levelValue, setLevelValue] = useState();
+  const [inputValue, setInputValue] = useState();
+
+  const dispatch = useDispatch();
+  const dispatchNewRound = () =>
+    dispatch(setOpenNewRoundModal({ openNewRoundModal: true }));
 
   return (
-    <div className="p-3 pt-10 bg-softGray">
-      <RoundHeader
-        roundName={roundName}
-        selectedHospital={selectedHospital}
-        setSelectedHospital={setSelectedHospital}
+    <div className="flex flex-col">
+      <PagesHeader
+        headerTitle="Rounds"
+        headerDescription="Manage your rounds and see updates"
+        headerIcon={<GiMedicalPackAlt />}
+        buttonTitle="New Round"
+        handleDarkButtonClick={dispatchNewRound}
       />
 
-      {/* Round Content Data */}
-      <RoundDataGrid
-        roundName={roundName}
-        selectedHospital={selectedHospital}
+      <RoundsFilterAndSearchBar
+        stateValue={stateValue}
+        setStateValue={setStateValue}
+        durationValue={durationValue}
+        setDurationValue={setDurationValue}
+        hospitalValue={hospitalValue}
+        setHospitalValue={setHospitalValue}
+        levelValue={levelValue}
+        setLevelValue={setLevelValue}
+        setInputValue={setInputValue}
+      />
+      <RoundsData
+        stateValue={stateValue}
+        durationValue={durationValue}
+        hospitalValue={hospitalValue}
+        levelValue={levelValue}
+        inputValue={inputValue}
       />
     </div>
   );

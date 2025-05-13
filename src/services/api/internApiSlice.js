@@ -10,16 +10,15 @@ export const internApiSlice = baseApiSlice.injectEndpoints({
       }),
     }),
 
-    getInternProfile: builder.query({
-      query: (internId) => ({
+    getIntern: builder.query({
+      query: ({ internId }) => ({
         url: `/intern/${internId}`,
         method: "GET",
         credentials: "include",
       }),
-      providesTags: ["User"],
+      providesTags: ["Intern", "Course"],
     }),
   }),
 });
 
-export const { useInternSignupMutation, useGetInternProfileQuery } =
-  internApiSlice;
+export const { useInternSignupMutation, useGetInternQuery } = internApiSlice;

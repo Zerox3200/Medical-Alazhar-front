@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { PURGE, REHYDRATE } from "redux-persist";
+import { PURGE } from "redux-persist";
 
 const initialState = {
   token: null,
@@ -12,7 +12,6 @@ const authSlice = createSlice({
   initialState,
   reducers: {
     setAuth: (state, action) => {
-      console.log("action", action.payload);
       state.token = action.payload.token;
       state.user = action.payload.user;
     },

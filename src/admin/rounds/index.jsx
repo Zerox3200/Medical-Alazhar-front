@@ -1,16 +1,12 @@
 import React from "react";
-import RoundsSidebar from "./components/RoundsSidebar";
 import RoundsContent from "./RoundsContent";
+import NewRound from "./NewRound";
 
 const Rounds = () => {
   return (
-    <div className="grid grid-cols-6 relative">
-      <div className="col-span-1">
-        <RoundsSidebar />
-      </div>
-      <div className="col-span-5">
-        <RoundsContent />
-      </div>
+    <div className="flex flex-col gap-10">
+      <RoundsContent />
+      <NewRound />
     </div>
   );
 };

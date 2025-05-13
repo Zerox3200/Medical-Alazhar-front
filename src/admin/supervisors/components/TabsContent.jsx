@@ -14,7 +14,7 @@ const columns = [
     renderCell: (cell) => {
       return (
         <Link
-          to={`/admin/supervisors/${cell.row._id}`}
+          to={`/supervisors/${cell.row._id}`}
           className="hover:text-mediumBlue"
         >
           {cell.value.split(" ").splice(1, 3).join(" ")}
@@ -42,6 +42,7 @@ const columns = [
     flex: 1,
   },
   { field: "hospital", headerName: "Hospital", width: 120, flex: 1 },
+  { field: "round", headerName: "Round", width: 120, flex: 1 },
 ];
 
 // This Component is rendered when there are no cases

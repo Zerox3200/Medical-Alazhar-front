@@ -1,15 +1,28 @@
 import React, { useState } from "react";
+import { toast, ToastContainer } from "react-toastify";
 import { Link } from "react-router";
 import { FaUserLarge } from "react-icons/fa6";
 import { MdLogout } from "react-icons/md";
 import { BsFillGearFill } from "react-icons/bs";
+import { useLogoutMutation } from "../../services/api/authApiSlice";
 
 const AccountMenu = ({ name, role, profileImage }) => {
   const [opened, setOpened] = useState(false);
   const [toggleTheme, setToggleTheme] = useState(false);
 
+  const [logout] = useLogoutMutation();
+
+  const handleLogout = async () => {
+    try {
+      await logout().unwrap();
+    } catch (error) {
+      toast.error(error);
+    }
+  };
+
   return (
     <div className="relative">
+      <ToastContainer position="top-center" />
       <div
         className="flex items-center gap-2 cursor-pointer"
         onClick={() => setOpened(!opened)}
@@ -53,14 +66,12 @@ const AccountMenu = ({ name, role, profileImage }) => {
               <BsFillGearFill /> Settings
             </Link>
           </li>
-          <li>
-            <Link
-              to="/admin/profile"
-              className="p-2 rounded-md text-secondary flex gap-2 items-center hover:bg-pink"
-            >
-              <MdLogout />
-              Logout
-            </Link>
+          <li
+            onClick={handleLogout}
+            className="p-2 rounded-md text-secondary flex gap-2 items-center hover:bg-pink cursor-pointer"
+          >
+            <MdLogout />
+            Logout
           </li>
           <div className="bg-silverFrost h-[1px] w-full my-2"></div>
           <li className="py-2 text-secondary flex justify-between gap-2 items-center">

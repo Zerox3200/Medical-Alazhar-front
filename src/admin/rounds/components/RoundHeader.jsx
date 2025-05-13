@@ -3,15 +3,14 @@ import Avatar from "@mui/material/Avatar";
 import Chip from "@mui/material/Chip";
 import Stack from "@mui/material/Stack";
 import { useGetAllSupervisorsQuery } from "../../../services/api/adminApiSlice";
-import { useSelector } from "react-redux";
 import { Link } from "react-router";
 import _ from "lodash";
+import PagesHeader from "../../components/PagesHeader";
 
 const RoundHeader = ({ roundName, selectedHospital, setSelectedHospital }) => {
   const [supervisors, setSupervisors] = useState(null);
   const [coordinator, setCoordinator] = useState(null);
-  const { id } = useSelector((state) => state.auth.user || {});
-  const { data, isSuccess } = useGetAllSupervisorsQuery({ skip: !id });
+  const { data, isSuccess } = useGetAllSupervisorsQuery();
 
   useEffect(() => {
     if (isSuccess) setSupervisors(data?.supervisors);
@@ -31,7 +30,7 @@ const RoundHeader = ({ roundName, selectedHospital, setSelectedHospital }) => {
     <div>
       {/* Round Header Data */}
       <div>
-        <div className="flex items-center gap-4 justify-end">
+        {/* <div className="flex items-center gap-4 justify-end">
           <div className="flex gap-2">
             <label htmlFor="al_hussein">Al Hussein</label>
             <input
@@ -56,8 +55,8 @@ const RoundHeader = ({ roundName, selectedHospital, setSelectedHospital }) => {
               onChange={() => setSelectedHospital("sayed_galal")}
             />
           </div>
-        </div>
-        <h1 className="mb-4 text-4xl">{_.startCase(roundName)} Round</h1>
+        </div> */}
+        <h1 className="mb-4 text-4xl">Rounds</h1>
         <div className="flex items-center gap-4">
           <div className="flex items-center gap-2">
             <h2 className="">Coordinator: </h2>

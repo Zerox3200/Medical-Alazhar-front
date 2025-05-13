@@ -2,7 +2,7 @@ import React from "react";
 import logo from "../../assets/images/logo.jpg";
 import { Link, NavLink } from "react-router";
 import { GoHomeFill } from "react-icons/go";
-import { FaHouseMedical } from "react-icons/fa6";
+import { FaHouseMedical, FaVideo } from "react-icons/fa6";
 import { IoCalendarClear } from "react-icons/io5";
 import { BsFillGearFill } from "react-icons/bs";
 import { FaHospital, FaStethoscope, FaUsers } from "react-icons/fa";
@@ -17,6 +17,11 @@ const DashboardLinks = [
     icon: <IoCalendarClear />,
     label: "Calendar",
     value: "calendar",
+  },
+  {
+    icon: <FaVideo />,
+    label: "Courses",
+    value: "courses",
   },
   {
     icon: <FaHospital />,
@@ -47,7 +52,7 @@ const DashboardLinks = [
 
 const DashobardSidebar = () => {
   return (
-    <div className="bg-white h-full w-full text-primary text-md">
+    <div className="bg-white h-full w-full text-primary text-md mb-10">
       <div className="mb-8 flex justify-center items-center border-b-[1px] border-silverFrost py-6">
         <h2 className="font-semibold text-2xl">
           <Link to="/">

@@ -45,8 +45,7 @@ export const adminApiSlice = baseApiSlice.injectEndpoints({
       }),
       invalidatesTags: ["Admin"],
     }),
-    /***************************************/
-    // Admin management endpoints
+
     getAllSupervisors: builder.query({
       query: (params = {}) => ({
         url: "/admin/supervisors",
@@ -57,15 +56,56 @@ export const adminApiSlice = baseApiSlice.injectEndpoints({
       providesTags: ["Supervisor"],
     }),
 
-    getAllCoordinators: builder.query({
-      query: () => ({
-        url: "/admin/coordinators",
+    getSingleSupervisor: builder.query({
+      query: ({ supervisorId }) => ({
+        url: `/admin/supervisors/${supervisorId}`,
         method: "GET",
         credentials: "include",
       }),
-      providesTags: ["Account"],
+      providesTags: ["Supervisor"],
     }),
 
+    changeSupervisorRole: builder.mutation({
+      query: ({ supervisorId, ...role }) => ({
+        url: `/admin/supervisors/${supervisorId}/role`,
+        method: "PATCH",
+        body: role,
+        credentials: "include",
+      }),
+      invalidatesTags: ["Supervisor"],
+    }),
+
+    /******************************** Rounds ********************************/
+
+    createNewRound: builder.mutation({
+      query: (roundData) => ({
+        url: "/admin/rounds/create",
+        method: "POST",
+        body: roundData,
+        credentials: "include",
+      }),
+      invalidatesTags: ["Round"],
+    }),
+
+    getAllRounds: builder.query({
+      query: (params = {}) => ({
+        url: `/admin/rounds`,
+        method: "GET",
+        params,
+        credentials: "include",
+      }),
+      providesTags: ["Round"],
+    }),
+
+    getRound: builder.query({
+      query: ({ roundId }) => ({
+        url: `/admin/rounds/${roundId}`,
+        method: "GET",
+        credentials: "include",
+      }),
+      providesTags: ["Round"],
+    }),
+    /***************************************/
     getAllInterns: builder.query({
       query: () => ({
         url: "/admin/interns",
@@ -82,24 +122,6 @@ export const adminApiSlice = baseApiSlice.injectEndpoints({
         credentials: "include",
       }),
       providesTags: ["Intern"],
-    }),
-
-    getSingleSupervisor: builder.query({
-      query: ({ supervisorId }) => ({
-        url: `/admin/supervisors/${supervisorId}`,
-        method: "GET",
-        credentials: "include",
-      }),
-      providesTags: ["Supervisor"],
-    }),
-
-    getSingleCoordinator: builder.query({
-      query: ({ coordinatorId }) => ({
-        url: `/admin/coordinators/${coordinatorId}`,
-        method: "GET",
-        credentials: "include",
-      }),
-      providesTags: ["Coordinator"],
     }),
 
     addInternToRound: builder.mutation({
@@ -119,11 +141,13 @@ export const {
   useGetAdminQuery,
   useGetNotApprovedUsersQuery,
   useGetAllSupervisorsQuery,
-  useGetAllCoordinatorsQuery,
+  useGetSingleSupervisorQuery,
+  useChangeSupervisorRoleMutation,
+  useCreateNewRoundMutation,
+  useGetAllRoundsQuery,
+  useGetRoundQuery,
   useGetAllInternsQuery,
   useGetSingleInternQuery,
-  useGetSingleSupervisorQuery,
-  useGetSingleCoordinatorQuery,
   useApproveAccountMutation,
   useAddInternToRoundMutation,
 } = adminApiSlice;

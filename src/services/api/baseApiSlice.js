@@ -60,7 +60,8 @@ export const baseApiSlice = createApi({
     "Intern",
     "Supervisor",
     "Coordinator",
-    "Rounds",
+    "Round",
+    "Course",
   ],
   endpoints: () => ({}),
 });
