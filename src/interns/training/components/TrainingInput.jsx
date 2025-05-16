@@ -8,6 +8,7 @@ const TrainingInput = ({
   value,
   handleChange,
   infoTooltip,
+  ...additionalParams
 }) => {
   return (
     <>
@@ -23,6 +24,7 @@ const TrainingInput = ({
         min={0}
         value={value}
         onChange={handleChange}
+        {...additionalParams}
       />
     </>
   );

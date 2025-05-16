@@ -1,13 +1,20 @@
 import React, { useState } from "react";
 import { DataGrid } from "@mui/x-data-grid";
-import { FaRegEdit, FaRegTrashAlt } from "react-icons/fa";
+import {
+  FaCheckCircle,
+  FaPlus,
+  FaRegEdit,
+  FaRegTrashAlt,
+} from "react-icons/fa";
 import EmptyData from "../components/EmptyData";
-import SearchBar from "../components/SearchBar";
+import SearchBar from "../../components/SearchBar";
 import AddProcedure from "./add/Index";
+import Button from "../../components/Button";
+import { useGetAllProceduresQuery } from "../../../services/api/internApiSlice";
 
 const columns = [
   { field: "round", headerName: "Round", minWidth: 150, flex: 1 },
-  { field: "procedure", headerName: "Procedure", minWidth: 150, flex: 1 },
+  { field: "skill", headerName: "Skill", minWidth: 150, flex: 1 },
   { field: "date", headerName: "Date", minWidth: 120, flex: 1 },
   { field: "venue", headerName: "Venue", minWidth: 150, flex: 1 },
   { field: "hospitalRecord", headerName: "Hospital Record", width: 150 },
@@ -15,6 +22,22 @@ const columns = [
     field: "performanceLevel",
     headerName: "Performance Level",
     width: 150,
+  },
+  {
+    field: "accepted",
+    headerName: "Accepted",
+    width: 120,
+    renderCell: (cell) => {
+      return (
+        <div className="h-full w-full flex items-center text-xl">
+          {cell.value ? (
+            <FaCheckCircle className="text-emeraldGreen" title="accepted" />
+          ) : (
+            <FaCheckCircle className="text-mistyMorning" title="not accepted" />
+          )}
+        </div>
+      );
+    },
   },
   {
     field: "actions",
@@ -37,149 +60,111 @@ const columns = [
   },
 ];
 
-let rows = [
-  {
-    id: 1,
-    round: "General Surgery",
-    patientSerial: 355212,
-    caseType: "Swellings and inguino-scrotal swellings",
-    date: "01/04/2024",
-    epa: "EPA 16",
-    expectedLevel: "A",
-  },
-  {
-    id: 3,
-    round: "Obs & Gyn",
-    patientSerial: 454465,
-    caseType: "Swellings and inguino-scrotal swellings",
-    date: "12/10/2024",
-    epa: "EPA 6",
-    expectedLevel: "C",
-  },
-  {
-    id: 2,
-    round: "General Surgery",
-    patientSerial: 424555,
-    caseType: "Ischemic Limb",
-    date: "15/06/2024",
-    epa: "EPA 11",
-    expectedLevel: "B",
-  },
-  {
-    id: 4,
-    round: "Medicine",
-    patientSerial: 169824,
-    caseType: "Varicose Veins",
-    date: "17/03/2024",
-    epa: "EPA 20",
-    expectedLevel: "A",
-  },
-  {
-    id: 6,
-    round: "Urology",
-    patientSerial: 150515,
-    caseType: "Anal Disorders",
-    date: "01/04/2024",
-    epa: "EPA 1",
-    expectedLevel: "A",
-  },
-  {
-    id: 7,
-    round: "Neurology",
-    patientSerial: 445421,
-    caseType: "Breast Masses",
-    date: "01/04/2024",
-    epa: "EPA 5",
-    expectedLevel: "C",
-  },
-  {
-    id: 8,
-    round: "Radiology",
-    patientSerial: 312545,
-    caseType:
-      "Common infections (e.g., peri-anal infection, breast infection, hand infection, face infection, erysipelas)",
-    date: "01/04/2024",
-    epa: "EPA 14",
-    expectedLevel: "C",
-  },
-  {
-    id: 9,
-    round: "Cardiology",
-    patientSerial: 215435,
-    caseType: "Common neck swellings (thyroid, lymph nodes)s",
-    date: "01/04/2024",
-    epa: "EPA 17",
-    expectedLevel: "B",
-  },
-];
-
 const Procedures = () => {
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+  const { data: proceduresData } = useGetAllProceduresQuery();
 
+  const procedures = proceduresData?.data?.map((c) => {
+    return {
+      ...c,
+      id: c._id,
+      round: c.round,
+      date: new Date(c.date).toDateString(),
+    };
+  });
+
+  const acceptedProcedures = procedures?.filter((acceptedProcedure) =>
+    Boolean(acceptedProcedure.accepted)
+  );
+
+  const notAcceptedProcedures = procedures?.filter((notAcceptedProcedure) =>
+    Boolean(!notAcceptedProcedure.accepted)
+  );
   return (
     <>
       <AddProcedure open={open} handleClose={handleClose} />
-      {rows.length > 0 ? (
-        <div className="shadow-md p-10">
-          <h2 className="col-span-1 text-4xl text-mediumGray">Procedures</h2>
-          <div className="grid grid-cols-4 gap-10 items-center mt-4 mb-8">
-            {/* Search bar */}
-            <div className="col-span-3">
-              <SearchBar />
+      {procedures?.length > 0 ? (
+        <div className="shadow-md p-6">
+          <div className="flex justify-between items-center">
+            <h2 className="text-4xl text-secondary">Procedures</h2>
+            <div className="">
+              <Button
+                handleClick={handleOpen}
+                icon={<FaPlus />}
+                label="Add Procedure"
+              />
             </div>
-            <div className="col-span-1">
-              <h2
-                onClick={handleOpen}
-                className="w-fit ml-auto border-1 border-deepBlue text-lg rounded-sm text-deepBlue hover:bg-deepBlue hover:text-crispWhite  cursor-pointer py-2 px-4"
-              >
-                Add Procedure
-              </h2>
+          </div>
+
+          <div className="bg-white shadow-md rounded-lg p-6 flex items-center justify-between gap-4 mt-4 mb-8">
+            {/* Search bar */}
+            <div className="w-2/4">
+              <SearchBar placeholder="Search procedures..." />
+            </div>
+            {/* Filters */}
+            <div className="w-1/3">
+              <p>Filters</p>
             </div>
           </div>
 
           {/* Procedures Statistics */}
-          <div className="mb-4 flex items-center gap-10">
-            <h3>
-              Total: <span className="font-semibold text-mediumGray">45</span>{" "}
-              procedures
-            </h3>
-            <h3>
-              Accepted:{" "}
-              <span className="font-semibold text-emeraldGreen">15</span>{" "}
-              procedures
-            </h3>
-            <h3>
-              Not accepted: <span className="font-semibold text-error">30</span>{" "}
-              procedures
-            </h3>
-          </div>
-
-          <div className="grid grid-cols-6 w-full">
-            <div className="!w-full col-span-full">
-              <DataGrid
-                rows={rows}
-                columns={columns}
-                disableColumnMenu
-                disableColumnSorting
-                disableRowSelectionOnClick
-                disableColumnResize
-                checkboxSelection
-                sx={{
-                  backgroundColor: "#f5f5f5",
-                  "& .MuiDataGrid-columnHeader": {
-                    backgroundColor: "#2d9c9c",
-                    color: "#fff",
-                  },
-                  "& .MuiDataGrid-cell:focus": {
-                    outline: "none",
-                  },
-                  "& .MuiDataGrid-columnHeader:focus": {
-                    outline: "none",
-                  },
-                }}
-              />
+          <div className="mb-4 flex flex-col items-center gap-10 text-primary font-medium text-lg bg-white shadow-md rounded-lg p-6">
+            <div className="flex items-start gap-10 border-b-1 border-silverFrost/40 w-full pb-4">
+              <h3>
+                Total:{" "}
+                <span className="font-semibold text-secondary">
+                  {procedures?.length}
+                </span>{" "}
+                procedures
+              </h3>
+              <h3>
+                Accepted:{" "}
+                <span className="font-semibold text-emeraldGreen">
+                  {" "}
+                  {acceptedProcedures?.length}
+                </span>{" "}
+                procedures
+              </h3>
+              <h3>
+                Not accepted:{" "}
+                <span className="font-semibold text-darkRed">
+                  {" "}
+                  {notAcceptedProcedures?.length}
+                </span>{" "}
+                procedures
+              </h3>
+            </div>
+            <div className="grid grid-cols-6 w-full">
+              <div className="!w-full col-span-full">
+                <DataGrid
+                  rows={procedures}
+                  columns={columns}
+                  disableColumnMenu
+                  disableColumnSorting
+                  disableRowSelectionOnClick
+                  disableColumnResize
+                  initialState={{
+                    pagination: {
+                      paginationModel: { pageSize: 5, page: 0 },
+                    },
+                  }}
+                  sx={{
+                    backgroundColor: "#f5f5f5",
+                    "& .MuiDataGrid-columnHeader": {
+                      backgroundColor: "#fff",
+                      color: "#1a2d42",
+                    },
+                    "& .MuiDataGrid-cell:focus": {
+                      outline: "none",
+                    },
+                    "& .MuiDataGrid-columnHeader:focus": {
+                      outline: "none",
+                    },
+                  }}
+                />
+              </div>
             </div>
           </div>
         </div>

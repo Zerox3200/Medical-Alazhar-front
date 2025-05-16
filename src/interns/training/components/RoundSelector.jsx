@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import Select from "react-select";
 import _ from "lodash";
 import trainingData from "../data/index.js";
@@ -6,16 +6,14 @@ import { useTrainingContext } from "../TrainingProvider.jsx";
 
 const orderedRounds = _.orderBy(trainingData.rounds, ["label"], ["asc"]);
 
-const RoundAndUnitSelector = ({ listType }) => {
-  const { selectedRound, setSelectedRound, filteredList, setFilteredList } =
-    useTrainingContext();
+const RoundAndUnitSelector = ({ listType, field }) => {
+  const { setSelectedRound, setFilteredList } = useTrainingContext();
 
-  useEffect(() => {
-    if (selectedRound) {
-      setFilteredList(selectedRound ? listType[selectedRound?.value] : []);
-    }
-  }, [selectedRound, filteredList, setFilteredList, listType]);
-
+  const handleChange = (selectedOption) => {
+    field.onChange(selectedOption);
+    setSelectedRound(selectedOption);
+    setFilteredList(listType[selectedOption?.value] || []);
+  };
   return (
     <>
       <div className="col-span-1">
@@ -23,13 +21,12 @@ const RoundAndUnitSelector = ({ listType }) => {
           Choose your round
         </label>
         <Select
+          {...field}
+          value={field.value}
+          onChange={handleChange}
           className="block w-full"
           options={orderedRounds}
-          value={selectedRound}
           placeholder="Round"
-          onChange={(selectedOption) => {
-            setSelectedRound(selectedOption);
-          }}
         />
       </div>
     </>

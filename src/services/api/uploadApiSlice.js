@@ -9,7 +9,7 @@ export const uploadApiSlice = baseApiSlice.injectEndpoints({
         body: imageFile,
         credentials: "include",
       }),
-      invalidatesTags: ["User"],
+      invalidatesTags: ["Intern", "Admin"],
     }),
 
     uploadNationalIDImage: builder.mutation({

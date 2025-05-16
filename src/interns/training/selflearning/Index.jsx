@@ -1,8 +1,10 @@
-import React, { useState } from "react";
+import React from "react";
 import { DataGrid } from "@mui/x-data-grid";
-import { FaRegEdit, FaRegTrashAlt } from "react-icons/fa";
+import { FaPlus, FaRegEdit, FaRegTrashAlt } from "react-icons/fa";
 import EmptyData from "../components/EmptyData";
-import SearchBar from "../components/SearchBar";
+import SearchWithFilters from "../../components/SearchWithFilters";
+import Button from "../../components/Button";
+import SearchBar from "../../components/SearchBar";
 // import AddProcedure from "./add/Index";
 
 const columns = [
@@ -31,146 +33,79 @@ const columns = [
   },
 ];
 
-let rows = [
-  {
-    id: 1,
-    round: "General Surgery",
-    patientSerial: 355212,
-    caseType: "Swellings and inguino-scrotal swellings",
-    date: "01/04/2024",
-    epa: "EPA 16",
-    expectedLevel: "A",
-  },
-  {
-    id: 3,
-    round: "Obs & Gyn",
-    patientSerial: 454465,
-    caseType: "Swellings and inguino-scrotal swellings",
-    date: "12/10/2024",
-    epa: "EPA 6",
-    expectedLevel: "C",
-  },
-  {
-    id: 2,
-    round: "General Surgery",
-    patientSerial: 424555,
-    caseType: "Ischemic Limb",
-    date: "15/06/2024",
-    epa: "EPA 11",
-    expectedLevel: "B",
-  },
-  {
-    id: 4,
-    round: "Medicine",
-    patientSerial: 169824,
-    caseType: "Varicose Veins",
-    date: "17/03/2024",
-    epa: "EPA 20",
-    expectedLevel: "A",
-  },
-  {
-    id: 6,
-    round: "Urology",
-    patientSerial: 150515,
-    caseType: "Anal Disorders",
-    date: "01/04/2024",
-    epa: "EPA 1",
-    expectedLevel: "A",
-  },
-  {
-    id: 7,
-    round: "Neurology",
-    patientSerial: 445421,
-    caseType: "Breast Masses",
-    date: "01/04/2024",
-    epa: "EPA 5",
-    expectedLevel: "C",
-  },
-  {
-    id: 8,
-    round: "Radiology",
-    patientSerial: 312545,
-    caseType:
-      "Common infections (e.g., peri-anal infection, breast infection, hand infection, face infection, erysipelas)",
-    date: "01/04/2024",
-    epa: "EPA 14",
-    expectedLevel: "C",
-  },
-  {
-    id: 9,
-    round: "Cardiology",
-    patientSerial: 215435,
-    caseType: "Common neck swellings (thyroid, lymph nodes)s",
-    date: "01/04/2024",
-    epa: "EPA 17",
-    expectedLevel: "B",
-  },
-];
+let rows = [];
 const SelfLearning = () => {
   return (
     <>
       {/* <AddProcedure open={open} handleClose={handleClose} /> */}
       {rows.length > 0 ? (
-        <div className="shadow-md p-10">
-          <h2 className="col-span-1 text-4xl text-mediumGray">
-            Self Learned Activity
-          </h2>
-          <div className="grid grid-cols-4 gap-10 items-center mt-4 mb-8">
-            {/* Search bar */}
-            <div className="col-span-3">
-              <SearchBar />
-            </div>
-            <div className="col-span-1">
-              <h2
-                // onClick={handleOpen}
-                className="w-fit ml-auto border-1 border-deepBlue text-lg rounded-sm text-deepBlue hover:bg-deepBlue hover:text-crispWhite cursor-pointer py-2 px-4"
-              >
-                Add Activity
-              </h2>
-            </div>
-          </div>
-
-          {/* Procedures Statistics */}
-          <div className="mb-4 flex items-center gap-10">
-            <h3>
-              Total: <span className="font-semibold text-mediumGray">45</span>{" "}
-              activities
-            </h3>
-            <h3>
-              Accepted:{" "}
-              <span className="font-semibold text-emeraldGreen">15</span>{" "}
-              activities
-            </h3>
-            <h3>
-              Not accepted: <span className="font-semibold text-error">30</span>{" "}
-              activities
-            </h3>
-          </div>
-
-          <div className="grid grid-cols-6 w-full">
-            <div className="!w-full col-span-full">
-              <DataGrid
-                rows={rows}
-                columns={columns}
-                disableColumnMenu
-                disableColumnSorting
-                disableRowSelectionOnClick
-                disableColumnResize
-                checkboxSelection
-                sx={{
-                  backgroundColor: "#f5f5f5",
-                  "& .MuiDataGrid-columnHeader": {
-                    backgroundColor: "#2d9c9c",
-                    color: "#fff",
-                  },
-                  "& .MuiDataGrid-cell:focus": {
-                    outline: "none",
-                  },
-                  "& .MuiDataGrid-columnHeader:focus": {
-                    outline: "none",
-                  },
-                }}
+        <div className="shadow-md p-6">
+          <div className="flex justify-between items-center">
+            <h2 className="text-4xl text-secondary">Self Learned Activity</h2>
+            <div className="">
+              <Button
+                // handleClick={handleOpen}
+                icon={<FaPlus />}
+                label="Add Activity"
               />
+            </div>
+          </div>
+          <div className="bg-white shadow-md rounded-lg p-6 gap-4 mt-4 mb-8">
+            {/* Search bar */}
+            <SearchWithFilters placeholder="Search cases..." />
+          </div>
+
+          {/* Self learned Statistics */}
+          <div className="mb-4 flex flex-col items-center gap-10 text-primary font-medium text-lg bg-white shadow-md rounded-lg p-6">
+            <div className="flex items-start gap-10 border-b-1 border-silverFrost/40 w-full pb-4">
+              <h3>
+                Total: <span className="font-semibold text-secondary">43</span>{" "}
+                activities
+              </h3>
+              <h3>
+                Accepted:{" "}
+                <span className="font-semibold text-emeraldGreen">24</span>{" "}
+                activities
+              </h3>
+              <h3>
+                Under Review:{" "}
+                <span className="font-semibold text-mediumBlue">15</span>{" "}
+                activities
+              </h3>
+              <h3>
+                Rejected: <span className="font-semibold text-darkRed">18</span>{" "}
+                activities
+              </h3>
+            </div>
+            <div className="grid grid-cols-6 w-full">
+              <div className="!w-full col-span-full">
+                <DataGrid
+                  rows={rows}
+                  columns={columns}
+                  disableColumnMenu
+                  disableColumnSorting
+                  disableRowSelectionOnClick
+                  disableColumnResize
+                  initialState={{
+                    pagination: {
+                      paginationModel: { pageSize: 5, page: 0 },
+                    },
+                  }}
+                  sx={{
+                    backgroundColor: "#f5f5f5",
+                    "& .MuiDataGrid-columnHeader": {
+                      backgroundColor: "#fff",
+                      color: "#1a2d42",
+                    },
+                    "& .MuiDataGrid-cell:focus": {
+                      outline: "none",
+                    },
+                    "& .MuiDataGrid-columnHeader:focus": {
+                      outline: "none",
+                    },
+                  }}
+                />
+              </div>
             </div>
           </div>
         </div>

@@ -1,11 +1,12 @@
-import React from "react";
+import React, { useState } from "react";
 import _ from "lodash";
+import ImageUploader from "../../components/ImageUploader";
 import { FaCheckCircle, FaIdCard, FaLock, FaUserCheck } from "react-icons/fa";
 import { FaRegCircleUser, FaUser } from "react-icons/fa6";
-import profileImage from "../profile.jpg";
 import ImagePopper from "./ImagePopper";
 import { MdLogout } from "react-icons/md";
 import { PiCertificateFill } from "react-icons/pi";
+import { Toaster } from "react-hot-toast";
 
 const profileLinks = [
   {
@@ -36,16 +37,32 @@ const ProfileSidebar = ({
 }) => {
   const date = new Date(intern?.lastLogin);
   const lastLoginDate = date.toLocaleString();
+  const [openImageUploaderModal, setOpenImageUploaderModal] = useState(false);
+
+  // console.log("openImageUploaderModal", openImageUploaderModal);
 
   return (
     <div className="bg-white p-6 rounded-sm shadow-sm">
+      <Toaster />
+      {openImageUploaderModal ? (
+        <ImageUploader
+          openImageUploaderModal={openImageUploaderModal}
+          setOpenImageUploaderModal={setOpenImageUploaderModal}
+        />
+      ) : null}
       <div>
         {/* Profile Image */}
-        <div className="mb-4 relative group flex flex-center justify-center">
-          {profileImage ? (
-            <ImagePopper src={profileImage} alt={intern?.fullname} />
+        <div className="mb-4 relative flex flex-center justify-center overflow-hidden">
+          {intern?.profileImage ? (
+            <ImagePopper
+              src={"http://localhost:3000/" + intern?.profileImage}
+              alt={intern?.fullname}
+              setOpenImageUploaderModal={setOpenImageUploaderModal}
+            />
           ) : (
-            <FaRegCircleUser className="text-6xl block m-auto text-mistyMorning" />
+            <div className="h-42 flex justify-center items-center">
+              <FaRegCircleUser className="text-6xl block m-auto text-mistyMorning" />
+            </div>
           )}
         </div>
         {/* Intern Info */}

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { toast, ToastContainer } from "react-toastify";
 import { Link } from "react-router";
 import { FaUserLarge } from "react-icons/fa6";
@@ -6,13 +6,13 @@ import { MdLogout } from "react-icons/md";
 import { BsFillGearFill } from "react-icons/bs";
 import { useLogoutMutation } from "../../services/api/authApiSlice";
 import { useGetInternQuery } from "../../services/api/internApiSlice";
-import profileImage from "../profile/profile.jpg";
 import { useSelector } from "react-redux";
 const AccountMenu = () => {
   const { id, role } = useSelector((state) => state.auth?.user);
   const [opened, setOpened] = useState(false);
   const [toggleTheme, setToggleTheme] = useState(false);
   const { data: internData } = useGetInternQuery({ internId: id });
+  const accountMenuRef = useRef(null);
 
   const fullname =
     internData?.intern?.fullname?.split(" ")[0] +
@@ -29,8 +29,14 @@ const AccountMenu = () => {
     }
   };
 
+  document.body.addEventListener("click", (e) => {
+    if (accountMenuRef.current && !accountMenuRef.current.contains(e.target)) {
+      setOpened(false);
+    }
+  });
+
   return (
-    <div className="relative">
+    <div className="relative" ref={accountMenuRef}>
       <ToastContainer position="top-center" />
       <div
         className="flex items-center gap-2 cursor-pointer"
@@ -38,8 +44,7 @@ const AccountMenu = () => {
       >
         <h2 className="relative">
           <img
-            // src={"http://localhost:3000/" + profileImage}
-            src={profileImage}
+            src={"http://localhost:3000/" + internData?.intern?.profileImage}
             alt="profile-image-icon"
             className="w-12 h-12 rounded-full object-cover border-[1px] border-silverFrost"
           />
@@ -64,6 +69,7 @@ const AccountMenu = () => {
             <Link
               to="/profile"
               className="p-2 rounded-md text-secondary flex gap-2 items-center hover:bg-lightBlue/40"
+              onClick={() => setOpened(false)}
             >
               <FaUserLarge /> Profile
             </Link>
@@ -72,6 +78,7 @@ const AccountMenu = () => {
             <Link
               to="/admin/profile"
               className="p-2 rounded-md text-secondary flex gap-2 items-center hover:bg-lightBlue/40"
+              onClick={() => setOpened(false)}
             >
               <BsFillGearFill /> Settings
             </Link>

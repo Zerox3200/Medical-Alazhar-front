@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import Select from "react-select";
 import { useTrainingContext } from "../../TrainingProvider";
 import trainingData from "../../data";
+import { Controller } from "react-hook-form";
 
 const expectedLevelOptions = [
   { value: "A", label: "A" },
@@ -9,10 +10,11 @@ const expectedLevelOptions = [
   { value: "C", label: "C" },
 ];
 
-const MainThemeOfCase = () => {
-  const [caseType, setCaseType] = useState("");
-  const [epas, setEpas] = useState([]);
-  const [expectedLevel, setExpectedLevel] = useState(null);
+const MainThemeOfCase = ({ errors, control }) => {
+  const [caseType, setCaseType] = useState({
+    label: "no types",
+    value: "no_types",
+  });
   const [frequency, setFrequency] = useState(20);
 
   // Consume Cases Context
@@ -26,52 +28,82 @@ const MainThemeOfCase = () => {
 
   return (
     <>
-      <h3 className="col-span-full text-xl font-semibold text-mediumGray">
+      <h3 className="col-span-full text-xl font-semibold text-primary/70">
         Main Theme of Case
       </h3>
 
       {/* Case Type */}
       <div className="col-span-full">
-        <label className="block text-sm font-medium mb-2">Case Type</label>
-        <Select
-          options={filteredList}
-          value={caseType}
-          isOptionSelected={{ caseType }}
-          onChange={setCaseType}
-          placeholder="Select Case Type"
+        <label className="block text-md font-medium mb-2">Case Type</label>
+        <Controller
+          name="caseType"
+          control={control}
+          render={({ field }) => (
+            <Select
+              {...field}
+              onChange={(value) => field.onChange(value)}
+              value={field.value || "no types"}
+              options={filteredList}
+              isOptionSelected={{ caseType }}
+              placeholder="Select Case Type"
+            />
+          )}
         />
+        {errors.caseType && (
+          <p className="text-red-500 text-sm">{errors?.caseType.message}</p>
+        )}
       </div>
 
       {/* Relevant Descriptors (EPAs) */}
       <div className="col-span-full">
-        <label className="block text-sm font-medium mb-2">
+        <label className="text-md font-medium block mb-2">
           Relevant Descriptors (EPAs)
         </label>
-        <Select
-          isMulti
-          options={trainingData.cases.epasList}
-          value={epas}
-          onChange={setEpas}
-          placeholder="Select EPAs"
+        <Controller
+          name="epas"
+          control={control}
+          render={({ field }) => (
+            <Select
+              {...field}
+              onChange={(value) => field.onChange(value)}
+              value={field.value || "no types"}
+              isMulti
+              options={trainingData.cases.epasList}
+              placeholder="Select EPAs"
+            />
+          )}
         />
+        {errors.epas && (
+          <p className="text-red-500 text-sm">{errors?.epas.message}</p>
+        )}
       </div>
 
       {/* Expected Level */}
       <div className="col-span-2">
-        <label className="block text-sm font-medium mb-2">Expected Level</label>
-        <Select
-          options={expectedLevelOptions}
-          value={expectedLevel}
-          onChange={setExpectedLevel}
-          placeholder="Select Expected Level"
+        <label className="text-md font-medium block mb-2">Expected Level</label>
+        <Controller
+          name="expectedLevel"
+          control={control}
+          render={({ field }) => (
+            <Select
+              options={expectedLevelOptions}
+              {...field}
+              onChange={(value) => field.onChange(value)}
+              value={field.value}
+              placeholder="Select Expected Level"
+            />
+          )}
         />
+        {errors.expectedLevel && (
+          <p className="text-red-500 text-sm">
+            {errors?.expectedLevel.message}
+          </p>
+        )}
       </div>
 
       {/* Minimal Frequency */}
       <div className="col-span-2">
-        <h2 className="text-sm font-medium mb-2 cursor-default">
-          Minimal Frequency
-        </h2>
+        <h2 className="text-md font-medium block mb-2">Minimal Frequency</h2>
         <p
           className={`border-1 border-mediumGray/60 rounded-sm p-1 text-lg outline-0 block w-full ${
             frequency <= 0 ? "text-emeraldGreen" : "text-error"

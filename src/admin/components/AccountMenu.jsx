@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { toast, ToastContainer } from "react-toastify";
 import { Link } from "react-router";
 import { FaUserLarge } from "react-icons/fa6";
@@ -9,6 +9,7 @@ import { useLogoutMutation } from "../../services/api/authApiSlice";
 const AccountMenu = ({ name, role, profileImage }) => {
   const [opened, setOpened] = useState(false);
   const [toggleTheme, setToggleTheme] = useState(false);
+  const accountMenuRef = useRef(null);
 
   const [logout] = useLogoutMutation();
 
@@ -20,8 +21,14 @@ const AccountMenu = ({ name, role, profileImage }) => {
     }
   };
 
+  document.body.addEventListener("click", (e) => {
+    if (accountMenuRef.current && !accountMenuRef.current.contains(e.target)) {
+      setOpened(false);
+    }
+  });
+
   return (
-    <div className="relative">
+    <div className="relative" ref={accountMenuRef}>
       <ToastContainer position="top-center" />
       <div
         className="flex items-center gap-2 cursor-pointer"

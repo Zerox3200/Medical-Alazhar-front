@@ -17,9 +17,7 @@ const DirectLearning = lazy(() =>
   import("../interns/training/DirectLearning.jsx")
 );
 const Assessments = lazy(() => import("../interns/training/Assessments.jsx"));
-const EndRoundReflections = lazy(() =>
-  import("../interns/training/EndRoundReflections.jsx")
-);
+const Reflections = lazy(() => import("../interns/training/Reflections.jsx"));
 
 // const Portfolio = lazy(() => import("../pages/interns/Courses.jsx"));
 // const ContactUs = lazy(() => import("../pages/interns/ContactUs.jsx"));
@@ -77,8 +75,8 @@ const InternRoutes = [
                 element: <Assessments />,
               },
               {
-                path: "end_round_reflections",
-                element: <EndRoundReflections />,
+                path: "reflections",
+                element: <Reflections />,
               },
             ],
           },

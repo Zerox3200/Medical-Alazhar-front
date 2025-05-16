@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useTrainingContext } from "../TrainingProvider";
 import Select from "react-select";
 
-const Skill = () => {
+const Skill = ({ field }) => {
   const [procedureType, setProcedureType] = useState("");
   const { filteredList, selectedRound } = useTrainingContext();
 
@@ -12,6 +12,11 @@ const Skill = () => {
     }
   }, [selectedRound]);
 
+  const handleChange = (procedureType) => {
+    field.onChange(procedureType);
+    setProcedureType(procedureType);
+  };
+
   return (
     <>
       <div className="col-span-1">
@@ -20,9 +25,10 @@ const Skill = () => {
         </label>
         <Select
           options={filteredList}
-          value={procedureType}
+          {...field}
+          value={field.value}
+          onChange={handleChange}
           isOptionSelected={{ procedureType }}
-          onChange={setProcedureType}
           placeholder="Select Skill"
         />
       </div>

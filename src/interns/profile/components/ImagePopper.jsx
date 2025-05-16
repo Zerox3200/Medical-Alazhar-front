@@ -1,13 +1,22 @@
 import React, { useState } from "react";
-import { FaTimes } from "react-icons/fa";
+import { FaCamera, FaTimes } from "react-icons/fa";
 
-const ImagePopper = ({ src, alt }) => {
+const ImagePopper = ({ src, alt, setOpenImageUploaderModal }) => {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <div className="flex justify-center items-center">
-      <div className="rounded-full overflow-hidden w-42 h-42 border-1 border-silverFrost cursor-pointer">
-        <img src={src} alt={alt} onClick={() => setIsOpen(true)} />
+    <div>
+      {/* Profile image */}
+      <div className="group relative rounded-full overflow-hidden w-fit">
+        <img
+          src={src}
+          alt={alt}
+          onClick={() => setIsOpen(true)}
+          className="rounded-full w-42 h-42 object-cover cursor-pointer border-1 border-silverFrost"
+        />
+        <div className="w-42 h-1/2 group-hover:-translate-y-0 translation-all duration-200 translate-y-full absolute bottom-0 left-1/2 -translate-x-1/2 bg-primary/20 text-white text-xl flex justify-center items-center cursor-pointer ">
+          <FaCamera onClick={() => setOpenImageUploaderModal(true)} />
+        </div>
       </div>
 
       {isOpen && (

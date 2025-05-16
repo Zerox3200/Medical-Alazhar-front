@@ -24,11 +24,17 @@ const places = [
   },
 ];
 
-const SeenAt = () => {
+const SeenAt = ({ field }) => {
   return (
     <div>
       <label className="text-md font-medium block mb-2">Seen At</label>
-      <Select className="block w-full" options={places} placeholder="Seen At" />
+      <Select
+        className="block w-full"
+        options={places}
+        placeholder="Seen At"
+        onChange={(value) => field.onChange(value)}
+        value={field?.value}
+      />
     </div>
   );
 };

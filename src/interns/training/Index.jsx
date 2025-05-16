@@ -2,7 +2,11 @@ import { Chip, Stack, Tooltip } from "@mui/material";
 import React, { useRef, useState } from "react";
 import { FaInfoCircle } from "react-icons/fa";
 import { FaArrowRight } from "react-icons/fa6";
-import { Link, Outlet } from "react-router";
+import { Outlet } from "react-router";
+import {
+  useGetAllCasesQuery,
+  useGetAllProceduresQuery,
+} from "../../services/api/internApiSlice";
 
 const wpblSummaryBox = (discriminant, count, bg) => {
   return (
@@ -19,6 +23,9 @@ const wpblSummaryBox = (discriminant, count, bg) => {
 };
 
 const RecordTraining = () => {
+  const { data: casesData } = useGetAllCasesQuery();
+  const { data: proceduresData } = useGetAllProceduresQuery();
+
   const [selectedRound, setSelectedRound] = useState("General Surgery");
   const [casesCount, setCasesCount] = useState(0);
   const [casesCompleted, setCasesCompleted] = useState(false);
@@ -28,8 +35,8 @@ const RecordTraining = () => {
     <div className="border-b-2 border-softGray shadow-sm mb-10 pb-10">
       {/* Training Summary */}
       <div className="grid grid-cols-4 gap-4 p-6">
-        {wpblSummaryBox("Total cases", 31, "bg-mediumBlue")}
-        {wpblSummaryBox("Total procedures", 29, "bg-coral")}
+        {wpblSummaryBox("Total cases", casesData?.count, "bg-mediumBlue")}
+        {wpblSummaryBox("Total procedures", proceduresData?.count, "bg-coral")}
         {wpblSummaryBox("Learned activities ", 12, "bg-deepBlue")}
         {wpblSummaryBox("Passed assessments", 8, "bg-emeraldGreen")}
       </div>
