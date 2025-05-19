@@ -1,12 +1,13 @@
 import React, { useState } from "react";
 import _ from "lodash";
-import ImageUploader from "../../components/ImageUploader";
-import { FaCheckCircle, FaIdCard, FaLock, FaUserCheck } from "react-icons/fa";
+import ImageUploader from "./ImageUploader";
+import { FaCheckCircle, FaIdCard, FaLock } from "react-icons/fa";
 import { FaRegCircleUser, FaUser } from "react-icons/fa6";
 import ImagePopper from "./ImagePopper";
 import { MdLogout } from "react-icons/md";
 import { PiCertificateFill } from "react-icons/pi";
-import { Toaster } from "react-hot-toast";
+import toast, { Toaster } from "react-hot-toast";
+import { useLogoutMutation } from "../../../services/api/authApiSlice";
 
 const profileLinks = [
   {
@@ -25,8 +26,6 @@ const profileLinks = [
     value: "academic_information",
   },
   { icon: <FaLock />, label: "Password", value: "password" },
-  { icon: <FaUserCheck />, label: "Account Status", value: "account_status" },
-  { icon: <MdLogout />, label: "Log Out", value: "logout" },
 ];
 
 const ProfileSidebar = ({
@@ -39,7 +38,16 @@ const ProfileSidebar = ({
   const lastLoginDate = date.toLocaleString();
   const [openImageUploaderModal, setOpenImageUploaderModal] = useState(false);
 
-  // console.log("openImageUploaderModal", openImageUploaderModal);
+  // Logout Handler
+  const [logout] = useLogoutMutation();
+
+  const handleLogout = async () => {
+    try {
+      await logout().unwrap();
+    } catch (error) {
+      toast.error(error);
+    }
+  };
 
   return (
     <div className="bg-white p-6 rounded-sm shadow-sm">
@@ -120,6 +128,15 @@ const ProfileSidebar = ({
             </li>
           );
         })}
+        <li
+          className={`flex gap-3 items-center text-lg px-4 py-2 cursor-pointer duration-150 transition-colors border-lightBlue`}
+          onClick={handleLogout}
+        >
+          <span className="text-2xl">
+            <MdLogout />
+          </span>{" "}
+          <span>Logout</span>
+        </li>
       </ul>
     </div>
   );

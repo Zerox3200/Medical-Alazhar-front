@@ -1,19 +1,30 @@
 import React from "react";
 import Select from "react-select";
+import { useSelector } from "react-redux";
 import _ from "lodash";
-import trainingData from "../data/index.js";
-import { useTrainingContext } from "../TrainingProvider.jsx";
+import { useGetInternQuery } from "../../../services/api/internApiSlice.js";
 
-const orderedRounds = _.orderBy(trainingData.rounds, ["label"], ["asc"]);
+const RoundAndUnitSelector = ({ field }) => {
+  const { id } = useSelector((state) => state.auth.user);
+  const { data: internData } = useGetInternQuery({ internId: id });
 
-const RoundAndUnitSelector = ({ listType, field }) => {
-  const { setSelectedRound, setFilteredList } = useTrainingContext();
+  const rounds = internData?.intern?.trainingProgress.map(
+    (progress) => progress.round
+  );
+  console.log("rounds", rounds);
+
+  let roundsList = [];
+  for (let round of rounds) {
+    roundsList.push({
+      label: _.startCase(round.name),
+      value: round._id,
+    });
+  }
 
   const handleChange = (selectedOption) => {
     field.onChange(selectedOption);
-    setSelectedRound(selectedOption);
-    setFilteredList(listType[selectedOption?.value] || []);
   };
+
   return (
     <>
       <div className="col-span-1">
@@ -25,7 +36,7 @@ const RoundAndUnitSelector = ({ listType, field }) => {
           value={field.value}
           onChange={handleChange}
           className="block w-full"
-          options={orderedRounds}
+          options={roundsList}
           placeholder="Round"
         />
       </div>

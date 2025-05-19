@@ -3,6 +3,7 @@ import { baseApiSlice } from "./baseApiSlice";
 
 export const authApiSlice = baseApiSlice.injectEndpoints({
   endpoints: (builder) => ({
+    // Login
     login: builder.mutation({
       query: (credentials) => ({
         url: "/auth/login",
@@ -12,6 +13,7 @@ export const authApiSlice = baseApiSlice.injectEndpoints({
       }),
     }),
 
+    // Logout
     logout: builder.mutation({
       query: () => ({
         url: "/auth/logout",
@@ -29,6 +31,16 @@ export const authApiSlice = baseApiSlice.injectEndpoints({
       },
     }),
 
+    // Change password
+    changePassword: builder.mutation({
+      query: ({ userId, ...credentials }) => ({
+        url: `/auth/${userId}/password/change`,
+        method: "PATCH",
+        body: credentials,
+        credentials: "include",
+      }),
+    }),
+
     getUser: builder.query({
       query: ({ userId, role }) => ({
         url:
@@ -43,5 +55,9 @@ export const authApiSlice = baseApiSlice.injectEndpoints({
   }),
 });
 
-export const { useLoginMutation, useLogoutMutation, useGetUserQuery } =
-  authApiSlice;
+export const {
+  useLoginMutation,
+  useLogoutMutation,
+  useChangePasswordMutation,
+  useGetUserQuery,
+} = authApiSlice;

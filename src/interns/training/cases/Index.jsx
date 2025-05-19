@@ -14,16 +14,41 @@ import EmptyData from "../components/EmptyData";
 import AddCase from "./add/Index";
 import { useGetAllCasesQuery } from "../../../services/api/internApiSlice";
 import _ from "lodash";
+import { Link } from "react-router";
 
 const columns = [
-  { field: "round", headerName: "Round", minWidth: 150, flex: 1 },
+  {
+    field: "round",
+    headerName: "Round",
+    minWidth: 150,
+    flex: 1,
+    renderCell: (cell) => {
+      return (
+        <Link to={`/training/cases/${cell.row._id}`} className="cursor-pointer">
+          {_.startCase(cell.value.name)}
+        </Link>
+      );
+    },
+  },
   {
     field: "patientSerial",
     headerName: "Patient serial",
     minWidth: 150,
     flex: 1,
   },
-  { field: "caseType", headerName: "Case Type", minWidth: 300, flex: 1 },
+  {
+    field: "caseType",
+    headerName: "Case Type",
+    minWidth: 300,
+    flex: 1,
+    renderCell: (cell) => {
+      return (
+        <Link to={`/training/cases/${cell.row._id}`} className="cursor-pointer">
+          {_.startCase(cell.value)}
+        </Link>
+      );
+    },
+  },
   { field: "date", headerName: "Date", minWidth: 120, flex: 1 },
   { field: "epas", headerName: "EPA", width: 90 },
   {
@@ -58,13 +83,15 @@ const columns = [
     field: "actions",
     headerName: "Actions",
     width: 90,
-    renderCell: () => (
+    renderCell: (cell) => (
       <div className="flex items-center justify-center gap-3 text-mediumGray h-full">
-        <FaRegEdit
-          className="text-xl cursor-pointer"
-          aria-label="Edit"
-          title="Edit"
-        />
+        <Link to={`/training/cases/${cell.row._id}`}>
+          <FaRegEdit
+            className="text-xl cursor-pointer hover:text-hotPink"
+            aria-label="Edit"
+            title="Edit"
+          />
+        </Link>
         <FaRegTrashAlt
           className="text-xl cursor-pointer"
           aria-label="Delete"
@@ -85,8 +112,7 @@ const CasesSummary = () => {
     return {
       ...c,
       id: c._id,
-      round: c.round,
-      date: new Date(c.date).toDateString(),
+      date: new Date(c.date).toISOString().split("T")[0],
     };
   });
 

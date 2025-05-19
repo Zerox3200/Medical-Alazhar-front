@@ -28,11 +28,31 @@ export const internApiSlice = baseApiSlice.injectEndpoints({
       }),
       providesTags: ["Cases"],
     }),
+    // Get Intern Training Cases
+    getSingleCase: builder.query({
+      query: ({ caseId }) => ({
+        url: `/intern/training/cases/${caseId}`,
+        method: "GET",
+        credentials: "include",
+      }),
+      providesTags: ["Cases"],
+    }),
     // Add New Case
     addNewCase: builder.mutation({
-      query: ({ ...caseData }) => ({
+      query: ({ intern, round, ...caseData }) => ({
         url: "/intern/training/cases/add",
         method: "POST",
+        body: caseData,
+        params: { intern, round },
+      }),
+      invalidatesTags: ["Cases"],
+    }),
+    // Edit case
+    editCase: builder.mutation({
+      query: ({ editMode, caseId, ...caseData }) => ({
+        url: `/intern/training/cases/:${caseId}`,
+        method: "PUT",
+        params: editMode,
         body: caseData,
       }),
       invalidatesTags: ["Cases"],
@@ -62,7 +82,9 @@ export const {
   useInternSignupMutation,
   useGetInternQuery,
   useGetAllCasesQuery,
+  useGetSingleCaseQuery,
   useAddNewCaseMutation,
+  useEditCaseMutation,
   useGetAllProceduresQuery,
   useAddNewProcedureMutation,
 } = internApiSlice;

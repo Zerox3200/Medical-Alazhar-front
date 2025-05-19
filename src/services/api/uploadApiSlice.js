@@ -19,7 +19,7 @@ export const uploadApiSlice = baseApiSlice.injectEndpoints({
         body: imageFile,
         credentials: "include",
       }),
-      invalidatesTags: ["User"],
+      invalidatesTags: ["Intern"],
     }),
 
     uploadMBBCHCertificateImage: builder.mutation({
@@ -29,7 +29,7 @@ export const uploadApiSlice = baseApiSlice.injectEndpoints({
         body: imageFile,
         credentials: "include",
       }),
-      invalidatesTags: ["User"],
+      invalidatesTags: ["Intern"],
     }),
   }),
 });

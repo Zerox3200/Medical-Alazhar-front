@@ -11,6 +11,7 @@ const TrainingLayout = lazy(() =>
 );
 const Training = lazy(() => import("..//interns/training/Index.jsx"));
 const CasesSummary = lazy(() => import("../interns/training/cases"));
+const Case = lazy(() => import("../interns/training/cases/case"));
 const Procedures = lazy(() => import("../interns/training/procedures"));
 const SelfLearning = lazy(() => import("../interns/training/selflearning"));
 const DirectLearning = lazy(() =>
@@ -57,6 +58,10 @@ const InternRoutes = [
               {
                 path: "cases",
                 element: <CasesSummary />,
+              },
+              {
+                path: "cases/:caseId",
+                element: <Case />,
               },
               {
                 path: "procedures",

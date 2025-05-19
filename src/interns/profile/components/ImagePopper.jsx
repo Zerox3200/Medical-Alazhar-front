@@ -6,7 +6,6 @@ const ImagePopper = ({ src, alt, setOpenImageUploaderModal }) => {
 
   return (
     <div>
-      {/* Profile image */}
       <div className="group relative rounded-full overflow-hidden w-fit">
         <img
           src={src}

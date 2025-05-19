@@ -10,8 +10,10 @@ import { useAddNewCaseMutation } from "../../../../services/api/internApiSlice";
 import { toast } from "react-toastify";
 import _ from "lodash";
 import { caseValidationSchema } from "../../constants/caseValidationSchema";
+import { useSelector } from "react-redux";
 
 const AddCase = ({ open, handleClose }) => {
+  const { id } = useSelector((state) => state.auth.user);
   const [addNewCase] = useAddNewCaseMutation();
 
   const {
@@ -25,6 +27,7 @@ const AddCase = ({ open, handleClose }) => {
     resolver: yupResolver(caseValidationSchema),
     defaultValues: {
       round: null,
+      intern: null,
       patientGender: null,
       patientSerial: null,
       patientAge: null,
@@ -51,12 +54,12 @@ const AddCase = ({ open, handleClose }) => {
     caseSummary,
     selfReflection,
   }) => {
-    console.log("epas", epas);
     try {
       await addNewCase({
         round: round.value,
+        intern: id,
         patientGender: patientGender.value,
-        venue: venue.value,
+        venue: _.snakeCase(venue.value),
         patientSerial,
         patientAge,
         date: date.toISOString(),

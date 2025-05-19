@@ -1,28 +1,6 @@
 import React from "react";
 import Select from "react-select";
-
-const places = [
-  {
-    value: "ER",
-    label: "Emergency Room",
-  },
-  {
-    value: "OR",
-    label: "Operating Room",
-  },
-  {
-    value: "Inpatient",
-    label: "Inpatient",
-  },
-  {
-    value: "Outpatient",
-    label: "Outpatient",
-  },
-  {
-    value: "Other",
-    label: "Other",
-  },
-];
+import trainingData from "../data";
 
 const SeenAt = ({ field }) => {
   return (
@@ -30,7 +8,7 @@ const SeenAt = ({ field }) => {
       <label className="text-md font-medium block mb-2">Seen At</label>
       <Select
         className="block w-full"
-        options={places}
+        options={trainingData.cases.venueOptions}
         placeholder="Seen At"
         onChange={(value) => field.onChange(value)}
         value={field?.value}

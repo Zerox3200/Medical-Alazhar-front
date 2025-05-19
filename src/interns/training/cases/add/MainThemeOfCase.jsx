@@ -4,12 +4,6 @@ import { useTrainingContext } from "../../TrainingProvider";
 import trainingData from "../../data";
 import { Controller } from "react-hook-form";
 
-const expectedLevelOptions = [
-  { value: "A", label: "A" },
-  { value: "B", label: "B" },
-  { value: "C", label: "C" },
-];
-
 const MainThemeOfCase = ({ errors, control }) => {
   const [caseType, setCaseType] = useState({
     label: "no types",
@@ -42,9 +36,8 @@ const MainThemeOfCase = ({ errors, control }) => {
             <Select
               {...field}
               onChange={(value) => field.onChange(value)}
-              value={field.value || "no types"}
-              options={filteredList}
-              isOptionSelected={{ caseType }}
+              value={field.value}
+              options={trainingData.cases.casesList}
               placeholder="Select Case Type"
             />
           )}
@@ -86,7 +79,7 @@ const MainThemeOfCase = ({ errors, control }) => {
           control={control}
           render={({ field }) => (
             <Select
-              options={expectedLevelOptions}
+              options={trainingData.cases.expectedLevels}
               {...field}
               onChange={(value) => field.onChange(value)}
               value={field.value}
