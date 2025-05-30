@@ -7,83 +7,162 @@ import {
   FaRegTrashAlt,
 } from "react-icons/fa";
 import EmptyData from "../components/EmptyData";
-import SearchBar from "../../components/SearchBar";
 import AddProcedure from "./add/Index";
 import Button from "../../components/Button";
-import { useGetAllProceduresQuery } from "../../../services/api/internApiSlice";
-
-const columns = [
-  { field: "round", headerName: "Round", minWidth: 150, flex: 1 },
-  { field: "skill", headerName: "Skill", minWidth: 150, flex: 1 },
-  { field: "date", headerName: "Date", minWidth: 120, flex: 1 },
-  { field: "venue", headerName: "Venue", minWidth: 150, flex: 1 },
-  { field: "hospitalRecord", headerName: "Hospital Record", width: 150 },
-  {
-    field: "performanceLevel",
-    headerName: "Performance Level",
-    width: 150,
-  },
-  {
-    field: "accepted",
-    headerName: "Accepted",
-    width: 120,
-    renderCell: (cell) => {
-      return (
-        <div className="h-full w-full flex items-center text-xl">
-          {cell.value ? (
-            <FaCheckCircle className="text-emeraldGreen" title="accepted" />
-          ) : (
-            <FaCheckCircle className="text-mistyMorning" title="not accepted" />
-          )}
-        </div>
-      );
-    },
-  },
-  {
-    field: "actions",
-    headerName: "Actions",
-    width: 90,
-    renderCell: () => (
-      <div className="flex items-center justify-center gap-3 text-mediumGray h-full">
-        <FaRegEdit
-          className="text-xl cursor-pointer"
-          aria-label="Edit"
-          title="Edit"
-        />
-        <FaRegTrashAlt
-          className="text-xl cursor-pointer"
-          aria-label="Delete"
-          title="Delete"
-        />
-      </div>
-    ),
-  },
-];
+import {
+  useDeleteProcedureMutation,
+  useGetAllProceduresQuery,
+} from "../../../services/api/internApiSlice";
+import _ from "lodash";
+import { HiOutlineDocumentSearch } from "react-icons/hi";
+import { IoCloseCircle } from "react-icons/io5";
+import { Link } from "react-router";
+import toast, { Toaster } from "react-hot-toast";
+import ConfirmDeleteMessage from "./procedure/ConfirmDeleteMessage";
+import SearchAndFilters from "../components/SearchAndFilters";
 
 const Procedures = () => {
+  const [dateFrom, setDateFrom] = useState(new Date());
+  const [dateTo, setDateTo] = useState(new Date());
+  const { data: proceduresData } = useGetAllProceduresQuery();
+  const [openWarningAlert, setOpenWarningAlert] = useState(false);
+  const [confirmDelete, setConfirmDelete] = useState(false);
+  const [procedureId, setProcedureId] = useState(null);
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
-  const { data: proceduresData } = useGetAllProceduresQuery();
+  const [deleteProcedure] = useDeleteProcedureMutation();
+
+  const columns = [
+    {
+      field: "round",
+      headerName: "Round",
+      minWidth: 150,
+      flex: 1,
+      renderCell: (cell) => {
+        return (
+          <Link
+            to={`/training/procedures/${cell.row._id}`}
+            className="cursor-pointer"
+          >
+            {_.startCase(cell.value.name)}
+          </Link>
+        );
+      },
+    },
+    {
+      field: "skill",
+      headerName: "Skill",
+      minWidth: 150,
+      flex: 1,
+      renderCell: (cell) => {
+        return <p>{_.startCase(cell.value)}</p>;
+      },
+    },
+    { field: "date", headerName: "Date", minWidth: 120, flex: 1 },
+    { field: "venue", headerName: "Venue", minWidth: 150, flex: 1 },
+    { field: "hospitalRecord", headerName: "Hospital Record", width: 150 },
+    {
+      field: "performanceLevel",
+      headerName: "Performance Level",
+      width: 150,
+    },
+    {
+      field: "procedureState",
+      headerName: "State",
+      width: 120,
+      renderCell: (cell) => {
+        return (
+          <div className="h-full w-full flex items-center text-xl">
+            {cell.value === "accepted" && (
+              <FaCheckCircle className="text-emeraldGreen" title={cell.value} />
+            )}
+            {cell.value === "rejected" && (
+              <IoCloseCircle className="text-error" title={cell.value} />
+            )}
+            {cell.value === "under_review" && (
+              <HiOutlineDocumentSearch
+                className="text-mistyMorning"
+                title={_.startCase(cell.value)}
+              />
+            )}
+          </div>
+        );
+      },
+    },
+    {
+      field: "actions",
+      headerName: "Actions",
+      width: 90,
+      renderCell: (cell) => (
+        <div className="flex items-center justify-center gap-3 text-mediumGray h-full">
+          <Link to={`/training/procedures/${cell.row._id}`}>
+            <FaRegEdit
+              className="text-xl cursor-pointer hover:text-hotPink"
+              aria-label="Edit"
+              title="Edit"
+            />
+          </Link>
+          <FaRegTrashAlt
+            className="text-xl cursor-pointer hover:text-error"
+            aria-label="Delete"
+            title="Delete"
+            onClick={() => {
+              setProcedureId(cell.row._id);
+              setOpenWarningAlert(true);
+            }}
+          />
+        </div>
+      ),
+    },
+  ];
 
   const procedures = proceduresData?.data?.map((c) => {
     return {
       ...c,
       id: c._id,
-      round: c.round,
-      date: new Date(c.date).toDateString(),
+      date: new Date(c.date).toISOString().split("T")[0],
     };
   });
 
-  const acceptedProcedures = procedures?.filter((acceptedProcedure) =>
-    Boolean(acceptedProcedure.accepted)
+  const acceptedProcedures = procedures?.filter(
+    ({ procedureState }) => procedureState === "accepted"
   );
 
-  const notAcceptedProcedures = procedures?.filter((notAcceptedProcedure) =>
-    Boolean(!notAcceptedProcedure.accepted)
+  const rejectedProcedures = procedures?.filter(
+    ({ procedureState }) => procedureState === "rejected"
   );
+
+  const underReviewProcedures = procedures?.filter(
+    ({ procedureState }) => procedureState === "under_review"
+  );
+
+  const handleDeleteProcedure = async () => {
+    try {
+      const response = await deleteProcedure({ procedureId });
+      if (response?.data?.code === 200) {
+        toast.success(response?.data?.message);
+      }
+    } catch (error) {
+      toast.error(error?.data?.message);
+    }
+  };
+
+  if (confirmDelete && procedureId) {
+    return handleDeleteProcedure()
+      .then((res) => console.log(res))
+      .catch((error) => {
+        throw new Error(error);
+      });
+  }
   return (
     <>
+      <ConfirmDeleteMessage
+        openWarningAlert={openWarningAlert}
+        setConfirmDelete={setConfirmDelete}
+        handleClose={() => setOpenWarningAlert(false)}
+      />
+      <Toaster />
       <AddProcedure open={open} handleClose={handleClose} />
       {procedures?.length > 0 ? (
         <div className="shadow-md p-6">
@@ -98,16 +177,13 @@ const Procedures = () => {
             </div>
           </div>
 
-          <div className="bg-white shadow-md rounded-lg p-6 flex items-center justify-between gap-4 mt-4 mb-8">
-            {/* Search bar */}
-            <div className="w-2/4">
-              <SearchBar placeholder="Search procedures..." />
-            </div>
-            {/* Filters */}
-            <div className="w-1/3">
-              <p>Filters</p>
-            </div>
-          </div>
+          {/* Search and Filters */}
+          <SearchAndFilters
+            dateFromValue={dateFrom}
+            handleDateFrom={setDateFrom}
+            dateToValue={dateTo}
+            handleDateTo={setDateTo}
+          />
 
           {/* Procedures Statistics */}
           <div className="mb-4 flex flex-col items-center gap-10 text-primary font-medium text-lg bg-white shadow-md rounded-lg p-6">
@@ -122,16 +198,21 @@ const Procedures = () => {
               <h3>
                 Accepted:{" "}
                 <span className="font-semibold text-emeraldGreen">
-                  {" "}
                   {acceptedProcedures?.length}
                 </span>{" "}
                 procedures
               </h3>
               <h3>
-                Not accepted:{" "}
+                Under Review:{" "}
+                <span className="font-semibold text-mediumBlue">
+                  {underReviewProcedures?.length}
+                </span>{" "}
+                procedures
+              </h3>
+              <h3>
+                Rejected:{" "}
                 <span className="font-semibold text-darkRed">
-                  {" "}
-                  {notAcceptedProcedures?.length}
+                  {rejectedProcedures?.length}
                 </span>{" "}
                 procedures
               </h3>
@@ -169,7 +250,7 @@ const Procedures = () => {
           </div>
         </div>
       ) : (
-        <EmptyData />
+        <EmptyData setOpen={setOpen} />
       )}
     </>
   );

@@ -15,9 +15,9 @@ const AccountMenu = () => {
   const accountMenuRef = useRef(null);
 
   const fullname =
-    internData?.intern?.fullname?.split(" ")[0] +
+    internData?.intern?.englishName?.split(" ")[0] +
     " " +
-    internData?.intern?.fullname?.split(" ")[1];
+    internData?.intern?.englishName?.split(" ")[1];
 
   const [logout] = useLogoutMutation();
 
@@ -58,7 +58,7 @@ const AccountMenu = () => {
 
       {/* Account Menu */}
       <div
-        className={`absolute bg-flashWhite w-full max-h-52 rounded-b-md shadow-md top-18 left-0 z-10 transition-all duration-300 ease-ou ${
+        className={`absolute bg-flashWhite w-full max-h-52 rounded-b-md shadow-md top-18 left-0 z-10 transition-all duration-300 ease-out ${
           opened
             ? "opacity-100 translate-y-0 visible"
             : "invisible opacity-0 -translate-y-2"

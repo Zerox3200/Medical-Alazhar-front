@@ -7,14 +7,16 @@ import SeenAt from "../../components/SeenAt";
 import TrainingInput from "../../components/TrainingInput";
 import trainingData from "../../data";
 import { Modal } from "@mui/material";
-import { toast } from "react-toastify";
+import toast from "react-hot-toast";
 import { useAddNewProcedureMutation } from "../../../../services/api/internApiSlice";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Controller, useForm } from "react-hook-form";
 import { procedureValidationSchema } from "../../constants/procedureValidationSchema";
 import Button from "../../../components/Button";
+import { useSelector } from "react-redux";
 
 const AddProcedure = ({ open, handleClose }) => {
+  const { id } = useSelector((state) => state.auth.user);
   const [addNewProcedure] = useAddNewProcedureMutation();
 
   const {
@@ -44,16 +46,20 @@ const AddProcedure = ({ open, handleClose }) => {
     venue,
     date,
   }) => {
+    console.log("round.value", round.value);
     try {
-      await addNewProcedure({
+      const response = await addNewProcedure({
         round: round.value,
+        intern: id,
         skill: skill.value,
         performanceLevel: performanceLevel.value,
         venue: venue.value,
         date: date.toISOString(),
         hospitalRecord,
       }).unwrap();
-      toast.success("Procedure added successfully!");
+      if (response?.code === 201) {
+        toast.success(response?.message);
+      }
       reset();
     } catch (error) {
       if (error.data?.errors) {
@@ -169,8 +175,14 @@ const AddProcedure = ({ open, handleClose }) => {
           </div>
 
           {/* Submit Button */}
-          <div className="col-span-full mt-4">
-            <Button type="submit" label="Add" />
+          <div className="col-span-3 flex gap-4 items-center">
+            <Button type="submit" label="Add Now" />
+            <Button
+              label="Cancel"
+              type="button"
+              customClass="!bg-white !border-silverFrost !text-secondary hover:!opacity-60"
+              handleClick={handleClose}
+            />
           </div>
         </form>
       </div>

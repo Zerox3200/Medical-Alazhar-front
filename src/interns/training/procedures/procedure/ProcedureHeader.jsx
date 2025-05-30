@@ -3,34 +3,33 @@ import _ from "lodash";
 import { BsThreeDotsVertical } from "react-icons/bs";
 import OptionsList from "./OptionsList";
 
-const stateBox = (caseData, state, bgColor) => {
+const stateBox = (procedureData, state, bgColor) => {
   return (
     <>
-      {caseData?.data?.caseState === state && (
+      {procedureData?.data?.procedureState === state && (
         <span className={`${bgColor} text-white font-semibold p-1 rounded-sm`}>
-          {_.startCase(caseData?.data?.caseState)}
+          {_.startCase(procedureData?.data?.procedureState)}
         </span>
       )}
     </>
   );
 };
 
-const CaseHeader = ({ editMode, setEditMode, caseData }) => {
-  console.log("caseData", caseData);
+const ProcedureHeader = ({ editMode, setEditMode, procedureData }) => {
   const [openOptions, setOpenOptions] = useState(false);
 
   return (
     <div className="col-span-full flex justify-between items-center border-b-2 border-flashWhite pb-4">
       <div className="flex justify-between items-center gap-10">
-        {/* Case State */}
+        {/* Procedure State */}
         <p>
           <span className="text-mistyMorning">State: </span>
           {/* Accepted */}
-          {stateBox(caseData, "accepted", "bg-emeraldGreen")}
+          {stateBox(procedureData, "accepted", "bg-emeraldGreen")}
           {/* Rejected */}
-          {stateBox(caseData, "rejected", "bg-error")}
+          {stateBox(procedureData, "rejected", "bg-error")}
           {/* Under Review */}
-          {stateBox(caseData, "under_review", "bg-yellow-400")}
+          {stateBox(procedureData, "under_review", "bg-yellow-400")}
         </p>
         {/* Accepted By */}
         <div>
@@ -44,23 +43,21 @@ const CaseHeader = ({ editMode, setEditMode, caseData }) => {
         </div>
       </div>
       {/* Edit */}
-      {caseData?.data?.caseState !== "accepted" && (
-        <div className="relative text-2xl">
-          {openOptions && (
-            <OptionsList
-              setEditMode={setEditMode}
-              editMode={editMode}
-              setOpenOptions={setOpenOptions}
-            />
-          )}
-          <BsThreeDotsVertical
-            className="cursor-pointer hover:text-mistyMorning"
-            onClick={() => setOpenOptions(!openOptions)}
+      <div className="relative text-2xl">
+        {openOptions && (
+          <OptionsList
+            setEditMode={setEditMode}
+            editMode={editMode}
+            setOpenOptions={setOpenOptions}
           />
-        </div>
-      )}
+        )}
+        <BsThreeDotsVertical
+          className="cursor-pointer hover:text-mistyMorning"
+          onClick={() => setOpenOptions(!openOptions)}
+        />
+      </div>
     </div>
   );
 };
 
-export default CaseHeader;
+export default ProcedureHeader;

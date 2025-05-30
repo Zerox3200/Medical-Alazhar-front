@@ -11,7 +11,6 @@ const RoundAndUnitSelector = ({ field }) => {
   const rounds = internData?.intern?.trainingProgress.map(
     (progress) => progress.round
   );
-  console.log("rounds", rounds);
 
   let roundsList = [];
   for (let round of rounds) {

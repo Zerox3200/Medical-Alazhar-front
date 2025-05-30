@@ -133,6 +133,15 @@ export const adminApiSlice = baseApiSlice.injectEndpoints({
       }),
       invalidatesTags: ["Rounds"],
     }),
+    /******************************** Cases ********************************/
+    // getAllCases: builder.query({
+    //   query: () => ({
+    //     url: `/admin/interns/training/cases`,
+    //     method: "GET",
+    //     credentials: "include",
+    //   }),
+    //   providesTags: ["Cases"],
+    // }),
   }),
   overrideExisting: false,
 });
@@ -150,4 +159,5 @@ export const {
   useGetSingleInternQuery,
   useApproveAccountMutation,
   useAddInternToRoundMutation,
+  // useGetAllCasesQuery,
 } = adminApiSlice;

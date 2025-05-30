@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import toast, { Toaster } from "react-hot-toast";
+import Button from "../../../components/Button";
 import CaseEditInputBox from "./CaseEditInputBox";
 import CaseEditSelectBox from "./CaseEditSelectBox";
 import CaseEditTextAreaBox from "./CaseEditTextAreaBox";
@@ -6,8 +8,13 @@ import _ from "lodash";
 import trainingData from "../../data";
 import CaseRoundSelectBox from "./CaseRoundSelectBox";
 import CaseEPASelectBox from "./CaseEPASelectBox";
+import { useEditCaseMutation } from "../../../../services/api/internApiSlice";
+import { useParams } from "react-router";
+import { useSelector } from "react-redux";
 
-const CaseContent = ({ internData, caseData, editMode }) => {
+const CaseContent = ({ internData, caseData, editMode, setEditMode }) => {
+  const { id } = useSelector((state) => state.auth.user);
+  const { caseId } = useParams();
   const [round, setRound] = useState(null);
   const [caseType, setCaseType] = useState(null);
   const [serial, setSerial] = useState(null);
@@ -44,9 +51,42 @@ const CaseContent = ({ internData, caseData, editMode }) => {
     { label: "Female", value: "Female" },
   ];
 
+  const [editCase] = useEditCaseMutation();
+
+  const handleEditCase = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await editCase({
+        editMode,
+        caseId: caseId.toString(),
+        round: round?.value,
+        internId: id,
+        patientGender: gender?.value,
+        venue: venue?.value,
+        caseType: caseType?.value,
+        expectedLevel: level?.value,
+        patientAge: age ?? caseData?.data?.patientAge,
+        patientSerial: serial ?? caseData?.data?.patientSerial,
+        caseSummary: summary ?? caseData?.data?.caseSummary,
+        selfReflection: reflection ?? caseData?.data?.selfReflection,
+        epas: epas.map((epa) => epa.value) ?? caseData?.data?.epas,
+      }).unwrap();
+      if (response?.code === 200) {
+        toast.success(response?.message);
+        setEditMode(false);
+      }
+    } catch (error) {
+      toast.error(error?.data?.message);
+    }
+  };
+
   return (
     <div className="col-span-full min-h-[400px]">
-      <form className="grid grid-cols-2 gap-10 w-full">
+      <Toaster />
+      <form
+        className="grid grid-cols-2 gap-10 w-full"
+        onSubmit={handleEditCase}
+      >
         <div className="col-span-1">
           {/* Round */}
           <CaseRoundSelectBox
@@ -147,6 +187,15 @@ const CaseContent = ({ internData, caseData, editMode }) => {
             options={trainingData.cases.epasList}
           />
         </div>
+        {editMode && (
+          <div className="col-span-full">
+            <Button
+              label="Save changes"
+              handleClick={handleEditCase}
+              type="submit"
+            />
+          </div>
+        )}
       </form>
     </div>
   );

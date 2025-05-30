@@ -60,24 +60,30 @@ const RecordTrainingNavbar = () => {
       <ul>
         <li
           className={`mt-6 hover:text-lightBlue  ${
-            pathname === "self_learning"
+            pathname === "self-learning-activities"
               ? "bg-lightBlue/30 hover:text-primary rounded-md"
               : null
           }`}
         >
-          <NavLink to="/training/self_learning" className="p-2 block">
+          <NavLink
+            to="/training/self-learning-activities"
+            className="p-2 block"
+          >
             Self Learning
           </NavLink>
         </li>
 
         <li
           className={`mt-6 hover:text-lightBlue  ${
-            pathname === "direct_learning"
+            pathname === "direct-learning-activity"
               ? "bg-lightBlue/30 hover:text-primary rounded-md"
               : null
           }`}
         >
-          <NavLink to="/training/direct_learning" className="p-2 block">
+          <NavLink
+            to="/training/direct-learning-activity"
+            className="p-2 block"
+          >
             Direct Learning
           </NavLink>
         </li>

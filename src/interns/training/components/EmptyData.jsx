@@ -2,7 +2,7 @@ import React from "react";
 import { TbMoodCry } from "react-icons/tb";
 import { Link } from "react-router";
 
-const EmptyData = () => {
+const EmptyData = ({ setOpen }) => {
   return (
     <div className="flex justify-center items-center flex-col relative translate-y-52">
       <p className="text-emeraldGreen text-5xl">
@@ -12,12 +12,12 @@ const EmptyData = () => {
         No data to show
       </h3>
       <div className="mt-6">
-        <Link
-          to="/training/cases/add"
+        <p
+          onClick={() => setOpen(true)}
           className="bg-emeraldGreen text-lg rounded-sm text-crispWhite cursor-pointer py-1 px-4"
         >
           Add now
-        </Link>
+        </p>
       </div>
     </div>
   );

@@ -7,7 +7,7 @@ import { FaCircleInfo } from "react-icons/fa6";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
 import { useAddNewCaseMutation } from "../../../../services/api/internApiSlice";
-import { toast } from "react-toastify";
+import toast, { Toaster } from "react-hot-toast";
 import _ from "lodash";
 import { caseValidationSchema } from "../../constants/caseValidationSchema";
 import { useSelector } from "react-redux";
@@ -55,7 +55,7 @@ const AddCase = ({ open, handleClose }) => {
     selfReflection,
   }) => {
     try {
-      await addNewCase({
+      const response = await addNewCase({
         round: round.value,
         intern: id,
         patientGender: patientGender.value,
@@ -69,7 +69,10 @@ const AddCase = ({ open, handleClose }) => {
         caseSummary,
         selfReflection,
       }).unwrap();
-      toast.success("Case added successfully!");
+      if (response?.code === 201) {
+        toast.success(response?.message);
+        handleClose();
+      }
       reset();
     } catch (error) {
       if (error.data?.errors) {
@@ -90,13 +93,14 @@ const AddCase = ({ open, handleClose }) => {
       onClose={handleClose}
       aria-labelledby="modal-modal-title"
       aria-describedby="modal-modal-description"
-      className="flex items-center justify-center overflow-y-scroll p-20"
+      className="flex items-center justify-center p-6"
     >
-      <div className="p-6 bg-flashWhite rounded outline-0 w-5/6 mt-20">
+      <div className="p-6 bg-flashWhite rounded outline-0 w-10/12">
+        <Toaster />
         <h1 className="text-2xl font-semibold text-secondary">Add New Case</h1>
 
         <form
-          className="mt-4 grid grid-cols-12 items-start gap-6"
+          className="mt-4 grid grid-cols-12 items-start gap-4"
           onSubmit={handleSubmit(onSubmit)}
         >
           {/* Main Information */}
@@ -119,7 +123,7 @@ const AddCase = ({ open, handleClose }) => {
             </label>
             <textarea
               {...register("caseSummary")}
-              className="border-1 border-mediumGray/20 block w-full h-20 resize-none rounded-sm outline-0 p-2"
+              className="border-1 border-mediumGray/20 block w-full h-16 resize-none rounded-sm outline-0 p-2"
               id="case-summary"
             />
             {errors && (
@@ -142,7 +146,7 @@ const AddCase = ({ open, handleClose }) => {
             </label>
             <textarea
               {...register("selfReflection")}
-              className="border-1 border-mediumGray/20 block w-full h-20 resize-none rounded-sm outline-0 p-2"
+              className="border-1 border-mediumGray/20 block w-full h-16 resize-none rounded-sm outline-0 p-2"
               id="self-reflection"
             />
             {errors && (
@@ -152,8 +156,14 @@ const AddCase = ({ open, handleClose }) => {
             )}
           </div>
           {/* Submit Button */}
-          <div className="col-span-full mt-4">
-            <Button type="submit" label="Add" />
+          <div className="col-span-3 flex gap-4 items-center">
+            <Button type="submit" label="Add Now" />
+            <Button
+              label="Cancel"
+              type="button"
+              customClass="!bg-white !border-silverFrost !text-secondary hover:!opacity-60"
+              handleClick={handleClose}
+            />
           </div>
         </form>
       </div>

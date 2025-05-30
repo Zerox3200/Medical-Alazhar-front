@@ -1,16 +1,9 @@
-import React, { useEffect, useState } from "react";
-import { useTrainingContext } from "../TrainingProvider";
+import React, { useState } from "react";
 import Select from "react-select";
+import trainingData from "../data";
 
 const Skill = ({ field }) => {
   const [procedureType, setProcedureType] = useState("");
-  const { filteredList, selectedRound } = useTrainingContext();
-
-  useEffect(() => {
-    if (selectedRound) {
-      setProcedureType("");
-    }
-  }, [selectedRound]);
 
   const handleChange = (procedureType) => {
     field.onChange(procedureType);
@@ -24,7 +17,7 @@ const Skill = ({ field }) => {
           Skill (procedure)
         </label>
         <Select
-          options={filteredList}
+          options={trainingData.procedures.proceduresList}
           {...field}
           value={field.value}
           onChange={handleChange}

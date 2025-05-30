@@ -1,5 +1,9 @@
 import { casesList, epasList, venueOptions, expectedLevels } from "./casesData";
 import { proceduresList, performanceLevels } from "./proceduresData";
+import {
+  selfLearningActivtiesData,
+  directLearningActivtiesData,
+} from "./activities";
 
 /* List of Rounds and Units */
 // export const rounds = [
@@ -27,6 +31,7 @@ const trainingData = {
   // rounds,
   cases: { casesList, epasList, venueOptions, expectedLevels },
   procedures: { proceduresList, performanceLevels },
+  activities: { selfLearningActivtiesData, directLearningActivtiesData },
 };
 
 export default trainingData;

@@ -8,6 +8,7 @@ import {
 import { FaHeartPulse } from "react-icons/fa6";
 import { MdSupervisorAccount } from "react-icons/md";
 import {
+  useGetAllCasesQuery,
   useGetAllInternsQuery,
   useGetAllSupervisorsQuery,
 } from "../../services/api/adminApiSlice";
@@ -17,8 +18,10 @@ import RecentAccounts from "./components/RecentAccounts";
 
 const Dashboard = () => {
   const { data: interns } = useGetAllInternsQuery();
+  const { data: cases } = useGetAllCasesQuery();
   const { data: supervisors } = useGetAllSupervisorsQuery();
 
+  console.log("cases", cases);
   return (
     <div className="flex flex-col gap-10 p-6">
       {/* Statistics */}
@@ -42,7 +45,7 @@ const Dashboard = () => {
         <StatsBox
           heading="Cases"
           lineColor="bg-mediumBlue"
-          subHeading="2,254"
+          subHeading={cases?.count}
           icon={<FaHeartPulse />}
           iconBg="bg-lightBlue/30"
           iconColor="text-mediumBlue"

@@ -63,6 +63,7 @@ const MainThemeOfCase = ({ errors, control }) => {
               isMulti
               options={trainingData.cases.epasList}
               placeholder="Select EPAs"
+              closeMenuOnSelect={false}
             />
           )}
         />

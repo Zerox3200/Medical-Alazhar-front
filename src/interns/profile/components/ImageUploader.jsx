@@ -21,7 +21,9 @@ const ImageUploader = ({
       return toast.error("Please select an image");
     }
     const formData = new FormData();
+
     formData.append("profile-image", image);
+    console.log("formData", formData);
     try {
       const response = await uploadProfileImage({
         role,

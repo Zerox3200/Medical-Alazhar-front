@@ -38,9 +38,12 @@ const CaseEPASelectBox = ({
           isClearable={true}
         />
       ) : (
-        <div className="col-span-3 text-secondary font-semibold text-sm flex items-center gap-2 ">
-          <Chip label={displayText?.[0]} />
-          <Chip label={displayText?.[1]} />
+        <div className="col-span-3 text-secondary font-semibold text-sm">
+          {displayText?.map((text, i) => {
+            return (
+              <Chip label={text} key={i} style={{ margin: "0 10px 10px 0" }} />
+            );
+          })}
         </div>
       )}
     </div>

@@ -3,31 +3,31 @@ import { useParams } from "react-router";
 import _ from "lodash";
 import {
   useGetInternQuery,
-  useGetSingleCaseQuery,
+  useGetSignleProcedureQuery,
 } from "../../../../services/api/internApiSlice";
-import CaseHeader from "./CaseHeader";
-import CaseContent from "./CaseContent";
 import { useSelector } from "react-redux";
+import ProcedureHeader from "./ProcedureHeader";
+import ProcedureContent from "./ProcedureContent";
 
-const Case = () => {
+const Procedure = () => {
   const { id } = useSelector((state) => state.auth.user);
-  const { caseId } = useParams();
+  const { procedureId } = useParams();
   const [editMode, setEditMode] = useState(false);
-  const { data: caseData } = useGetSingleCaseQuery({ caseId });
+  const { data: procedureData } = useGetSignleProcedureQuery({ procedureId });
   const { data: internData } = useGetInternQuery({ internId: id });
 
   return (
     <div className="p-6">
       <div className="bg-white rounded-md shadow-sm p-6 grid grid-cols-2 items-center gap-4">
-        {/* Case header */}
-        <CaseHeader
+        {/* Procedure header */}
+        <ProcedureHeader
           editMode={editMode}
           setEditMode={setEditMode}
-          caseData={caseData}
+          procedureData={procedureData}
         />
-        {/* Case content */}
-        <CaseContent
-          caseData={caseData}
+        {/* Procedure content */}
+        <ProcedureContent
+          procedureData={procedureData}
           editMode={editMode}
           setEditMode={setEditMode}
           internData={internData}
@@ -37,4 +37,4 @@ const Case = () => {
   );
 };
 
-export default Case;
+export default Procedure;
