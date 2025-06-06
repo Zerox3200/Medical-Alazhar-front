@@ -7,7 +7,7 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { loginValidationSchema } from "../constants/authFormData";
 import { useDispatch } from "react-redux";
-import { useLoginMutation } from "../services/api/authApiSlice";
+import { useLoginMutation } from "../services/common/authApiSlice";
 import { setAuth } from "../services/slices/authSlice";
 
 const Login = () => {

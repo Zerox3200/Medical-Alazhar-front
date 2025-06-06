@@ -1,4 +1,4 @@
-import { baseApiSlice } from "./baseApiSlice";
+import { baseApiSlice } from "../common/baseApiSlice";
 
 export const adminApiSlice = baseApiSlice.injectEndpoints({
   endpoints: (builder) => ({

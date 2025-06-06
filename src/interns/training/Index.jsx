@@ -3,28 +3,32 @@ import React, { useRef, useState } from "react";
 import { FaInfoCircle } from "react-icons/fa";
 import { FaArrowRight } from "react-icons/fa6";
 import { Outlet } from "react-router";
-import {
-  useGetAllCasesQuery,
-  useGetAllProceduresQuery,
-} from "../../services/api/internApiSlice";
+import { useCases } from "../../services/intern/api/hooks/casesHooks";
+import { useProcedures } from "../../services/intern/api/hooks/proceduresHooks";
+import { useSelfLearnings } from "../../services/intern/api/hooks/selfLearningHooks";
+import { useDirectLearnings } from "../../services/intern/api/hooks/directLearningHooks";
 
 const wpblSummaryBox = (discriminant, count, bg) => {
   return (
     <div
-      className={`col-span-1 p-2 text-crispWhite rounded-md ${bg} text-center`}
+      className={`col-span-1 p-2 text-flashWhite rounded-md ${bg} text-center`}
     >
-      <h2 className="text-xl font-light">{discriminant}</h2>
-      <p className="">
+      <h2 className="text-xl font-normal">{discriminant}</h2>
+      <p>
         <span className="text-4xl font-semibold">{+count} </span>
-        {discriminant.split(" ")[1]}
+        <span className="text-silverFrost">
+          {discriminant.split(" ").pop()}
+        </span>
       </p>
     </div>
   );
 };
 
 const RecordTraining = () => {
-  const { data: casesData } = useGetAllCasesQuery();
-  const { data: proceduresData } = useGetAllProceduresQuery();
+  const { cases } = useCases();
+  const { procedures } = useProcedures();
+  const { selfLearnings } = useSelfLearnings();
+  const { directLearnings } = useDirectLearnings();
 
   const [selectedRound, setSelectedRound] = useState("General Surgery");
   const [casesCount, setCasesCount] = useState(0);
@@ -35,10 +39,18 @@ const RecordTraining = () => {
     <div className="border-b-2 border-softGray shadow-sm mb-10 pb-10">
       {/* Training Summary */}
       <div className="grid grid-cols-4 gap-4 p-6">
-        {wpblSummaryBox("Total cases", casesData?.count, "bg-mediumBlue")}
-        {wpblSummaryBox("Total procedures", proceduresData?.count, "bg-coral")}
-        {wpblSummaryBox("Learned activities ", 12, "bg-deepBlue")}
-        {wpblSummaryBox("Passed assessments", 8, "bg-emeraldGreen")}
+        {wpblSummaryBox("Total cases", cases?.count, "bg-mediumBlue")}
+        {wpblSummaryBox("Total procedures", procedures?.count, "bg-orange-500")}
+        {wpblSummaryBox(
+          "Self Learning activities",
+          selfLearnings?.count,
+          "bg-deepBlue"
+        )}
+        {wpblSummaryBox(
+          "Direct learning activities",
+          directLearnings?.count,
+          "bg-emeraldGreen"
+        )}
       </div>
 
       <div className="grid grid-cols-3">

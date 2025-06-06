@@ -7,7 +7,7 @@ import ImagePopper from "./ImagePopper";
 import { MdLogout } from "react-icons/md";
 import { PiCertificateFill } from "react-icons/pi";
 import toast, { Toaster } from "react-hot-toast";
-import { useLogoutMutation } from "../../../services/api/authApiSlice";
+import { useLogoutMutation } from "../../../services/common/authApiSlice";
 
 const profileLinks = [
   {
@@ -28,12 +28,7 @@ const profileLinks = [
   { icon: <FaLock />, label: "Password", value: "password" },
 ];
 
-const ProfileSidebar = ({
-  data: { intern },
-  linkIndex,
-  setLinkIndex,
-  setLinkValue,
-}) => {
+const ProfileSidebar = ({ intern, linkIndex, setLinkIndex, setLinkValue }) => {
   const date = new Date(intern?.lastLogin);
   const lastLoginDate = date.toLocaleString();
   const [openImageUploaderModal, setOpenImageUploaderModal] = useState(false);

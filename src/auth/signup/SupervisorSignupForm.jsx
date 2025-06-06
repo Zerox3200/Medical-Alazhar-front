@@ -5,7 +5,7 @@ import { Controller, useForm } from "react-hook-form";
 import { Link } from "react-router";
 import Input from "../components/Input";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { useSupervisorSignupMutation } from "../../services/api/apiSlice";
+import { useSupervisorSignupMutation } from "../../services/common/apiSlice";
 import {
   specialities,
   supervisorSignupValidationSchema,

@@ -2,6 +2,7 @@ import React from "react";
 import TrainingNavbar from "./components/TrainingNavbar";
 import { Outlet } from "react-router";
 import { TrainingProvider } from "./TrainingProvider";
+import TrainingBreadcrumbs from "./components/TrainingBreadcrumbs";
 
 const TrainingLayout = () => {
   return (
@@ -10,6 +11,9 @@ const TrainingLayout = () => {
         <TrainingNavbar />
       </div>
       <div className="col-span-5">
+        <div className="p-6 ">
+          <TrainingBreadcrumbs />
+        </div>
         <TrainingProvider>
           <Outlet />
         </TrainingProvider>

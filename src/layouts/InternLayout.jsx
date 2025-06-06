@@ -3,18 +3,22 @@ import Navbar from "../interns/components/Navbar.jsx";
 import { Outlet, useLocation } from "react-router";
 import Footer from "../components/Footer.jsx";
 import ProfileApproval from "../interns/components/ProfileApproval.jsx";
-import { useGetInternQuery } from "../services/api/internApiSlice";
+import { useIntern } from "../services/intern/api/hooks/authHooks.js";
 import { useSelector } from "react-redux";
 
 const InternLayout = () => {
-  const { id } = useSelector((state) => state.auth.user);
+  const { role, id } = useSelector((state) => state.auth.user);
   const { pathname } = useLocation();
 
-  const { data } = useGetInternQuery({ internId: id });
+  const { internData } = useIntern({
+    userRole: role,
+    userId: id,
+    internId: id,
+  });
 
   return (
     <div>
-      {!data?.intern?.approved && pathname !== "/profile" ? (
+      {!internData?.intern?.approved && pathname !== "/profile" ? (
         <div>
           <ProfileApproval />
         </div>

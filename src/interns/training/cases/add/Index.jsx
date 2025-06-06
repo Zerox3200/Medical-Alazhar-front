@@ -6,15 +6,13 @@ import { Modal, Tooltip } from "@mui/material";
 import { FaCircleInfo } from "react-icons/fa6";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
-import { useAddNewCaseMutation } from "../../../../services/api/internApiSlice";
+import { useAddCaseMutation } from "../../../../services/intern/api/hooks/casesHooks";
 import toast, { Toaster } from "react-hot-toast";
 import _ from "lodash";
 import { caseValidationSchema } from "../../constants/caseValidationSchema";
-import { useSelector } from "react-redux";
 
-const AddCase = ({ open, handleClose }) => {
-  const { id } = useSelector((state) => state.auth.user);
-  const [addNewCase] = useAddNewCaseMutation();
+const AddCase = () => {
+  const [addCase] = useAddCaseMutation();
 
   const {
     register,
@@ -26,8 +24,7 @@ const AddCase = ({ open, handleClose }) => {
   } = useForm({
     resolver: yupResolver(caseValidationSchema),
     defaultValues: {
-      round: null,
-      intern: null,
+      roundId: null,
       patientGender: null,
       patientSerial: null,
       patientAge: null,
@@ -54,27 +51,28 @@ const AddCase = ({ open, handleClose }) => {
     caseSummary,
     selfReflection,
   }) => {
+    console.log(round.value);
     try {
-      const response = await addNewCase({
-        round: round.value,
-        intern: id,
+      const response = await addCase({
+        roundId: round.value,
         patientGender: patientGender.value,
         venue: _.snakeCase(venue.value),
+        caseType: caseType.value,
+        expectedLevel: expectedLevel.value,
+        epas: epas.flatMap((epa) => epa.value),
         patientSerial,
         patientAge,
         date: date.toISOString(),
-        caseType: caseType.value,
-        epas: epas.flatMap((epa) => epa.value),
-        expectedLevel: expectedLevel.value,
         caseSummary,
         selfReflection,
       }).unwrap();
+      console.log(response);
       if (response?.code === 201) {
         toast.success(response?.message);
-        handleClose();
       }
       reset();
     } catch (error) {
+      console.log("error", error);
       if (error.data?.errors) {
         error.data.errors.forEach((err) => {
           setError(err.path, {
@@ -83,91 +81,92 @@ const AddCase = ({ open, handleClose }) => {
           });
         });
       } else {
-        toast.error(error.message || "Failed to add new case");
+        toast.error(error.data?.message || "Failed to add new case");
       }
     }
   };
   return (
-    <Modal
-      open={open}
-      onClose={handleClose}
-      aria-labelledby="modal-modal-title"
-      aria-describedby="modal-modal-description"
-      className="flex items-center justify-center p-6"
-    >
-      <div className="p-6 bg-flashWhite rounded outline-0 w-10/12">
-        <Toaster />
-        <h1 className="text-2xl font-semibold text-secondary">Add New Case</h1>
-
-        <form
-          className="mt-4 grid grid-cols-12 items-start gap-4"
-          onSubmit={handleSubmit(onSubmit)}
-        >
-          {/* Main Information */}
-          <div className="col-span-6 grid grid-cols-4 gap-6 items-center shadow-md p-6 h-full bg-white rounded-md">
-            <MainInfo register={register} errors={errors} control={control} />
-          </div>
-          {/* Main Theme of Case */}
-          <div className="col-span-6 grid grid-cols-4 gap-6 items-center shadow-md p-6 h-full bg-white rounded-md">
-            <MainThemeOfCase
-              register={register}
-              errors={errors}
-              control={control}
-            />
-          </div>
-
-          <div className="col-span-6 shadow-md p-6 bg-white rounded-md">
-            {/* Case Summary */}
-            <label className="text-md font-medium flex gap-1 mb-2">
-              Case Summary
-            </label>
-            <textarea
-              {...register("caseSummary")}
-              className="border-1 border-mediumGray/20 block w-full h-16 resize-none rounded-sm outline-0 p-2"
-              id="case-summary"
-            />
-            {errors && (
-              <p className="text-red-500 text-sm">
-                {errors.caseSummary?.message}
-              </p>
-            )}
-          </div>
-          {/* Self Reflection */}
-          <div className="col-span-6 shadow-md p-6 bg-white rounded-md">
-            <label className="text-md font-medium flex gap-1 mb-2">
-              Self-reflection:
-              <Tooltip
-                title="What did I do right?, What needs more development?, Plan for further development"
-                placement="top"
-                color="#0d6efd"
-              >
-                <FaCircleInfo className="text-xs" />
-              </Tooltip>
-            </label>
-            <textarea
-              {...register("selfReflection")}
-              className="border-1 border-mediumGray/20 block w-full h-16 resize-none rounded-sm outline-0 p-2"
-              id="self-reflection"
-            />
-            {errors && (
-              <p className="text-red-500 text-sm">
-                {errors.selfReflection?.message}
-              </p>
-            )}
-          </div>
-          {/* Submit Button */}
-          <div className="col-span-3 flex gap-4 items-center">
-            <Button type="submit" label="Add Now" />
+    <div className="p-6 pt-0 bg-flashWhite rounded outline-0 ">
+      <Toaster />
+      <div className="mb-6 flex justify-between items-center">
+        <h1 className="text-4xl font-semibold text-secondary">Add Case</h1>
+        {/* Submit Button */}
+        <div className="col-span-full flex gap-4 items-center justify-end">
+          <div>
             <Button
-              label="Cancel"
               type="button"
-              customClass="!bg-white !border-silverFrost !text-secondary hover:!opacity-60"
-              handleClick={handleClose}
+              label="Cancel"
+              customClass="!bg-white !border-white hover:!opacity-50 !shadow-md !text-secondary"
+              handleClick={() => reset()}
             />
           </div>
-        </form>
+          <div>
+            <Button
+              type="submit"
+              label="Add Now"
+              handleClick={handleSubmit(onSubmit)}
+            />
+          </div>
+        </div>
       </div>
-    </Modal>
+      <form
+        className="grid grid-cols-12 items-start gap-4"
+        onSubmit={handleSubmit(onSubmit)}
+      >
+        {/* Main Information */}
+        <div className="col-span-6 grid grid-cols-4 gap-6 items-center shadow-md p-6 h-full bg-white rounded-md">
+          <MainInfo register={register} errors={errors} control={control} />
+        </div>
+        {/* Main Theme of Case */}
+        <div className="col-span-6 grid grid-cols-4 gap-6 items-center shadow-md p-6 h-full bg-white rounded-md">
+          <MainThemeOfCase
+            register={register}
+            errors={errors}
+            control={control}
+          />
+        </div>
+
+        <div className="col-span-6 shadow-md p-6 bg-white rounded-md">
+          {/* Case Summary */}
+          <label className="text-md font-medium flex gap-1 mb-2">
+            Case Summary
+          </label>
+          <textarea
+            {...register("caseSummary")}
+            className="border-1 border-mediumGray/20 block w-full h-26 resize-none rounded-sm outline-0 p-2"
+            id="case-summary"
+          />
+          {errors && (
+            <p className="text-red-500 text-sm">
+              {errors.caseSummary?.message}
+            </p>
+          )}
+        </div>
+        {/* Self Reflection */}
+        <div className="col-span-6 shadow-md p-6 bg-white rounded-md">
+          <label className="text-md font-medium flex gap-1 mb-2">
+            Self-reflection:
+            <Tooltip
+              title="What did I do right?, What needs more development?, Plan for further development"
+              placement="top"
+              color="#0d6efd"
+            >
+              <FaCircleInfo className="text-xs" />
+            </Tooltip>
+          </label>
+          <textarea
+            {...register("selfReflection")}
+            className="border-1 border-mediumGray/20 block w-full h-26 resize-none rounded-sm outline-0 p-2"
+            id="self-reflection"
+          />
+          {errors && (
+            <p className="text-red-500 text-sm">
+              {errors.selfReflection?.message}
+            </p>
+          )}
+        </div>
+      </form>
+    </div>
   );
 };
 

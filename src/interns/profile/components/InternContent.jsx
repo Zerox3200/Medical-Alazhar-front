@@ -9,12 +9,12 @@ import { useSelector } from "react-redux";
 import {
   useUploadMBBCHCertificateImageMutation,
   useUploadNationalIDImageMutation,
-} from "../../../services/api/uploadApiSlice";
+} from "../../../services/common/uploadApiSlice";
 import { FaCamera, FaEye, FaEyeSlash } from "react-icons/fa";
 import Input from "./Input";
-import { useChangePasswordMutation } from "../../../services/api/authApiSlice";
+import { useChangePasswordMutation } from "../../../services/common/authApiSlice";
 
-const InternContent = ({ data: { intern }, linkIndex, linkValue }) => {
+const InternContent = ({ intern, linkIndex, linkValue }) => {
   const [visibleCurrentPassword, setVisibleCurrentPassword] = useState(false);
   const [visibleNewPassword, setVisibleNewPassword] = useState(false);
   const [visibleConfirmPassword, setVisibleConfirmPassword] = useState(false);
@@ -79,42 +79,27 @@ const InternContent = ({ data: { intern }, linkIndex, linkValue }) => {
     }
   };
 
-  const [fullnameValue, setFullnameValue] = useState("");
+  const [englishNameValue, setEnglishNameValue] = useState("");
   const [emailValue, setEmailValue] = useState("");
   const [phoneValue, setPhoneValue] = useState("");
   const [nationalityValue, setNationalityValue] = useState("");
   // const [idOrPassportValue, setIdOrPassportValue] = useState("");
   const [dateOfBirthValue, setDateOfBirthValue] = useState(new Date());
 
-  const {
-    fullname,
-    email,
-    phone,
-    nationality,
-    facultyOfGraduation,
-    yearOfGraduation,
-    orderOfGraduate,
-    grade,
-    facultyIDNumber,
-    idOrPassport,
-    hospital,
-    dateOfBirth,
-  } = intern;
+  const dateOfBirth = intern?.dob;
 
   // Convert Date Of Birth
   const date = new Date(dateOfBirth);
   const DOB = date.toLocaleDateString();
 
   useEffect(() => {
-    if (intern) {
-      setFullnameValue(fullname);
-      setEmailValue(email);
-      setPhoneValue(phone);
-      setNationalityValue(nationality);
-      // setIdOrPassportValue(idOrPassport);
-      setDateOfBirthValue(DOB);
-    }
-  }, [intern, fullname, email, phone, nationality, idOrPassport, DOB]);
+    setEnglishNameValue(intern?.englishName);
+    setEmailValue(intern?.email);
+    setPhoneValue(intern?.phone);
+    setNationalityValue(intern?.nationality);
+    // setIdOrPassportValue(idOrPassport);
+    setDateOfBirthValue(intern?.dob);
+  }, [intern]);
 
   // Dispatch password change
   const handlePasswordChange = async (e) => {
@@ -153,10 +138,10 @@ const InternContent = ({ data: { intern }, linkIndex, linkValue }) => {
           </div>
           <div className="mt-6 text-md grid grid-cols-2 gap-4">
             <InfoBox
-              label="Fullname"
-              value={fullnameValue}
+              label="englishName"
+              value={englishNameValue}
               id="fullname"
-              handleChange={(e) => setFullnameValue(e.target.value)}
+              handleChange={(e) => setEnglishNameValue(e.target.value)}
             />
             <InfoBox
               label="Date of birth"
@@ -187,11 +172,11 @@ const InternContent = ({ data: { intern }, linkIndex, linkValue }) => {
             />
             <InfoBox
               label={
-                idOrPassport?.type === "nationalID"
+                intern?.idOrPassport?.type === "nationalID"
                   ? "National ID"
                   : "PassportNumber"
               }
-              value={idOrPassport?.number}
+              value={intern?.idOrPassport?.number}
               id="idOrPassport"
               // handleChange={(e) => setIdOrPassportValue(e.target.value)}
             />
@@ -327,29 +312,29 @@ const InternContent = ({ data: { intern }, linkIndex, linkValue }) => {
           <div className="mt-6 text-md grid grid-cols-2 gap-4">
             <InfoBox
               label="Faculty of Graduation"
-              value={facultyOfGraduation}
+              value={intern?.facultyOfGraduation}
               id="facultyOfGraduation"
             />
             <InfoBox
               label="Year of Graduation"
-              value={yearOfGraduation}
+              value={intern?.yearOfGraduation}
               id="yearOfGraduation"
             />
             <InfoBox
               label="Order of Graduate"
-              value={orderOfGraduate}
+              value={intern?.orderOfGraduate}
               id="orderOfGraduate"
             />
-            <InfoBox label="Grade" value={grade} id="grade" />
+            <InfoBox label="Grade" value={intern?.grade} id="grade" />
             <InfoBox
               label="Hospital ID Number"
-              value={facultyIDNumber}
+              value={intern?.facultyIDNumber}
               id="facultyIDNumber"
             />
 
             <InfoBox
               label="Hospital"
-              value={hospital + " Hospital"}
+              value={intern?.hospital + " Hospital"}
               id="hospital"
             />
           </div>

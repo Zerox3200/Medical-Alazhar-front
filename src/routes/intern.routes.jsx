@@ -12,6 +12,7 @@ const TrainingLayout = lazy(() =>
 const Training = lazy(() => import("..//interns/training/Index.jsx"));
 const CasesSummary = lazy(() => import("../interns/training/cases/Index"));
 const Case = lazy(() => import("../interns/training/cases/case/Index"));
+const AddCase = lazy(() => import("../interns/training/cases/add/Index"));
 const Procedures = lazy(() => import("../interns/training/procedures/Index"));
 const Procedure = lazy(() =>
   import("../interns/training/procedures/procedure/Index")
@@ -70,6 +71,10 @@ const InternRoutes = [
               {
                 path: "cases/:caseId",
                 element: <Case />,
+              },
+              {
+                path: "cases/add",
+                element: <AddCase />,
               },
               {
                 path: "procedures",

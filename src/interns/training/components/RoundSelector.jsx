@@ -2,15 +2,19 @@ import React from "react";
 import Select from "react-select";
 import { useSelector } from "react-redux";
 import _ from "lodash";
-import { useGetInternQuery } from "../../../services/api/internApiSlice.js";
+import { useIntern } from "../../../services/intern/api/hooks/authHooks";
 
 const RoundAndUnitSelector = ({ field }) => {
-  const { id } = useSelector((state) => state.auth.user);
-  const { data: internData } = useGetInternQuery({ internId: id });
+  const { role, id } = useSelector((state) => state.auth.user);
+  const { internData } = useIntern({
+    userRole: role,
+    userId: id,
+    internId: id,
+  });
 
-  const rounds = internData?.intern?.trainingProgress.map(
-    (progress) => progress.round
-  );
+  const rounds =
+    internData?.intern?.trainingProgress.map((progress) => progress.roundId) ||
+    [];
 
   let roundsList = [];
   for (let round of rounds) {

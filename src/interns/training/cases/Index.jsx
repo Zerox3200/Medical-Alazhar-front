@@ -1,6 +1,24 @@
+/** Major imports **/
 import React, { useState } from "react";
-import Button from "../../components/Button";
 import { DataGrid } from "@mui/x-data-grid";
+import _ from "lodash";
+import { Link } from "react-router";
+import toast, { Toaster } from "react-hot-toast";
+import { useSelector } from "react-redux";
+
+/** APIs **/
+import {
+  useCases,
+  useDeleteCaseMutation,
+} from "../../../services/intern/api/hooks/casesHooks";
+
+/** Components **/
+import Button from "../../components/Button";
+import EmptyData from "../components/EmptyData";
+import ConfirmDeleteMessage from "../components/ConfirmDeleteMessage";
+import SearchAndFilters from "../components/SearchAndFilters";
+
+/** Icons **/
 import {
   FaCheckCircle,
   FaPlus,
@@ -9,30 +27,15 @@ import {
 } from "react-icons/fa";
 import { IoCloseCircle } from "react-icons/io5";
 import { HiOutlineDocumentSearch } from "react-icons/hi";
-import EmptyData from "../components/EmptyData";
-import AddCase from "./add/Index";
-import {
-  useDeleteCaseMutation,
-  useGetAllCasesQuery,
-} from "../../../services/api/internApiSlice";
-import _ from "lodash";
-import { Link } from "react-router";
-import toast, { Toaster } from "react-hot-toast";
-import ConfirmDeleteMessage from "../components/ConfirmDeleteMessage";
-import { useSelector } from "react-redux";
-import SearchAndFilters from "../components/SearchAndFilters";
 
 const CasesSummary = () => {
+  const { id } = useSelector((state) => state.auth.user);
+  const { cases: casesData } = useCases();
+  const [deleteCase] = useDeleteCaseMutation();
   const [dateFrom, setDateFrom] = useState(new Date());
   const [dateTo, setDateTo] = useState(new Date());
-  const { id } = useSelector((state) => state.auth.user);
-  const { data: casesData } = useGetAllCasesQuery({ internId: id });
   const [openWarningAlert, setOpenWarningAlert] = useState(false);
   const [caseId, setCaseId] = useState(null);
-  const [open, setOpen] = useState(false);
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
-  const [deleteCase] = useDeleteCaseMutation();
 
   // Delete non accepted cases
   const handleDeleteCase = async () => {
@@ -49,7 +52,7 @@ const CasesSummary = () => {
   /*Columns*/
   const columns = [
     {
-      field: "round",
+      field: "roundId",
       headerName: "Round",
       minWidth: 150,
       flex: 1,
@@ -59,7 +62,7 @@ const CasesSummary = () => {
             to={`/training/cases/${cell.row._id}`}
             className="cursor-pointer"
           >
-            {_.startCase(cell.value.name)}
+            {_.startCase(cell.value?.name)}
           </Link>
         );
       },
@@ -166,17 +169,12 @@ const CasesSummary = () => {
       />
 
       <Toaster />
-      <AddCase open={open} handleClose={handleClose} />
       {cases?.length > 0 ? (
-        <div className="shadow-md p-6">
+        <div className="shadow-md p-6 pt-0">
           <div className="flex justify-between items-center">
             <h2 className="text-4xl text-secondary">Cases</h2>
-            <div className="">
-              <Button
-                handleClick={handleOpen}
-                icon={<FaPlus />}
-                label="Add Case"
-              />
+            <div>
+              <Link to="/training/cases/add">Add Case</Link>
             </div>
           </div>
 
@@ -253,7 +251,7 @@ const CasesSummary = () => {
           </div>
         </div>
       ) : (
-        <EmptyData setOpen={setOpen} />
+        <EmptyData />
       )}
     </>
   );

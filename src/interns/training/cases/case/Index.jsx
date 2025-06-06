@@ -1,23 +1,25 @@
 import React, { useState } from "react";
-import { useParams } from "react-router";
 import _ from "lodash";
-import {
-  useGetInternQuery,
-  useGetSingleCaseQuery,
-} from "../../../../services/api/internApiSlice";
+import { useParams } from "react-router";
+import { useSelector } from "react-redux";
 import CaseHeader from "./CaseHeader";
 import CaseContent from "./CaseContent";
-import { useSelector } from "react-redux";
+import { useGetCaseQuery } from "../../../../services/intern/api/hooks/casesHooks";
+import { useIntern } from "../../../../services/intern/api/hooks/authHooks";
 
 const Case = () => {
-  const { id } = useSelector((state) => state.auth.user);
+  const { role, id } = useSelector((state) => state.auth.user);
   const { caseId } = useParams();
   const [editMode, setEditMode] = useState(false);
-  const { data: caseData } = useGetSingleCaseQuery({ caseId });
-  const { data: internData } = useGetInternQuery({ internId: id });
+  const { data: caseData } = useGetCaseQuery({ caseId });
+  const { internData } = useIntern({
+    userRole: role,
+    userId: id,
+    internId: id,
+  });
 
   return (
-    <div className="p-6">
+    <div className="p-6 pt-0">
       <div className="bg-white rounded-md shadow-sm p-6 grid grid-cols-2 items-center gap-4">
         {/* Case header */}
         <CaseHeader

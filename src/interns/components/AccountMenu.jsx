@@ -4,14 +4,14 @@ import { Link } from "react-router";
 import { FaUserLarge } from "react-icons/fa6";
 import { MdLogout } from "react-icons/md";
 import { BsFillGearFill } from "react-icons/bs";
-import { useLogoutMutation } from "../../services/api/authApiSlice";
-import { useGetInternQuery } from "../../services/api/internApiSlice";
+import { useLogoutMutation } from "../../services/common/authApiSlice";
+import { useIntern } from "../../services/intern/api/hooks/authHooks";
 import { useSelector } from "react-redux";
 const AccountMenu = () => {
   const { id, role } = useSelector((state) => state.auth?.user);
   const [opened, setOpened] = useState(false);
   const [toggleTheme, setToggleTheme] = useState(false);
-  const { data: internData } = useGetInternQuery({ internId: id });
+  const { internData } = useIntern({ internId: id });
   const accountMenuRef = useRef(null);
 
   const fullname =

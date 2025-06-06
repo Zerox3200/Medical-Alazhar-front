@@ -1,25 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import Select from "react-select";
-import { useTrainingContext } from "../../TrainingProvider";
 import trainingData from "../../data";
 import { Controller } from "react-hook-form";
 
 const MainThemeOfCase = ({ errors, control }) => {
-  const [caseType, setCaseType] = useState({
-    label: "no types",
-    value: "no_types",
-  });
-  const [frequency, setFrequency] = useState(20);
-
-  // Consume Cases Context
-  const { filteredList, selectedRound } = useTrainingContext();
-
-  useEffect(() => {
-    if (selectedRound) {
-      setCaseType("");
-    }
-  }, [selectedRound]);
-
   return (
     <>
       <h3 className="col-span-full text-xl font-semibold text-primary/70">
@@ -73,7 +57,7 @@ const MainThemeOfCase = ({ errors, control }) => {
       </div>
 
       {/* Expected Level */}
-      <div className="col-span-2">
+      <div className="col-span-full">
         <label className="text-md font-medium block mb-2">Expected Level</label>
         <Controller
           name="expectedLevel"
@@ -93,18 +77,6 @@ const MainThemeOfCase = ({ errors, control }) => {
             {errors?.expectedLevel.message}
           </p>
         )}
-      </div>
-
-      {/* Minimal Frequency */}
-      <div className="col-span-2">
-        <h2 className="text-md font-medium block mb-2">Minimal Frequency</h2>
-        <p
-          className={`border-1 border-mediumGray/60 rounded-sm p-1 text-lg outline-0 block w-full ${
-            frequency <= 0 ? "text-emeraldGreen" : "text-error"
-          }`}
-        >
-          {+frequency || 20}
-        </p>
       </div>
     </>
   );

@@ -8,14 +8,12 @@ import _ from "lodash";
 import trainingData from "../../data";
 import CaseRoundSelectBox from "./CaseRoundSelectBox";
 import CaseEPASelectBox from "./CaseEPASelectBox";
-import { useEditCaseMutation } from "../../../../services/api/internApiSlice";
+import { useEditCaseMutation } from "../../../../services/intern/api/hooks/casesHooks";
 import { useParams } from "react-router";
-import { useSelector } from "react-redux";
 
 const CaseContent = ({ internData, caseData, editMode, setEditMode }) => {
-  const { id } = useSelector((state) => state.auth.user);
   const { caseId } = useParams();
-  const [round, setRound] = useState(null);
+  const [roundId, setRoundId] = useState(null);
   const [caseType, setCaseType] = useState(null);
   const [serial, setSerial] = useState(null);
   const [gender, setGender] = useState(null);
@@ -27,14 +25,14 @@ const CaseContent = ({ internData, caseData, editMode, setEditMode }) => {
   const [epas, setEpas] = useState([]);
 
   const rounds = internData?.intern?.trainingProgress.map(
-    (progress) => progress.round
+    (progress) => progress.roundId
   );
 
   let roundOptions = [];
   for (let round of rounds) {
     roundOptions.push({
-      label: _.startCase(round.name),
-      value: round._id,
+      label: _.startCase(round?.name),
+      value: round?._id,
     });
   }
 
@@ -59,8 +57,7 @@ const CaseContent = ({ internData, caseData, editMode, setEditMode }) => {
       const response = await editCase({
         editMode,
         caseId: caseId.toString(),
-        round: round?.value,
-        internId: id,
+        roundId: roundId?.value,
         patientGender: gender?.value,
         venue: venue?.value,
         caseType: caseType?.value,
@@ -92,10 +89,10 @@ const CaseContent = ({ internData, caseData, editMode, setEditMode }) => {
           <CaseRoundSelectBox
             editMode={editMode}
             caseDataTitle="Round"
-            caseDataValue={caseData?.data?.round}
+            caseDataValue={caseData?.data?.roundId}
             placeholder="Select your round"
-            selectValue={round}
-            handleSelectChange={(option) => setRound(option)}
+            selectValue={roundId}
+            handleSelectChange={(option) => setRoundId(option)}
             options={roundOptions}
           />
           {/* Case Type */}

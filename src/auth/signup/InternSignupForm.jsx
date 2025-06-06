@@ -6,7 +6,7 @@ import { Controller, useForm } from "react-hook-form";
 import { Link } from "react-router";
 import Input from "../components/Input";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { useInternSignupMutation } from "../../services/api/apiSlice";
+import { useInternSignupMutation } from "../../services/intern/api/hooks/authHooks";
 import {
   facultiesList,
   grades,

@@ -16,7 +16,6 @@ const stateBox = (caseData, state, bgColor) => {
 };
 
 const CaseHeader = ({ editMode, setEditMode, caseData }) => {
-  console.log("caseData", caseData);
   const [openOptions, setOpenOptions] = useState(false);
 
   return (

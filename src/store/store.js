@@ -8,10 +8,10 @@ import {
 import storage from "redux-persist/lib/storage";
 
 // Api Slices
-import { adminApiSlice } from "../services/api/adminApiSlice";
-import { internApiSlice } from "../services/api/internApiSlice";
-import { authApiSlice } from "../services/api/authApiSlice";
-import { uploadApiSlice } from "../services/api/uploadApiSlice";
+import internApiSlice from "../services/intern/api/";
+import { adminApiSlice } from "../services/admin/adminApiSlice";
+import { authApiSlice } from "../services/common/authApiSlice";
+import { uploadApiSlice } from "../services/common/uploadApiSlice";
 
 // Slices
 import authReducer from "../services/slices/authSlice";
