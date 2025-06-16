@@ -6,18 +6,16 @@ import TrainingDatePicker from "../../components/TrainingDatePicker";
 import SeenAt from "../../components/SeenAt";
 import TrainingInput from "../../components/TrainingInput";
 import trainingData from "../../data";
-import { Modal } from "@mui/material";
-import toast from "react-hot-toast";
-import { useAddNewProcedureMutation } from "../../../../services/api/internApiSlice";
+import toast, { Toaster } from "react-hot-toast";
+import { useAddProcedureMutation } from "../../../../services/intern/api/hooks/proceduresHooks";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Controller, useForm } from "react-hook-form";
 import { procedureValidationSchema } from "../../constants/procedureValidationSchema";
 import Button from "../../../components/Button";
-import { useSelector } from "react-redux";
+import _ from "lodash";
 
-const AddProcedure = ({ open, handleClose }) => {
-  const { id } = useSelector((state) => state.auth.user);
-  const [addNewProcedure] = useAddNewProcedureMutation();
+const AddProcedure = () => {
+  const [addProcedure] = useAddProcedureMutation();
 
   const {
     register,
@@ -29,7 +27,7 @@ const AddProcedure = ({ open, handleClose }) => {
   } = useForm({
     resolver: yupResolver(procedureValidationSchema),
     defaultValues: {
-      round: null,
+      roundId: null,
       skill: null,
       hospitalRecord: null,
       performanceLevel: null,
@@ -46,14 +44,12 @@ const AddProcedure = ({ open, handleClose }) => {
     venue,
     date,
   }) => {
-    console.log("round.value", round.value);
     try {
-      const response = await addNewProcedure({
-        round: round.value,
-        intern: id,
-        skill: skill.value,
+      const response = await addProcedure({
+        roundId: round?.value,
+        skill: skill?.value,
         performanceLevel: performanceLevel.value,
-        venue: venue.value,
+        venue: _.snakeCase(venue.value),
         date: date.toISOString(),
         hospitalRecord,
       }).unwrap();
@@ -70,25 +66,42 @@ const AddProcedure = ({ open, handleClose }) => {
           });
         });
       } else {
-        toast.error(error.message || "Failed to add new procedure");
+        toast.error(error.data?.message || "Failed to add new procedure");
       }
     }
   };
 
   return (
-    <Modal
-      open={open}
-      onClose={handleClose}
-      aria-labelledby="modal-modal-title"
-      aria-describedby="modal-modal-description"
-      className="flex items-center justify-center"
-    >
-      <div className="p-6 bg-softGray rounded outline-0 w-4/6">
-        <h1 className="text-3xl">Add New Procedure</h1>
-        <form
-          className="mt-4 grid grid-cols-12 items-start gap-6"
-          onSubmit={handleSubmit(onSubmit)}
-        >
+    <div className="p-6 pt-0 bg-flashWhite rounded outline-0">
+      <Toaster />
+      <div className="mb-6 flex justify-between items-center">
+        <h1 className="text-4xl text-secondary">Add Procedure</h1>
+        {/* Submit Button */}
+        <div className="col-span-full flex gap-4 items-center justify-end">
+          <div>
+            <Button
+              type="button"
+              label="Reset"
+              customClass="!bg-white !border-white hover:!opacity-50 !shadow-md !text-secondary"
+              handleClick={() => reset()}
+            />
+          </div>
+          <div>
+            <Button
+              type="submit"
+              label="Add Now"
+              handleClick={handleSubmit(onSubmit)}
+            />
+          </div>
+        </div>
+      </div>
+
+      {/*  */}
+      <form
+        className="grid grid-cols-12 items-start gap-4"
+        onSubmit={handleSubmit(onSubmit)}
+      >
+        <div className="col-span-6 grid grid-cols-4 gap-6 items-center shadow-md p-6 h-full bg-white rounded-md">
           <div className="col-span-6">
             <Controller
               name="round"
@@ -114,7 +127,6 @@ const AddProcedure = ({ open, handleClose }) => {
               <p className="text-red-500 text-sm">{errors?.skill?.message}</p>
             )}
           </div>
-
           <div className="col-span-6">
             <Controller
               name="date"
@@ -125,6 +137,9 @@ const AddProcedure = ({ open, handleClose }) => {
               <p className="text-red-500 text-sm">{errors?.date?.message}</p>
             )}
           </div>
+        </div>
+
+        <div className="col-span-6 grid grid-cols-4 gap-6 items-center shadow-md p-6 h-full bg-white rounded-md">
           <div className="col-span-6">
             <Controller
               name="venue"
@@ -173,20 +188,9 @@ const AddProcedure = ({ open, handleClose }) => {
               </p>
             )}
           </div>
-
-          {/* Submit Button */}
-          <div className="col-span-3 flex gap-4 items-center">
-            <Button type="submit" label="Add Now" />
-            <Button
-              label="Cancel"
-              type="button"
-              customClass="!bg-white !border-silverFrost !text-secondary hover:!opacity-60"
-              handleClick={handleClose}
-            />
-          </div>
-        </form>
-      </div>
-    </Modal>
+        </div>
+      </form>
+    </div>
   );
 };
 

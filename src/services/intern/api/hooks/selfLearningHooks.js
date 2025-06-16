@@ -8,12 +8,12 @@ export const {
   useDeleteSelfLearningMutation,
 } = internApiSlice;
 
-export const useSelfLearnings = () => {
-  const { data, isLoading, error } = useGetSelfLearningsQuery();
+export const useSelfLearnings = (filters) => {
+  const { data, isLoading, isError } = useGetSelfLearningsQuery(filters);
 
   return {
     selfLearnings: data,
     isLoading,
-    error,
+    isError,
   };
 };

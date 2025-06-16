@@ -1,100 +1,133 @@
 import React, { useState } from "react";
 import { DataGrid } from "@mui/x-data-grid";
-import {
-  FaCheckCircle,
-  FaPlus,
-  FaRegEdit,
-  FaRegTrashAlt,
-} from "react-icons/fa";
+import { FaCheckCircle, FaRegEdit, FaRegTrashAlt } from "react-icons/fa";
 import EmptyData from "../components/EmptyData";
-import SearchWithFilters from "../../components/SearchWithFilters";
-import Button from "../../components/Button";
-import SearchBar from "../../components/SearchBar";
-import AddActivity from "./add/Index";
-import { useGetAllSelfLearningActivitiesQuery } from "../../../services/api/internApiSlice";
+import toast, { Toaster } from "react-hot-toast";
+import { LinearProgress } from "@mui/material";
+import { useSelfLearnings } from "../../../services/intern/api/hooks/selfLearningHooks";
 import _ from "lodash";
 import { IoCloseCircle } from "react-icons/io5";
 import { HiOutlineDocumentSearch } from "react-icons/hi";
 import { Link } from "react-router";
-
-const columns = [
-  { field: "learnedActivity", headerName: "Activity", minWidth: 150, flex: 1 },
-  { field: "activityTitle", headerName: "Title", minWidth: 150, flex: 1 },
-  { field: "date", headerName: "Date", minWidth: 120, flex: 1 },
-  {
-    field: "evidence",
-    headerName: "Evidence",
-    minWidth: 150,
-    flex: 1,
-    renderCell: (cell) => {
-      return (
-        <p className="h-full flex justify-center items-center rounded-full overflow-hidden ">
-          <img
-            src={"http://localhost:3000/" + cell.value}
-            className="w-10 h-10 rounded-full "
-          />
-        </p>
-      );
-    },
-  },
-  {
-    field: "activityState",
-    headerName: "State",
-    width: 120,
-    renderCell: (cell) => {
-      return (
-        <div className="h-full w-full flex items-center text-xl">
-          {cell.value === "accepted" && (
-            <FaCheckCircle className="text-emeraldGreen" title={cell.value} />
-          )}
-          {cell.value === "rejected" && (
-            <IoCloseCircle className="text-error" title={cell.value} />
-          )}
-          {cell.value === "under_review" && (
-            <HiOutlineDocumentSearch
-              className="text-mistyMorning"
-              title={_.startCase(cell.value)}
-            />
-          )}
-        </div>
-      );
-    },
-  },
-  {
-    field: "actions",
-    headerName: "Actions",
-    width: 90,
-    renderCell: (cell) => (
-      <div className="flex items-center justify-center gap-3 text-mediumGray h-full">
-        <Link to={`/training/self-learning-activities/${cell.row._id}`}>
-          <FaRegEdit
-            className="text-xl cursor-pointer hover:text-hotPink"
-            aria-label="Edit"
-            title="Edit"
-          />
-        </Link>
-        <FaRegTrashAlt
-          className="text-xl cursor-pointer hover:text-error"
-          aria-label="Delete"
-          title="Delete"
-          onClick={() => {
-            // setProcedureId(cell.row._id);
-            // setOpenWarningAlert(true);
-          }}
-        />
-      </div>
-    ),
-  },
-];
+import { useDeleteProcedureMutation } from "../../../services/intern/api/hooks/proceduresHooks";
+import ConfirmDeleteMessage from "../components/ConfirmDeleteMessage";
+import SearchAndFilters from "../components/SearchAndFilters";
 
 const SelfLearning = () => {
-  const [open, setOpen] = useState(true);
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
-  const { data: activityData } = useGetAllSelfLearningActivitiesQuery();
+  // Filtering states
+  const [chipValue, setChipValue] = useState(null);
+  const [dateFrom, setDateFrom] = useState(new Date("2024-03-01"));
+  const [dateTo, setDateTo] = useState(new Date());
+  const [venue, setVenue] = useState({});
+  const [searchValue, setSearchValue] = useState("");
 
-  const activities = activityData?.data?.map((activity) => {
-    return { ...activity, id: activity._id };
+  const [openWarningAlert, setOpenWarningAlert] = useState(false);
+  const [selfLearningId, setSelfLearningId] = useState(null);
+  const { selfLearnings, isError, isLoading } = useSelfLearnings({
+    filters: {
+      activityState: _.snakeCase(chipValue),
+      dateFrom: dateFrom?.toISOString(),
+      dateTo: dateTo?.toISOString(),
+      venue: _.snakeCase(venue?.value),
+      searchTerm: _.snakeCase(searchValue),
+    },
+  });
+
+  const [deleteSelfLearning] = useDeleteProcedureMutation();
+
+  const handleDeleteSelfLearning = async () => {
+    try {
+      const response = await deleteSelfLearning({ selfLearningId }).unwrap();
+      if (response?.code === 200) {
+        toast.success(response?.message);
+      }
+    } catch (error) {
+      toast.error(error?.data?.message);
+    }
+  };
+
+  const columns = [
+    {
+      field: "learnedActivity",
+      headerName: "Activity",
+      minWidth: 150,
+      flex: 1,
+      renderCell: (cell) => <p>{_.startCase(cell.value)}</p>,
+    },
+    { field: "activityTitle", headerName: "Title", minWidth: 150, flex: 1 },
+    { field: "date", headerName: "Date", minWidth: 120, flex: 1 },
+    {
+      field: "evidence",
+      headerName: "Evidence",
+      minWidth: 150,
+      flex: 1,
+      renderCell: (cell) => {
+        return (
+          <p className="h-full flex justify-center items-center rounded-full overflow-hidden ">
+            <img
+              src={"http://localhost:3000/" + cell.value}
+              className="w-10 h-10 rounded-full "
+            />
+          </p>
+        );
+      },
+    },
+    {
+      field: "activityState",
+      headerName: "State",
+      width: 120,
+      renderCell: (cell) => {
+        return (
+          <div className="h-full w-full flex items-center text-xl">
+            {cell.value === "accepted" && (
+              <FaCheckCircle className="text-emeraldGreen" title={cell.value} />
+            )}
+            {cell.value === "rejected" && (
+              <IoCloseCircle className="text-error" title={cell.value} />
+            )}
+            {cell.value === "under_review" && (
+              <HiOutlineDocumentSearch
+                className="text-mistyMorning"
+                title={_.startCase(cell.value)}
+              />
+            )}
+          </div>
+        );
+      },
+    },
+    {
+      field: "actions",
+      headerName: "Actions",
+      width: 90,
+      renderCell: (cell) => (
+        <div className="flex items-center justify-center gap-3 text-mediumGray h-full">
+          <Link to={`/training/self-learning-activities/${cell.row._id}`}>
+            <FaRegEdit
+              className="text-xl cursor-pointer hover:text-hotPink"
+              aria-label="Edit"
+              title="Edit"
+            />
+          </Link>
+          <FaRegTrashAlt
+            className="text-xl cursor-pointer hover:text-error"
+            aria-label="Delete"
+            title="Delete"
+            onClick={() => {
+              setSelfLearningId(cell.row._id);
+              setOpenWarningAlert(true);
+            }}
+          />
+        </div>
+      ),
+    },
+  ];
+
+  const activities = selfLearnings?.data?.map((activity) => {
+    return {
+      ...activity,
+      id: activity._id,
+      date: new Date(activity.date).toISOString().split("T")[0],
+    };
   });
 
   const acceptedActivities = activities?.filter(
@@ -111,91 +144,109 @@ const SelfLearning = () => {
 
   return (
     <>
-      <AddActivity open={open} handleClose={handleClose} />
-      {activityData?.data.length > 0 ? (
-        <div className="shadow-md p-6">
-          <div className="flex justify-between items-center">
-            <h2 className="text-4xl text-secondary">Self Learned Activity</h2>
-            <div className="">
-              <Button
-                handleClick={handleOpen}
-                icon={<FaPlus />}
-                label="Add Activity"
+      <ConfirmDeleteMessage
+        deletedObject="Activity"
+        handleDeleteObject={handleDeleteSelfLearning}
+        openWarningAlert={openWarningAlert}
+        handleClose={() => setOpenWarningAlert(false)}
+      />
+      <Toaster />
+      <div className="shadow-md p-6 pt-0">
+        <div className="flex justify-between items-center">
+          <h2 className="text-4xl text-secondary">Self Learning Activities</h2>
+          <div className="">
+            <Link
+              to="/training/self-learning-activities/add"
+              className="p-3 rounded-lg bg-mediumBlue hover:bg-lightBlue text-white"
+            >
+              Add Self Learning Activity
+            </Link>
+          </div>
+        </div>
+        {/* Search and Filters */}
+        <SearchAndFilters
+          placeholder="Search by round name or skill"
+          dateFromValue={dateFrom}
+          handleDateFrom={setDateFrom}
+          dateToValue={dateTo}
+          handleDateTo={setDateTo}
+          chipValue={chipValue}
+          setChipValue={setChipValue}
+          venue={venue}
+          setVenue={setVenue}
+          searchValue={searchValue}
+          setSearchValue={setSearchValue}
+        />
+        {/* Self learned Statistics */}
+        <div className="mb-4 flex flex-col items-center gap-10 text-primary font-medium text-lg bg-white shadow-md rounded-lg p-6">
+          <div className="flex items-start gap-10 border-b-1 border-silverFrost/40 w-full pb-4">
+            <h3>
+              Total:{" "}
+              <span className="font-semibold text-secondary">
+                {activities?.length}
+              </span>{" "}
+              activities
+            </h3>
+            <h3>
+              Accepted:{" "}
+              <span className="font-semibold text-emeraldGreen">
+                {acceptedActivities?.length}
+              </span>{" "}
+              activities
+            </h3>
+            <h3>
+              Under Review:{" "}
+              <span className="font-semibold text-mediumBlue">
+                {underReviewActivities?.length}
+              </span>{" "}
+              activities
+            </h3>
+            <h3>
+              Rejected:{" "}
+              <span className="font-semibold text-darkRed">
+                {rejectedActivities?.length}
+              </span>{" "}
+              activities
+            </h3>
+          </div>
+          <div className="grid grid-cols-6 w-full">
+            <div className="!w-full col-span-full">
+              <DataGrid
+                rows={activities}
+                columns={columns}
+                disableColumnMenu
+                disableColumnSorting
+                disableRowSelectionOnClick
+                disableColumnResize
+                initialState={{
+                  pagination: {
+                    paginationModel: { pageSize: 5, page: 0 },
+                  },
+                }}
+                sx={{
+                  backgroundColor: "#f5f5f5",
+                  "& .MuiDataGrid-columnHeader": {
+                    backgroundColor: "#fff",
+                    color: "#1a2d42",
+                  },
+                  "& .MuiDataGrid-cell:focus": {
+                    outline: "none",
+                  },
+                  "& .MuiDataGrid-columnHeader:focus": {
+                    outline: "none",
+                  },
+                }}
+                loading={isLoading}
+                error={isError}
+                slots={{
+                  loadingOverlay: LinearProgress,
+                  noRowsOverlay: EmptyData,
+                }}
               />
             </div>
           </div>
-          <div className="bg-white shadow-md rounded-lg p-6 gap-4 mt-4 mb-8">
-            {/* Search bar */}
-            <SearchWithFilters placeholder="Search cases..." />
-          </div>
-
-          {/* Self learned Statistics */}
-          <div className="mb-4 flex flex-col items-center gap-10 text-primary font-medium text-lg bg-white shadow-md rounded-lg p-6">
-            <div className="flex items-start gap-10 border-b-1 border-silverFrost/40 w-full pb-4">
-              <h3>
-                Total:{" "}
-                <span className="font-semibold text-secondary">
-                  {activities?.length}
-                </span>{" "}
-                activities
-              </h3>
-              <h3>
-                Accepted:{" "}
-                <span className="font-semibold text-emeraldGreen">
-                  {acceptedActivities?.length}
-                </span>{" "}
-                activities
-              </h3>
-              <h3>
-                Under Review:{" "}
-                <span className="font-semibold text-mediumBlue">
-                  {underReviewActivities?.length}
-                </span>{" "}
-                activities
-              </h3>
-              <h3>
-                Rejected:{" "}
-                <span className="font-semibold text-darkRed">
-                  {rejectedActivities?.length}
-                </span>{" "}
-                activities
-              </h3>
-            </div>
-            <div className="grid grid-cols-6 w-full">
-              <div className="!w-full col-span-full">
-                <DataGrid
-                  rows={activities}
-                  columns={columns}
-                  disableColumnMenu
-                  disableColumnSorting
-                  disableRowSelectionOnClick
-                  disableColumnResize
-                  initialState={{
-                    pagination: {
-                      paginationModel: { pageSize: 5, page: 0 },
-                    },
-                  }}
-                  sx={{
-                    backgroundColor: "#f5f5f5",
-                    "& .MuiDataGrid-columnHeader": {
-                      backgroundColor: "#fff",
-                      color: "#1a2d42",
-                    },
-                    "& .MuiDataGrid-cell:focus": {
-                      outline: "none",
-                    },
-                    "& .MuiDataGrid-columnHeader:focus": {
-                      outline: "none",
-                    },
-                  }}
-                />
-              </div>
-            </div>
-          </div>
         </div>
-      ) : (
-        <EmptyData setOpen={setOpen} />
-      )}
+      </div>
     </>
   );
 };

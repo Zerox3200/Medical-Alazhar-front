@@ -8,12 +8,12 @@ export const {
   useDeleteProcedureMutation,
 } = internApiSlice;
 
-export const useProcedures = () => {
-  const { data, isLoading, error } = useGetProceduresQuery();
+export const useProcedures = (filters) => {
+  const { data, isLoading, isError } = useGetProceduresQuery(filters);
 
   return {
     procedures: data,
     isLoading,
-    error,
+    isError,
   };
 };

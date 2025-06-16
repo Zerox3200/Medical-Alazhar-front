@@ -31,6 +31,7 @@ const CaseEPASelectBox = ({
           options={options}
           onChange={handleSelectChange}
           value={localValue}
+          selected={localValue}
           placeholder={placeholder}
           className="col-span-3"
           isMulti={true}

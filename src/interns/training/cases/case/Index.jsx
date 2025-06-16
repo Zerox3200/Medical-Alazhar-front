@@ -2,10 +2,10 @@ import React, { useState } from "react";
 import _ from "lodash";
 import { useParams } from "react-router";
 import { useSelector } from "react-redux";
-import CaseHeader from "./CaseHeader";
 import CaseContent from "./CaseContent";
 import { useGetCaseQuery } from "../../../../services/intern/api/hooks/casesHooks";
 import { useIntern } from "../../../../services/intern/api/hooks/authHooks";
+import EditHeader from "../../components/edit/EditHeader";
 
 const Case = () => {
   const { role, id } = useSelector((state) => state.auth.user);
@@ -22,10 +22,10 @@ const Case = () => {
     <div className="p-6 pt-0">
       <div className="bg-white rounded-md shadow-sm p-6 grid grid-cols-2 items-center gap-4">
         {/* Case header */}
-        <CaseHeader
+        <EditHeader
           editMode={editMode}
           setEditMode={setEditMode}
-          caseData={caseData}
+          objectData={caseData?.data?.caseState}
         />
         {/* Case content */}
         <CaseContent

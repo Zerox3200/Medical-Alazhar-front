@@ -1,9 +1,10 @@
-import React, { useState } from "react";
+/* eslint-disable no-unused-vars */
+import React, { useEffect, useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
 import Button from "../../../components/Button";
 import _ from "lodash";
-import { useEditProcedureMutation } from "../../../../services/api/internApiSlice";
-import { useParams } from "react-router";
+import { useEditProcedureMutation } from "../../../../services/intern/api/hooks/proceduresHooks";
+import { useParams, useSearchParams } from "react-router";
 import ProcedureRoundSelectBox from "./ProcedureRoundSelectBox";
 import trainingData from "../../data";
 import ProcedureEditSelectBox from "./ProcedureEditSelectBox";
@@ -16,25 +17,33 @@ const ProcedureContent = ({
   setEditMode,
 }) => {
   const { procedureId } = useParams();
-  const [round, setRound] = useState(null);
+  const [roundId, setRoundId] = useState(null);
   const [hospitalRecord, setHospitalRecord] = useState(null);
   const [skill, setSkill] = useState(null);
   const [venue, setVenue] = useState(null);
   const [performanceLevel, setPerformanceLevel] = useState(null);
 
+  // Set edit mode
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  useEffect(() => {
+    setSearchParams({ edit: editMode });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [editMode]);
+
   const rounds = internData?.intern?.trainingProgress.map(
-    (progress) => progress.round
+    (progress) => progress.roundId
   );
 
   let roundOptions = [];
   for (let round of rounds) {
     roundOptions.push({
-      label: _.startCase(round.name),
-      value: round._id,
+      label: _.startCase(round?.name),
+      value: round?._id,
     });
   }
 
-  const proceduresOptions = trainingData.procedures.proceduresList.flatMap(
+  const proceduresOptions = trainingData?.procedures?.proceduresList.flatMap(
     (opt) => opt.options
   );
 
@@ -47,7 +56,7 @@ const ProcedureContent = ({
       const response = await editProcedure({
         editMode,
         procedureId: procedureId.toString(),
-        round: round?.value,
+        roundId: roundId?.value,
         skill: skill?.value,
         venue: venue?.value,
         performanceLevel: performanceLevel?.value,
@@ -73,10 +82,10 @@ const ProcedureContent = ({
         <ProcedureRoundSelectBox
           editMode={editMode}
           procedureDataTitle="Round"
-          procedureDataValue={procedureData?.data?.round}
+          procedureDataValue={procedureData?.data?.roundId}
           placeholder="Select your round"
-          selectValue={round}
-          handleSelectChange={(option) => setRound(option)}
+          selectValue={roundId}
+          handleSelectChange={(option) => setRoundId(option)}
           options={roundOptions}
         />
         {/* Skill */}

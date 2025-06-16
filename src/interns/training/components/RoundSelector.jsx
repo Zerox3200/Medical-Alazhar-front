@@ -19,8 +19,8 @@ const RoundAndUnitSelector = ({ field }) => {
   let roundsList = [];
   for (let round of rounds) {
     roundsList.push({
-      label: _.startCase(round.name),
-      value: round._id,
+      label: _.startCase(round?.name),
+      value: round?._id,
     });
   }
 

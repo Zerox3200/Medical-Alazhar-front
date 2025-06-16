@@ -1,10 +1,10 @@
 /** Major imports **/
 import React, { useState } from "react";
+import { LinearProgress } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import _ from "lodash";
 import { Link } from "react-router";
 import toast, { Toaster } from "react-hot-toast";
-import { useSelector } from "react-redux";
 
 /** APIs **/
 import {
@@ -13,34 +13,44 @@ import {
 } from "../../../services/intern/api/hooks/casesHooks";
 
 /** Components **/
-import Button from "../../components/Button";
 import EmptyData from "../components/EmptyData";
 import ConfirmDeleteMessage from "../components/ConfirmDeleteMessage";
 import SearchAndFilters from "../components/SearchAndFilters";
 
 /** Icons **/
-import {
-  FaCheckCircle,
-  FaPlus,
-  FaRegEdit,
-  FaRegTrashAlt,
-} from "react-icons/fa";
+import { FaCheckCircle, FaRegEdit, FaRegTrashAlt } from "react-icons/fa";
 import { IoCloseCircle } from "react-icons/io5";
 import { HiOutlineDocumentSearch } from "react-icons/hi";
 
 const CasesSummary = () => {
-  const { id } = useSelector((state) => state.auth.user);
-  const { cases: casesData } = useCases();
-  const [deleteCase] = useDeleteCaseMutation();
-  const [dateFrom, setDateFrom] = useState(new Date());
+  // Filtering states
+  const [chipValue, setChipValue] = useState(null);
+  const [dateFrom, setDateFrom] = useState(new Date("2024-03-01"));
   const [dateTo, setDateTo] = useState(new Date());
+  const [venue, setVenue] = useState({});
+  const [searchValue, setSearchValue] = useState("");
+
+  const [deleteCase] = useDeleteCaseMutation();
   const [openWarningAlert, setOpenWarningAlert] = useState(false);
   const [caseId, setCaseId] = useState(null);
+  const {
+    cases: casesData,
+    isLoading,
+    isError,
+  } = useCases({
+    filters: {
+      caseState: _.snakeCase(chipValue),
+      dateFrom: dateFrom?.toISOString(),
+      dateTo: dateTo?.toISOString(),
+      venue: _.snakeCase(venue?.value),
+      searchTerm: _.snakeCase(searchValue),
+    },
+  });
 
   // Delete non accepted cases
   const handleDeleteCase = async () => {
     try {
-      const response = await deleteCase({ caseId, internId: id }).unwrap();
+      const response = await deleteCase({ caseId }).unwrap();
       if (response?.code === 200) {
         toast.success(response?.message);
       }
@@ -167,92 +177,105 @@ const CasesSummary = () => {
         openWarningAlert={openWarningAlert}
         handleClose={() => setOpenWarningAlert(false)}
       />
-
       <Toaster />
-      {cases?.length > 0 ? (
-        <div className="shadow-md p-6 pt-0">
-          <div className="flex justify-between items-center">
-            <h2 className="text-4xl text-secondary">Cases</h2>
-            <div>
-              <Link to="/training/cases/add">Add Case</Link>
-            </div>
+      <div className="shadow-md p-6 pt-0">
+        <div className="flex justify-between items-center">
+          <h2 className="text-4xl text-secondary">Cases</h2>
+          <div className="">
+            <Link
+              to="/training/cases/add"
+              className="p-3 rounded-lg bg-mediumBlue hover:bg-lightBlue text-white"
+            >
+              Add Case
+            </Link>
           </div>
+        </div>
 
-          {/* Search and Filters */}
-          <SearchAndFilters
-            dateFromValue={dateFrom}
-            handleDateFrom={setDateFrom}
-            dateToValue={dateTo}
-            handleDateTo={setDateTo}
-          />
+        {/* Search and Filters */}
+        <SearchAndFilters
+          placeholder="Search by round name or case type"
+          dateFromValue={dateFrom}
+          handleDateFrom={setDateFrom}
+          dateToValue={dateTo}
+          handleDateTo={setDateTo}
+          chipValue={chipValue}
+          setChipValue={setChipValue}
+          venue={venue}
+          setVenue={setVenue}
+          searchValue={searchValue}
+          setSearchValue={setSearchValue}
+        />
 
-          {/* Cases Statistics */}
-          <div className="mb-4 flex flex-col items-center gap-10 text-primary font-medium text-lg bg-white shadow-md rounded-lg p-6">
-            <div className="flex items-start gap-10 border-b-1 border-silverFrost/40 w-full pb-4">
-              <h3>
-                Total:{" "}
-                <span className="font-semibold text-secondary">
-                  {cases?.length}
-                </span>{" "}
-                cases
-              </h3>
-              <h3>
-                Accepted:{" "}
-                <span className="font-semibold text-emeraldGreen">
-                  {acceptedCases?.length}
-                </span>{" "}
-                cases
-              </h3>
-              <h3>
-                Under Review:{" "}
-                <span className="font-semibold text-mediumBlue">
-                  {underReviewCases?.length}
-                </span>{" "}
-                cases
-              </h3>
-              <h3>
-                Rejected:{" "}
-                <span className="font-semibold text-darkRed">
-                  {rejectedCases?.length}
-                </span>{" "}
-                cases
-              </h3>
-            </div>
-            <div className="grid grid-cols-6 w-full">
-              <div className="!w-full col-span-full">
-                <DataGrid
-                  rows={cases}
-                  columns={columns}
-                  disableColumnMenu
-                  disableColumnSorting
-                  disableRowSelectionOnClick
-                  disableColumnResize
-                  initialState={{
-                    pagination: {
-                      paginationModel: { pageSize: 5, page: 0 },
-                    },
-                  }}
-                  sx={{
-                    backgroundColor: "#f5f5f5",
-                    "& .MuiDataGrid-columnHeader": {
-                      backgroundColor: "#fff",
-                      color: "#1a2d42",
-                    },
-                    "& .MuiDataGrid-cell:focus": {
-                      outline: "none",
-                    },
-                    "& .MuiDataGrid-columnHeader:focus": {
-                      outline: "none",
-                    },
-                  }}
-                />
-              </div>
+        {/* Cases Statistics */}
+        <div className="mb-4 flex flex-col items-center gap-10 text-primary font-medium text-lg bg-white shadow-md rounded-lg p-6">
+          <div className="flex items-start gap-10 border-b-1 border-silverFrost/40 w-full pb-4">
+            <h3>
+              Total:{" "}
+              <span className="font-semibold text-secondary">
+                {cases?.length}
+              </span>{" "}
+              cases
+            </h3>
+            <h3>
+              Accepted:{" "}
+              <span className="font-semibold text-emeraldGreen">
+                {acceptedCases?.length}
+              </span>{" "}
+              cases
+            </h3>
+            <h3>
+              Under Review:{" "}
+              <span className="font-semibold text-mediumBlue">
+                {underReviewCases?.length}
+              </span>{" "}
+              cases
+            </h3>
+            <h3>
+              Rejected:{" "}
+              <span className="font-semibold text-darkRed">
+                {rejectedCases?.length}
+              </span>{" "}
+              cases
+            </h3>
+          </div>
+          <div className="grid grid-cols-6 w-full">
+            <div className="!w-full col-span-full">
+              <DataGrid
+                rows={cases}
+                columns={columns}
+                disableColumnMenu
+                disableColumnSorting
+                disableRowSelectionOnClick
+                disableColumnResize
+                initialState={{
+                  pagination: {
+                    paginationModel: { pageSize: 5, page: 0 },
+                  },
+                }}
+                sx={{
+                  backgroundColor: "#f5f5f5",
+                  "& .MuiDataGrid-columnHeader": {
+                    backgroundColor: "#fff",
+                    color: "#1a2d42",
+                  },
+                  "& .MuiDataGrid-cell:focus": {
+                    outline: "none",
+                  },
+                  "& .MuiDataGrid-columnHeader:focus": {
+                    outline: "none",
+                  },
+                }}
+                loading={isLoading}
+                error={isError}
+                slots={{
+                  loadingOverlay: LinearProgress,
+                  noRowsOverlay: EmptyData,
+                }}
+              />
             </div>
           </div>
         </div>
-      ) : (
-        <EmptyData />
-      )}
+      </div>
     </>
   );
 };

@@ -1,9 +1,10 @@
 const proceduresEndpoints = (builder) => ({
   // Get  Procedures
   getProcedures: builder.query({
-    query: () => ({
+    query: ({ filters }) => ({
       url: `/intern/training/procedures`,
       method: "GET",
+      params: filters,
       credentials: "include",
     }),
     providesTags: ["Procedures"],
@@ -19,11 +20,11 @@ const proceduresEndpoints = (builder) => ({
   }),
   // Add New Procedure
   addProcedure: builder.mutation({
-    query: ({ intern, round, ...procedureData }) => ({
+    query: ({ roundId, ...procedureData }) => ({
       url: "/intern/training/procedures/add",
       method: "POST",
       body: procedureData,
-      params: { intern, round },
+      params: { roundId },
     }),
     invalidatesTags: ["Procedures"],
   }),
@@ -31,7 +32,7 @@ const proceduresEndpoints = (builder) => ({
   editProcedure: builder.mutation({
     query: ({ editMode, procedureId, ...procedureData }) => ({
       url: `/intern/training/procedures/${procedureId}`,
-      method: "PUT",
+      method: "PATCH",
       params: { editMode },
       body: procedureData,
     }),

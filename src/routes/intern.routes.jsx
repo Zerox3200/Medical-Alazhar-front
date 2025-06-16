@@ -17,11 +17,17 @@ const Procedures = lazy(() => import("../interns/training/procedures/Index"));
 const Procedure = lazy(() =>
   import("../interns/training/procedures/procedure/Index")
 );
+const AddProcedure = lazy(() =>
+  import("../interns/training/procedures/add/Index.jsx")
+);
 const SelfLearningActivities = lazy(() =>
   import("../interns/training/self_learning/Index")
 );
 const SelfLearningActivity = lazy(() =>
   import("../interns/training/self_learning/activity/Index")
+);
+const AddSelfLearningActivity = lazy(() =>
+  import("../interns/training/self_learning/add/Index")
 );
 const DirectLearning = lazy(() =>
   import("../interns/training/direct_learning/Index")
@@ -81,6 +87,10 @@ const InternRoutes = [
                 element: <Procedures />,
               },
               {
+                path: "procedures/add",
+                element: <AddProcedure />,
+              },
+              {
                 path: "procedures/:procedureId",
                 element: <Procedure />,
               },
@@ -91,6 +101,10 @@ const InternRoutes = [
               {
                 path: "self-learning-activities/:activityId",
                 element: <SelfLearningActivity />,
+              },
+              {
+                path: "self-learning-activities/Add",
+                element: <AddSelfLearningActivity />,
               },
               {
                 path: "direct-learning-activity",

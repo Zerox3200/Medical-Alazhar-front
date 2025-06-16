@@ -1,9 +1,10 @@
 const casesEndpoints = (builder) => ({
   // Get Intern Training Cases
   getCases: builder.query({
-    query: () => ({
+    query: ({ filters }) => ({
       url: `/intern/training/cases`,
       method: "GET",
+      params: filters,
       credentials: "include",
     }),
     providesTags: ["Cases"],
@@ -29,10 +30,10 @@ const casesEndpoints = (builder) => ({
   }),
   // Edit case
   editCase: builder.mutation({
-    query: ({ editMode, internId, caseId, ...caseData }) => ({
+    query: ({ editMode, caseId, ...caseData }) => ({
       url: `/intern/training/cases/${caseId}`,
-      method: "PUT",
-      params: { editMode, internId },
+      method: "PATCH",
+      params: { editMode },
       body: caseData,
     }),
     invalidatesTags: ["Cases"],
@@ -40,10 +41,9 @@ const casesEndpoints = (builder) => ({
 
   // Delete case
   deleteCase: builder.mutation({
-    query: ({ caseId, internId }) => ({
+    query: ({ caseId }) => ({
       url: `/intern/training/cases/${caseId}`,
       method: "DELETE",
-      params: { internId },
       credentials: "include",
     }),
     invalidatesTags: ["Cases"],

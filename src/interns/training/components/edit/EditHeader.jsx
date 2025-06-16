@@ -3,37 +3,36 @@ import _ from "lodash";
 import { BsThreeDotsVertical } from "react-icons/bs";
 import OptionsList from "./OptionsList";
 
-const stateBox = (caseData, state, bgColor) => {
+const stateBox = (objectData, state, bgColor) => {
   return (
     <>
-      {caseData?.data?.caseState === state && (
+      {objectData === state && (
         <span className={`${bgColor} text-white font-semibold p-1 rounded-sm`}>
-          {_.startCase(caseData?.data?.caseState)}
+          {_.startCase(objectData)}
         </span>
       )}
     </>
   );
 };
 
-const CaseHeader = ({ editMode, setEditMode, caseData }) => {
+const EditHeader = ({ editMode, setEditMode, objectData }) => {
   const [openOptions, setOpenOptions] = useState(false);
 
   return (
     <div className="col-span-full flex justify-between items-center border-b-2 border-flashWhite pb-4">
       <div className="flex justify-between items-center gap-10">
-        {/* Case State */}
         <p>
-          <span className="text-mistyMorning">State: </span>
+          <span className="text-mistyMorning mr-2">State: </span>
           {/* Accepted */}
-          {stateBox(caseData, "accepted", "bg-emeraldGreen")}
+          {stateBox(objectData, "accepted", "bg-emeraldGreen")}
           {/* Rejected */}
-          {stateBox(caseData, "rejected", "bg-error")}
+          {stateBox(objectData, "rejected", "bg-error")}
           {/* Under Review */}
-          {stateBox(caseData, "under_review", "bg-yellow-400")}
+          {stateBox(objectData, "under_review", "bg-yellow-400")}
         </p>
         {/* Accepted By */}
         <div>
-          <span className="text-mistyMorning">Supervisor: </span>
+          <span className="text-mistyMorning mr-2">Supervisor: </span>
           <span className="text-secondary font-semibold">Mohamed Farouk</span>
         </div>
         {/* Date of acceptance */}
@@ -43,7 +42,7 @@ const CaseHeader = ({ editMode, setEditMode, caseData }) => {
         </div>
       </div>
       {/* Edit */}
-      {caseData?.data?.caseState !== "accepted" && (
+      {objectData !== "accepted" && (
         <div className="relative text-2xl">
           {openOptions && (
             <OptionsList
@@ -62,4 +61,4 @@ const CaseHeader = ({ editMode, setEditMode, caseData }) => {
   );
 };
 
-export default CaseHeader;
+export default EditHeader;

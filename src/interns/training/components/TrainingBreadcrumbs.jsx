@@ -69,7 +69,13 @@ const TrainingBreadcrumbs = () => {
             <Chip
               key={index}
               label={
-                params.caseId ? "case-" + item.label.slice(-4) : item.label
+                params.caseId
+                  ? "case-" + item.label.slice(-4)
+                  : params.procedureId
+                  ? "procedure-" + item.label.slice(-4)
+                  : params.activityId
+                  ? "activity-" + item.label.slice(-4)
+                  : item.label
               }
               className={` ${
                 item.path === location.pathname && "!bg-lightBlue !text-white"

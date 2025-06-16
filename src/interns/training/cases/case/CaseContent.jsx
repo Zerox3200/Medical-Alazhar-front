@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
 import Button from "../../../components/Button";
 import CaseEditInputBox from "./CaseEditInputBox";
@@ -9,7 +9,7 @@ import trainingData from "../../data";
 import CaseRoundSelectBox from "./CaseRoundSelectBox";
 import CaseEPASelectBox from "./CaseEPASelectBox";
 import { useEditCaseMutation } from "../../../../services/intern/api/hooks/casesHooks";
-import { useParams } from "react-router";
+import { useParams, useSearchParams } from "react-router";
 
 const CaseContent = ({ internData, caseData, editMode, setEditMode }) => {
   const { caseId } = useParams();
@@ -23,6 +23,15 @@ const CaseContent = ({ internData, caseData, editMode, setEditMode }) => {
   const [summary, setSummary] = useState(null);
   const [reflection, setReflection] = useState(null);
   const [epas, setEpas] = useState([]);
+
+  // Set edit mode
+  // eslint-disable-next-line no-unused-vars
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  useEffect(() => {
+    setSearchParams({ edit: editMode });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [editMode]);
 
   const rounds = internData?.intern?.trainingProgress.map(
     (progress) => progress.roundId
@@ -50,7 +59,6 @@ const CaseContent = ({ internData, caseData, editMode, setEditMode }) => {
   ];
 
   const [editCase] = useEditCaseMutation();
-
   const handleEditCase = async (e) => {
     e.preventDefault();
     try {
@@ -66,7 +74,8 @@ const CaseContent = ({ internData, caseData, editMode, setEditMode }) => {
         patientSerial: serial ?? caseData?.data?.patientSerial,
         caseSummary: summary ?? caseData?.data?.caseSummary,
         selfReflection: reflection ?? caseData?.data?.selfReflection,
-        epas: epas.map((epa) => epa.value) ?? caseData?.data?.epas,
+        epas:
+          epas.length > 0 ? epas.map((epa) => epa.value) : caseData?.data?.epas,
       }).unwrap();
       if (response?.code === 200) {
         toast.success(response?.message);

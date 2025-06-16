@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Modal } from "@mui/material";
 import { FaCamera, FaUpload } from "react-icons/fa";
-import toast, { Toaster } from "react-hot-toast";
+import toast from "react-hot-toast";
 import { useUploadProfileImageMutation } from "../../../services/common/uploadApiSlice";
 import { useSelector } from "react-redux";
 import Button from "../../components/Button";

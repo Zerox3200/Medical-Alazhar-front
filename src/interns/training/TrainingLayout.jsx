@@ -11,7 +11,7 @@ const TrainingLayout = () => {
         <TrainingNavbar />
       </div>
       <div className="col-span-5">
-        <div className="p-6 ">
+        <div className="p-6">
           <TrainingBreadcrumbs />
         </div>
         <TrainingProvider>

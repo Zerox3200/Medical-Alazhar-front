@@ -2,7 +2,7 @@ import React from "react";
 import MainThemeOfCase from "./MainThemeOfCase";
 import MainInfo from "./MainInfo";
 import Button from "../../../components/Button";
-import { Modal, Tooltip } from "@mui/material";
+import { Tooltip } from "@mui/material";
 import { FaCircleInfo } from "react-icons/fa6";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
@@ -51,7 +51,6 @@ const AddCase = () => {
     caseSummary,
     selfReflection,
   }) => {
-    console.log(round.value);
     try {
       const response = await addCase({
         roundId: round.value,
@@ -89,13 +88,13 @@ const AddCase = () => {
     <div className="p-6 pt-0 bg-flashWhite rounded outline-0 ">
       <Toaster />
       <div className="mb-6 flex justify-between items-center">
-        <h1 className="text-4xl font-semibold text-secondary">Add Case</h1>
+        <h1 className="text-4xl text-secondary">Add Case</h1>
         {/* Submit Button */}
         <div className="col-span-full flex gap-4 items-center justify-end">
           <div>
             <Button
               type="button"
-              label="Cancel"
+              label="Reset"
               customClass="!bg-white !border-white hover:!opacity-50 !shadow-md !text-secondary"
               handleClick={() => reset()}
             />

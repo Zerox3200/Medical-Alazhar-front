@@ -8,12 +8,13 @@ export const {
   useEditCaseMutation,
 } = internApiSlice;
 
-export const useCases = () => {
-  const { data, error, isLoading } = useGetCasesQuery();
+export const useCases = (filters) => {
+  const { data, isError, isFetching, isLoading } = useGetCasesQuery(filters);
 
   return {
     cases: data,
-    error,
+    isError,
+    isFetching,
     isLoading,
   };
 };
