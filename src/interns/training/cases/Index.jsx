@@ -178,7 +178,7 @@ const CasesSummary = () => {
         handleClose={() => setOpenWarningAlert(false)}
       />
       <Toaster />
-      <div className="shadow-md p-6 pt-0">
+      <div>
         <div className="flex justify-between items-center">
           <h2 className="text-4xl text-secondary">Cases</h2>
           <div className="">

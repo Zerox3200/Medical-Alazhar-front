@@ -15,7 +15,6 @@ const Profile = () => {
     userId: id,
     internId: id,
   });
-  console.log(internData);
 
   if (!id) return <div>Please log in.</div>;
   if (isLoading) return <Loader />;

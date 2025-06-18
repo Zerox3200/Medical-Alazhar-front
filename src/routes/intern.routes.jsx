@@ -29,13 +29,20 @@ const SelfLearningActivity = lazy(() =>
 const AddSelfLearningActivity = lazy(() =>
   import("../interns/training/self_learning/add/Index")
 );
-const DirectLearning = lazy(() =>
+const DirectLearnings = lazy(() =>
   import("../interns/training/direct_learning/Index")
+);
+const DirectLearningActivity = lazy(() =>
+  import("../interns/training/direct_learning/activity/Index")
+);
+const AddDirectLearning = lazy(() =>
+  import("../interns/training/direct_learning/add/Index.jsx")
 );
 const Assessments = lazy(() => import("../interns/training/Assessments.jsx"));
 const Reflections = lazy(() => import("../interns/training/Reflections.jsx"));
 
-// const Portfolio = lazy(() => import("../pages/interns/Courses.jsx"));
+const Progress = lazy(() => import("../interns/progress/Index.jsx"));
+// const Portfolio = lazy(() => import("../interns/Courses.jsx"));
 const ContactUs = lazy(() => import("../interns/ContactUs.jsx"));
 
 const InternRoutes = [
@@ -66,10 +73,10 @@ const InternRoutes = [
             path: "training",
             element: <TrainingLayout />,
             children: [
-              {
-                index: true,
-                element: <Training />,
-              },
+              // {
+              //   index: true,
+              //   element: <Training />,
+              // },
               {
                 path: "cases",
                 element: <CasesSummary />,
@@ -103,12 +110,20 @@ const InternRoutes = [
                 element: <SelfLearningActivity />,
               },
               {
-                path: "self-learning-activities/Add",
+                path: "self-learning-activities/add",
                 element: <AddSelfLearningActivity />,
               },
               {
-                path: "direct-learning-activity",
-                element: <DirectLearning />,
+                path: "direct-learning-activities",
+                element: <DirectLearnings />,
+              },
+              {
+                path: "direct-learning-activities/:activityId",
+                element: <DirectLearningActivity />,
+              },
+              {
+                path: "direct-learning-activities/add",
+                element: <AddDirectLearning />,
               },
               {
                 path: "assessments",
@@ -120,10 +135,10 @@ const InternRoutes = [
               },
             ],
           },
-          // {
-          //   path: "portfolio",
-          //   element: <Portfolio />,
-          // },
+          {
+            path: "progress",
+            element: <Progress />,
+          },
           {
             path: "contact_us",
             element: <ContactUs />,

@@ -10,12 +10,16 @@ const navLinks = [
     label: "Home",
   },
   {
-    title: "training",
+    title: "training/cases",
     label: "Training",
   },
   {
     title: "courses",
     label: "Courses",
+  },
+  {
+    title: "progress",
+    label: "Progress",
   },
   {
     title: "portfolio",

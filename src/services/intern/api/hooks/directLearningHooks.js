@@ -8,8 +8,8 @@ export const {
   useDeleteDirectLearningMutation,
 } = internApiSlice;
 
-export const useDirectLearnings = () => {
-  const { data, isLoading, error } = useGetDirectLearningsQuery();
+export const useDirectLearnings = (filters) => {
+  const { data, isLoading, error } = useGetDirectLearningsQuery(filters);
 
   return {
     directLearnings: data,

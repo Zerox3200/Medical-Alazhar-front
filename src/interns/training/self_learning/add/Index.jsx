@@ -67,7 +67,7 @@ const AddActivity = () => {
   };
 
   return (
-    <div className="p-6 pt-0 bg-flashWhite rounded outline-0">
+    <div className="bg-flashWhite">
       <Toaster />
       <div className="mb-6 flex justify-between items-center">
         <h1 className="text-4xl text-secondary">Add Self Learning Activity</h1>
@@ -91,7 +91,7 @@ const AddActivity = () => {
         </div>
       </div>
       <form
-        className="grid grid-cols-12 items-start gap-4"
+        className="grid grid-cols-12 items-start gap-4 bg-white rounded-md p-6 shadow-md"
         onSubmit={handleSubmit(onSubmit)}
         encType="multipart/form-data"
         noValidate
@@ -101,12 +101,7 @@ const AddActivity = () => {
           <Controller
             name="round"
             control={control}
-            render={({ field }) => (
-              <RoundSelector
-                field={field}
-                listType={trainingData.procedures.proceduresList}
-              />
-            )}
+            render={({ field }) => <RoundSelector field={field} />}
           />
           {errors.round && (
             <p className="text-red-500 text-sm">{errors?.round?.message}</p>

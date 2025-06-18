@@ -13,9 +13,6 @@ const ImagePopper = ({ src, alt }) => {
           onClick={() => setIsOpen(true)}
           className="w-full h-32 object-contain cursor-pointer"
         />
-        {/* <div className="w-full h-1/2 group-hover:-translate-y-0 translation-all duration-200 translate-y-full absolute bottom-0 left-1/2 -translate-x-1/2 bg-primary/20 text-white text-xl flex justify-center items-center cursor-pointer ">
-          <FaCamera onClick={() => setOpenImageUploaderModal(true)} />
-        </div> */}
       </div>
 
       {isOpen && (

@@ -85,7 +85,7 @@ const AddCase = () => {
     }
   };
   return (
-    <div className="p-6 pt-0 bg-flashWhite rounded outline-0 ">
+    <div className="bg-flashWhite rounded">
       <Toaster />
       <div className="mb-6 flex justify-between items-center">
         <h1 className="text-4xl text-secondary">Add Case</h1>

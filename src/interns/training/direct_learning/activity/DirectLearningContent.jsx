@@ -3,31 +3,28 @@ import React, { useEffect, useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
 import Button from "../../../components/Button";
 import _ from "lodash";
-import { useEditSelfLearningMutation } from "../../../../services/intern/api/hooks/selfLearningHooks";
+import { useEditDirectLearningMutation } from "../../../../services/intern/api/hooks/directLearningHooks";
 import { useParams, useSearchParams } from "react-router";
-import SelfLearningRoundSelectBox from "./SelfLearningRoundSelectBox";
+import SelfLearningRoundSelectBox from "./DirectLearningRoundSelectBox";
 import trainingData from "../../data";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import { FaCamera } from "react-icons/fa6";
 
 /* My Components */
 import EditSelectBox from "../../components/edit/EditSelectBox";
 import EditInputBox from "../../components/edit/EditInputBox";
-import ImagePopper from "./ImagePopper";
 
 const SelfLearningContent = ({
   internData,
-  selfLearningData,
+  directLearningData,
   editMode,
   setEditMode,
 }) => {
   const { activityId } = useParams();
   const [roundId, setRoundId] = useState(null);
   const [learnedActivity, setLearnedActivity] = useState(null);
-  const [activityTitle, setActivityTitle] = useState(null);
+  const [topic, setTopic] = useState(null);
   const [date, setDate] = useState(Date.now());
-  const [evidence, setEvidence] = useState(null);
 
   // Set edit mode
   const [searchParams, setSearchParams] = useSearchParams();
@@ -47,37 +44,20 @@ const SelfLearningContent = ({
       value: round?._id,
     });
   }
-  const [editSelfLearning] = useEditSelfLearningMutation();
+  const [editDirectLearning] = useEditDirectLearningMutation();
 
   const handleEditSelfLearningActivity = async (e) => {
     e.preventDefault();
-    const formData = new FormData();
-
-    formData.append(
-      "roundId",
-      roundId?.value ?? selfLearningData?.data?.roundId?._id
-    );
-    formData.append(
-      "learnedActivity",
-      learnedActivity?.value ?? selfLearningData?.data?.learnedActivity
-    );
-    formData.append(
-      "activityTitle",
-      activityTitle ?? selfLearningData?.data?.activityTitle
-    );
-    formData.append("date", date ?? selfLearningData?.data?.date);
-    if (evidence) {
-      formData.append(
-        "selfLearningActivityEvidence",
-        evidence ?? selfLearningData?.data?.selfLearningActivityEvidence
-      );
-    }
 
     try {
-      const response = await editSelfLearning({
+      const response = await editDirectLearning({
         activityId: activityId,
         editMode,
-        formData,
+        roundId: roundId.value ?? directLearningData?.data?.roundId?._id,
+        learnedActivity:
+          learnedActivity.value ?? directLearningData?.data?.learnedActivity,
+        topic: topic.value ?? directLearningData?.data?.topic,
+        date: date ?? directLearningData?.data?.date,
       }).unwrap();
       if (response?.code === 200) {
         toast.success(response?.message);
@@ -99,7 +79,7 @@ const SelfLearningContent = ({
         <SelfLearningRoundSelectBox
           editMode={editMode}
           procedureDataTitle="Round"
-          procedureDataValue={selfLearningData?.data?.roundId}
+          procedureDataValue={directLearningData?.data?.roundId}
           placeholder="Select your round"
           selectValue={roundId}
           handleSelectChange={(option) => setRoundId(option)}
@@ -109,22 +89,26 @@ const SelfLearningContent = ({
         <EditSelectBox
           editMode={editMode}
           dataTitle="Learned Activity"
-          dataValue={selfLearningData?.data?.learnedActivity}
+          dataValue={directLearningData?.data?.learnedActivity}
           placeholder="Select activity"
           selectValue={learnedActivity}
           handleSelectChange={(value) => setLearnedActivity(value)}
-          options={trainingData.activities.selfLearningActivtiesData}
+          options={[
+            { label: "Lecture", value: "lecture" },
+            { label: "Workshop", value: "workshop" },
+            { label: "Other", value: "other" },
+          ]}
         />
-
-        {/* Activity Title */}
-        <EditInputBox
+        {/* Topic */}
+        <EditSelectBox
           editMode={editMode}
-          dataTitle="Activity Title"
-          dataValue={selfLearningData?.data?.activityTitle}
-          inputValue={activityTitle}
-          handleInputChange={(e) => setActivityTitle(e.target.value)}
+          dataTitle="Topic"
+          dataValue={directLearningData?.data?.topic}
+          placeholder="Select topic"
+          selectValue={topic}
+          handleSelectChange={(value) => setTopic(value)}
+          options={trainingData.activities.directLearningActivtiesData}
         />
-
         {/* Date */}
         <div className="grid grid-cols-5 gap-2 mb-4">
           <label className="font-medium text-mistyMorning col-span-2">
@@ -141,57 +125,8 @@ const SelfLearningContent = ({
             />
           ) : (
             <span className="text-secondary font-semibold col-span-2">
-              {selfLearningData?.data?.date.split("T")[0]}
+              {directLearningData?.data?.date.split("T")[0]}
             </span>
-          )}
-        </div>
-
-        {/* Evidence */}
-        <div className="col-span-1 grid grid-cols-5 gap-2">
-          <span className="text-mistyMorning mr-2 col-span-2">Evidence: </span>
-          {editMode ? (
-            <div className="col-span-2">
-              <input
-                type="file"
-                id="evidence"
-                accept="image/*"
-                className="hidden"
-                onChange={(e) => {
-                  const file = e.target.files?.[0];
-                  setEvidence(file);
-                }}
-              />
-              <label
-                htmlFor="evidence"
-                className="  bg-white border-2 border-dashed border-mistyMorning p-4 rounded-lg flex flex-col items-center justify-center w-full h-full cursor-pointer"
-              >
-                {evidence ? (
-                  <>
-                    <img
-                      src={URL.createObjectURL(evidence)}
-                      alt="Preview"
-                      className="max-h-32 max-w-full object-contain mb-2"
-                    />
-                    <span>{evidence.name}</span>
-                  </>
-                ) : (
-                  <>
-                    <FaCamera className="text-mistyMorning text-xl mb-2" />
-                    <span>Evidence</span>
-                  </>
-                )}
-              </label>
-            </div>
-          ) : (
-            <div className="col-span-2">
-              <ImagePopper
-                src={
-                  "http://localhost:3000/" +
-                  selfLearningData?.data?.selfLearningActivityEvidence
-                }
-                alt={selfLearningData?.data?.activityTitle}
-              />
-            </div>
           )}
         </div>
 

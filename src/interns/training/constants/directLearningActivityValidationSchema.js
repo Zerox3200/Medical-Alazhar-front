@@ -15,7 +15,6 @@ export const directLearningActivityValidationSchema = yup.object({
     .shape({ value: yup.string().required(), label: yup.string().required() })
     .nullable()
     .required("Topic is required"),
-  evidence: yup.mixed().required("Evidence is required"),
   date: yup
     .date()
     .nullable()

@@ -6,17 +6,19 @@ import TrainingBreadcrumbs from "./components/TrainingBreadcrumbs";
 
 const TrainingLayout = () => {
   return (
-    <div className="grid grid-cols-6">
-      <div className="col-span-1">
+    <div className="flex gap-6">
+      <div className="w-1/6">
         <TrainingNavbar />
       </div>
-      <div className="col-span-5">
-        <div className="p-6">
+      <div className="w-5/6">
+        <div className="py-6">
           <TrainingBreadcrumbs />
         </div>
-        <TrainingProvider>
-          <Outlet />
-        </TrainingProvider>
+        <div className="pr-6">
+          <TrainingProvider>
+            <Outlet />
+          </TrainingProvider>
+        </div>
       </div>
     </div>
   );

@@ -25,10 +25,10 @@ const wpblSummaryBox = (discriminant, count, bg) => {
 };
 
 const RecordTraining = () => {
-  const { cases } = useCases();
-  const { procedures } = useProcedures();
-  const { selfLearnings } = useSelfLearnings();
-  const { directLearnings } = useDirectLearnings();
+  const { cases } = useCases({});
+  const { procedures } = useProcedures({});
+  const { selfLearnings } = useSelfLearnings({});
+  const { directLearnings } = useDirectLearnings({});
 
   const [selectedRound, setSelectedRound] = useState("General Surgery");
   const [casesCount, setCasesCount] = useState(0);
@@ -36,9 +36,9 @@ const RecordTraining = () => {
   const roundChipRef = useRef(null);
 
   return (
-    <div className="border-b-2 border-softGray shadow-sm mb-10 pb-10">
+    <div className="">
       {/* Training Summary */}
-      <div className="grid grid-cols-4 gap-4 p-6">
+      <div className="grid grid-cols-4 gap-4">
         {wpblSummaryBox("Total cases", cases?.count, "bg-mediumBlue")}
         {wpblSummaryBox("Total procedures", procedures?.count, "bg-orange-500")}
         {wpblSummaryBox(
@@ -55,7 +55,7 @@ const RecordTraining = () => {
 
       <div className="grid grid-cols-3">
         {/* Activities and Rounds */}
-        <div className="col-span-2 flex flex-col justify-between gap-6 p-6">
+        <div className="col-span-2 flex flex-col justify-between gap-6 ">
           {/* Recent Activity */}
           <div>
             <h2 className="text-xl font-bold mb-4">Recent Activity</h2>

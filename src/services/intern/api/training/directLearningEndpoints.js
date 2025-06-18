@@ -1,9 +1,10 @@
 const directLearningEndpoints = (builder) => ({
   // Get All Direct Learning Activities
   getDirectLearnings: builder.query({
-    query: () => ({
+    query: ({ filters }) => ({
       url: `/intern/training/direct-learning-activities`,
       method: "GET",
+      params: filters,
       credentials: "include",
     }),
     providesTags: ["direct_Learning_Activity"],
@@ -19,11 +20,11 @@ const directLearningEndpoints = (builder) => ({
   }),
   // Add New Direct Learning Activity
   addDirectLearning: builder.mutation({
-    query: ({ intern, round, ...activitiyData }) => ({
+    query: ({ roundId, ...activitiyData }) => ({
       url: "/intern/training/direct-learning-activities/add",
       method: "POST",
       body: activitiyData,
-      params: { intern, round },
+      params: { roundId },
     }),
     invalidatesTags: ["direct_Learning_Activity"],
   }),
@@ -31,7 +32,7 @@ const directLearningEndpoints = (builder) => ({
   editDirectLearning: builder.mutation({
     query: ({ editMode, activityId, ...activityData }) => ({
       url: `/intern/training/direct-learning-activities/${activityId}`,
-      method: "PUT",
+      method: "PATCH",
       params: { editMode },
       body: activityData,
     }),

@@ -30,11 +30,11 @@ const selfLearningEndpoints = (builder) => ({
   }),
   // Edit Self Learning Activity
   editSelfLearning: builder.mutation({
-    query: ({ editMode, activityId, ...activityData }) => ({
+    query: ({ editMode, activityId, formData }) => ({
       url: `/intern/training/self-learning-activities/${activityId}`,
       method: "PATCH",
       params: { editMode },
-      body: activityData,
+      body: formData,
     }),
     invalidatesTags: ["Self_Learning_Activity"],
   }),

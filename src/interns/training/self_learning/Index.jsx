@@ -4,12 +4,14 @@ import { FaCheckCircle, FaRegEdit, FaRegTrashAlt } from "react-icons/fa";
 import EmptyData from "../components/EmptyData";
 import toast, { Toaster } from "react-hot-toast";
 import { LinearProgress } from "@mui/material";
-import { useSelfLearnings } from "../../../services/intern/api/hooks/selfLearningHooks";
+import {
+  useDeleteSelfLearningMutation,
+  useSelfLearnings,
+} from "../../../services/intern/api/hooks/selfLearningHooks";
 import _ from "lodash";
 import { IoCloseCircle } from "react-icons/io5";
 import { HiOutlineDocumentSearch } from "react-icons/hi";
 import { Link } from "react-router";
-import { useDeleteProcedureMutation } from "../../../services/intern/api/hooks/proceduresHooks";
 import ConfirmDeleteMessage from "../components/ConfirmDeleteMessage";
 import SearchAndFilters from "../components/SearchAndFilters";
 
@@ -18,26 +20,24 @@ const SelfLearning = () => {
   const [chipValue, setChipValue] = useState(null);
   const [dateFrom, setDateFrom] = useState(new Date("2024-03-01"));
   const [dateTo, setDateTo] = useState(new Date());
-  const [venue, setVenue] = useState({});
   const [searchValue, setSearchValue] = useState("");
 
   const [openWarningAlert, setOpenWarningAlert] = useState(false);
-  const [selfLearningId, setSelfLearningId] = useState(null);
+  const [activityId, setActivityId] = useState(null);
   const { selfLearnings, isError, isLoading } = useSelfLearnings({
     filters: {
       activityState: _.snakeCase(chipValue),
       dateFrom: dateFrom?.toISOString(),
       dateTo: dateTo?.toISOString(),
-      venue: _.snakeCase(venue?.value),
       searchTerm: _.snakeCase(searchValue),
     },
   });
 
-  const [deleteSelfLearning] = useDeleteProcedureMutation();
+  const [deleteSelfLearning] = useDeleteSelfLearningMutation();
 
   const handleDeleteSelfLearning = async () => {
     try {
-      const response = await deleteSelfLearning({ selfLearningId }).unwrap();
+      const response = await deleteSelfLearning({ activityId }).unwrap();
       if (response?.code === 200) {
         toast.success(response?.message);
       }
@@ -57,16 +57,16 @@ const SelfLearning = () => {
     { field: "activityTitle", headerName: "Title", minWidth: 150, flex: 1 },
     { field: "date", headerName: "Date", minWidth: 120, flex: 1 },
     {
-      field: "evidence",
+      field: "selfLearningActivityEvidence",
       headerName: "Evidence",
       minWidth: 150,
       flex: 1,
       renderCell: (cell) => {
         return (
-          <p className="h-full flex justify-center items-center rounded-full overflow-hidden ">
+          <p className="h-full flex justify-start items-center">
             <img
               src={"http://localhost:3000/" + cell.value}
-              className="w-10 h-10 rounded-full "
+              className="w-10 h-10  "
             />
           </p>
         );
@@ -113,7 +113,7 @@ const SelfLearning = () => {
             aria-label="Delete"
             title="Delete"
             onClick={() => {
-              setSelfLearningId(cell.row._id);
+              setActivityId(cell.row._id);
               setOpenWarningAlert(true);
             }}
           />
@@ -151,7 +151,7 @@ const SelfLearning = () => {
         handleClose={() => setOpenWarningAlert(false)}
       />
       <Toaster />
-      <div className="shadow-md p-6 pt-0">
+      <div>
         <div className="flex justify-between items-center">
           <h2 className="text-4xl text-secondary">Self Learning Activities</h2>
           <div className="">
@@ -172,8 +172,6 @@ const SelfLearning = () => {
           handleDateTo={setDateTo}
           chipValue={chipValue}
           setChipValue={setChipValue}
-          venue={venue}
-          setVenue={setVenue}
           searchValue={searchValue}
           setSearchValue={setSearchValue}
         />
