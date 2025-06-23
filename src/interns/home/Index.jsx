@@ -27,7 +27,6 @@ const InternHome = () => {
   return (
     <div className="p-6">
       {/* Intern Personal Information */}
-      <div>asdas</div>
       <div className="grid grid-cols-2">
         {/* Rotations Progress */}
         <RotationsProgress />
