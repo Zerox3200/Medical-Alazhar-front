@@ -16,7 +16,7 @@ const SelectBox = ({
   };
 
   return (
-    <div className={`my-2 w-full ${customStyleClass}`}>
+    <div className={`w-full h-full ${customStyleClass}`}>
       <Select
         options={options}
         placeholder={placeholder}
@@ -24,11 +24,18 @@ const SelectBox = ({
         onChange={changeHandler}
         {...additionParams}
         styles={{
-          control: (styles) => ({
-            ...styles,
-            borderColor: error
-              ? "var(--color-error)"
-              : "color-mix(in oklab, var(--color-mediumGray) 60%, transparent)",
+          control: (provided) => ({
+            ...provided,
+            height: "100%",
+            border: error
+              ? "1px solid red"
+              : "1px solid color-mix(in oklab, var(--color-silverFrost) 40%, transparent);",
+            borderRadius: "6px",
+            boxShadow: "none",
+            padding: "3px",
+            "&:hover": {
+              borderColor: "var(--color-lightBlue)",
+            },
           }),
         }}
       />

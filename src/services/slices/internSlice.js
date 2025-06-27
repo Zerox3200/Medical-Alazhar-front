@@ -1,19 +1,17 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-const initialState = {
-  cases: [],
-  procedures: [],
-};
+const initialState = {};
 
-const internSlice = createSlice({
-  name: "intern",
+const internFormSlice = createSlice({
+  name: "internForm",
   initialState,
   reducers: {
-    setCases: (state, action) => {
-      state.cases = action.payload.cases;
+    updateFormData: (state, action) => {
+      return { ...state, ...action.payload };
     },
+    resetForm: () => ({}),
   },
 });
 
-export const { setOpenNewRoundModal } = internSlice.actions;
-export default internSlice.reducer;
+export const { updateFormData, resetForm } = internFormSlice.actions;
+export default internFormSlice.reducer;

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import RoundBox from "./RoundBox.jsx";
-import { useGetRoundQuery } from "../../../../services/api/adminApiSlice.js";
+import { useGetRoundQuery } from "../../../../services/admin/api/hooks/roundHooks.js";
 import SupervisorsBox from "./SupervisorsBox.jsx";
 import InternsBox from "./InternsBox.jsx";
 

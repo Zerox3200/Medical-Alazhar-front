@@ -8,20 +8,19 @@ import {
 import { FaHeartPulse } from "react-icons/fa6";
 import { MdSupervisorAccount } from "react-icons/md";
 import {
-  useGetAllCasesQuery,
-  useGetAllInternsQuery,
-  useGetAllSupervisorsQuery,
-} from "../../services/api/adminApiSlice";
+  // useGetAllCasesQuery,
+  // useGetAllInternsQuery,
+  useSupervisors,
+} from "../../services/admin/api/hooks/supervisorHooks";
 import CasesLogged from "./charts/CasesLogged";
 import PassedRounds from "./charts/PassedRounds";
 import RecentAccounts from "./components/RecentAccounts";
 
 const Dashboard = () => {
-  const { data: interns } = useGetAllInternsQuery();
-  const { data: cases } = useGetAllCasesQuery();
-  const { data: supervisors } = useGetAllSupervisorsQuery();
+  // const { data: interns } = useGetAllInternsQuery();
+  // const { data: cases } = useGetAllCasesQuery();
+  const { supervisors } = useSupervisors();
 
-  console.log("cases", cases);
   return (
     <div className="flex flex-col gap-10 p-6">
       {/* Statistics */}
@@ -30,7 +29,7 @@ const Dashboard = () => {
         <StatsBox
           heading="Interns"
           lineColor="bg-pink"
-          subHeading={interns?.count}
+          // subHeading={interns?.count}
           icon={<FaUserMd />}
           iconBg="bg-pink/30"
           iconColor="text-hotPink"
@@ -45,7 +44,7 @@ const Dashboard = () => {
         <StatsBox
           heading="Cases"
           lineColor="bg-mediumBlue"
-          subHeading={cases?.count}
+          // subHeading={cases?.count}
           icon={<FaHeartPulse />}
           iconBg="bg-lightBlue/30"
           iconColor="text-mediumBlue"

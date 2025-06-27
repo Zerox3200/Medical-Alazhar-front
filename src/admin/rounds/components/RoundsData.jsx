@@ -1,5 +1,5 @@
 import React from "react";
-import { useGetAllRoundsQuery } from "../../../services/api/adminApiSlice";
+import { useRounds } from "../../../services/admin/api/hooks/roundHooks";
 import { DataGrid } from "@mui/x-data-grid";
 import _ from "lodash";
 import { Link } from "react-router";
@@ -87,7 +87,7 @@ const RoundsData = ({
   if (levelValue?.value) filters.numericYear = levelValue.value;
   if (inputValue) filters.name = inputValue;
 
-  const { data } = useGetAllRoundsQuery(filters);
+  const { data } = useRounds(filters);
 
   const rounds = data?.rounds?.map((round) => {
     return {

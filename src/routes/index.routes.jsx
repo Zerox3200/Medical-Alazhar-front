@@ -1,6 +1,6 @@
 import React, { lazy } from "react";
 import AuthRoutes from "./auth.routes.jsx";
-// import AdminRoutes from "./admin.routes.jsx";
+import AdminRoutes from "./admin.routes.jsx";
 import NotAuthorized from "../pages/NotAuthorized.jsx";
 import InternRoutes from "./intern.routes.jsx";
 import ProtectedRoute from "../utils/ProtectedRoute.jsx";
@@ -15,7 +15,7 @@ const createRoutes = (userRole, token) => {
     {
       element: <ProtectedRoute allowedRoles={["admin", "intern"]} />,
       children: [
-        // ...(token && userRole === "admin" ? AdminRoutes : []),
+        ...(token && userRole === "admin" ? AdminRoutes : []),
         ...(token && userRole === "intern" ? InternRoutes : []),
       ],
     },

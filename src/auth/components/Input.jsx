@@ -11,12 +11,12 @@ const Input = ({
   ...additionalParams
 }) => {
   return (
-    <div className="my-2 w-full">
+    <div className="w-full">
       <input
         onInput={handleInput}
         type={type}
         placeholder={placeholder}
-        className={`border-1 border-mediumGray/60 rounded-sm p-2 outline-0 block w-full bg-white ${customStyle} ${
+        className={`border-1 border-silverFrost/40 text-secondary/80 focus:border-lightBlue hover:border-lightBlue rounded-md p-2 outline-0 block w-full bg-white ${customStyle} ${
           error ? "!border-error" : ""
         }`}
         ref={ref}

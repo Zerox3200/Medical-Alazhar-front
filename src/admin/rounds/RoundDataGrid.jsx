@@ -4,7 +4,7 @@ import { IoCloseCircleSharp } from "react-icons/io5";
 import { FaCheckCircle } from "react-icons/fa";
 import { Link } from "react-router";
 import { useSelector } from "react-redux";
-import { useGetAllInternsQuery } from "../../services/api/adminApiSlice";
+import { useGetAllInternsQuery } from "../../services/admin/adminApiSlice";
 import { Button } from "@mui/material";
 import AddIntern from "./AddIntern";
 import _ from "lodash";

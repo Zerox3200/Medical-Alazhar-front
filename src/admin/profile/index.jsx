@@ -1,7 +1,7 @@
 import React from "react";
 import { FaCheck, FaCheckCircle, FaEnvelope } from "react-icons/fa";
 import { FaPhoneAlt } from "react-icons/fa";
-import { useGetAdminQuery } from "../../services/api/adminApiSlice";
+import { useAdmin } from "../../services/admin/api/hooks/adminHooks";
 import { useSelector } from "react-redux";
 import { MdEdit } from "react-icons/md";
 
@@ -10,16 +10,16 @@ import _ from "lodash";
 const Profile = () => {
   const { id } = useSelector((state) => state.auth?.user);
 
-  const { data, isLoading, isFetching, isSuccess } = useGetAdminQuery({
+  const { adminData, isLoading, isFetching, isSuccess } = useAdmin({
     adminId: id,
   });
 
   // Last Seen
-  const seenDate = new Date(data?.admin?.lastLogin);
+  const seenDate = new Date(adminData?.admin?.lastLogin);
   const lastLoginDate = seenDate.toLocaleString();
 
   // Join At
-  const joinDate = new Date(data?.admin?.createdAt);
+  const joinDate = new Date(adminData?.admin?.createdAt);
   const joinAtDate = joinDate.toLocaleString();
 
   return (
@@ -30,7 +30,7 @@ const Profile = () => {
           <div className="">
             <img
               className="w-42 h-42 object-cover"
-              src={"http://localhost:3000/" + data?.admin?.profileImage}
+              src={"http://localhost:3000/" + adminData?.admin?.profileImage}
               alt="profile-image"
             />
           </div>
@@ -45,7 +45,7 @@ const Profile = () => {
               Last Login: <span className="text-hotPink">{lastLoginDate}</span>
             </p>
             <p className="text-primary flex items-center gap-2">
-              {_.capitalize(data?.admin?.role)}{" "}
+              {_.capitalize(adminData?.admin?.role)}{" "}
               <FaCheckCircle className="text-emeraldGreen" title="verified" />
             </p>
           </div>

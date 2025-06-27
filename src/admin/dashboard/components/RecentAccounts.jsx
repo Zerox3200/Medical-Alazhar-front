@@ -5,7 +5,7 @@ import { FaCheckCircle } from "react-icons/fa";
 import {
   useApproveAccountMutation,
   useGetNotApprovedUsersQuery,
-} from "../../../services/api/adminApiSlice";
+} from "../../../services/admin/api/hooks/adminHooks";
 
 const getColumns = (handleAction) => [
   {

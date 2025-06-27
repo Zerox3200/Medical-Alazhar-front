@@ -6,7 +6,7 @@ import Select from "react-select";
 import _ from "lodash";
 import { useDispatch, useSelector } from "react-redux";
 import { setOpenNewRoundModal } from "../../services/slices/adminSlice";
-import { useCreateNewRoundMutation } from "../../services/api/adminApiSlice";
+import { useCreateRoundMutation } from "../../services/admin/api/hooks/roundHooks";
 import Input from "../components/Input";
 import selectOptions from "../constants/selectOptions";
 import RoundDatePicker from "./components/RoundDatePicker";
@@ -16,7 +16,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 
 const NewRound = () => {
   const { openNewRoundModal } = useSelector((state) => state.admin);
-  const [createNewRound] = useCreateNewRoundMutation();
+  const [createNewRound] = useCreateRoundMutation();
   const [selectedStartDate, setSelectedStartDate] = useState(new Date());
   const [selectedEndDate, setSelectedEndDate] = useState(new Date());
 

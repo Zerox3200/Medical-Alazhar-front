@@ -1,6 +1,5 @@
 import React, { useState } from "react";
-import { ToastContainer, toast } from "react-toastify";
-import { FaEye, FaEyeSlash } from "react-icons/fa6";
+import { toast, Toaster } from "react-hot-toast";
 import Input from "./components/Input";
 import { Link, useNavigate } from "react-router";
 import { useForm } from "react-hook-form";
@@ -9,6 +8,8 @@ import { loginValidationSchema } from "../constants/authFormData";
 import { useDispatch } from "react-redux";
 import { useLoginMutation } from "../services/common/authApiSlice";
 import { setAuth } from "../services/slices/authSlice";
+import { LuEyeClosed, LuEye } from "react-icons/lu";
+import SubmitButton from "./components/SubmitButton";
 
 const Login = () => {
   const [visiblePassword, setVisiblePassword] = useState(false);
@@ -43,29 +44,24 @@ const Login = () => {
       if (err.status === 403) {
         toast.error("Account locked due to too many failed attempts.");
       } else if (err.status === 422) {
-        toast.warn(err.data?.message);
+        toast.error(err.data?.message);
       } else if (err.status >= 500) {
         toast.error("Server error, please try again later.");
       } else {
-        toast.error(err.data?.message || "An unexpected error occurred.");
+        toast.error(err.error || "An unexpected error occurred.");
       }
     }
   };
 
   return (
-    <div className="bg-crispWhite w-fit p-12">
-      <ToastContainer
-        limit={1}
-        position="bottom-left"
-        closeOnClick={true}
-        closeButton={false}
-      />
-      <h1 className="text-teal text-4xl mb-8 font-semibold">
-        Welcome Back! Please Log In
+    <div className="bg-white w-2/6 p-12 shadow-md rounded-md">
+      <Toaster />
+
+      <h1 className="text-lightBlue text-4xl mb-8 font-semibold text-center">
+        Welcome Back
       </h1>
-      <div className="h-[1px] w-full bg-mediumGray my-8"></div>
-      <form className="" onSubmit={handleSubmit(onSubmit)}>
-        <div>
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <div className="flex flex-col gap-2">
           <div>
             <Input
               placeholder="Email"
@@ -82,38 +78,37 @@ const Login = () => {
               error={errors.password?.message}
             />
             <p
-              className="absolute right-2 top-3 cursor-pointer text-lg text-mediumGray/80"
+              className="absolute right-2 top-1/2 -translate-y-1/2 cursor-pointer text-lg text-mistyMorning"
               onClick={() => setVisiblePassword(!visiblePassword)}
             >
-              {visiblePassword ? <FaEyeSlash /> : <FaEye />}
+              {visiblePassword ? <LuEyeClosed /> : <LuEye />}
             </p>
           </div>
-          <p className="my-4 w-full">
+          <p className="text-mistyMorning mb-2 w-full text-sm">
             Forgot your password?{" "}
-            <Link to="/auth/reset" className="text-deepBlue">
+            <Link to="/auth/reset" className="text-lightBlue">
               Reset
             </Link>
           </p>
         </div>
 
         <div className="w-full mt-2">
-          <button
-            type="submit"
-            className={`w-full transition-colors duration-200 bg-deepBlue hover:bg-teal text-crispWhite p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-teal ${
-              isLoading || isSubmitting
-                ? "bg-lightBlue cursor-not-allowed"
-                : "cursor-pointer"
-            }`}
-            disabled={isLoading || isSubmitting}
-          >
-            Login
-          </button>
-          <p className="mt-2">
-            Don't have an email?{" "}
-            <Link to="/auth/signup" className="text-deepBlue">
-              Signup
-            </Link>
-          </p>
+          <SubmitButton
+            isLoading={isLoading}
+            isSubmitting={isSubmitting}
+            label="Login"
+          />
+          <div className="text-mistyMorning text-center mt-6 flex flex-col gap-2">
+            <p>Don't have an email? </p>
+            <p className="w-full self-center">
+              <Link
+                to="/auth/signup"
+                className="w-full block transition-colors duration-200 bg-mistyMorning/30 hover:text-lightBlue text-secondary p-2 rounded-md"
+              >
+                Signup
+              </Link>
+            </p>
+          </div>
         </div>
       </form>
     </div>

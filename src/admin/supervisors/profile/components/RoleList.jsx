@@ -14,7 +14,7 @@ import {
 } from "@mui/material";
 import { FaPen } from "react-icons/fa6";
 import DarkButton from "../../../components/DarkButton";
-import { useChangeSupervisorRoleMutation } from "../../../../services/api/adminApiSlice";
+import { useChangeSupervisorRoleMutation } from "../../../../services/admin/api/hooks/supervisorHooks";
 import { useParams } from "react-router";
 
 const options = ["coordinator", "supervisor"];

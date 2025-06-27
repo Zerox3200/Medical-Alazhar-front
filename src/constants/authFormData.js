@@ -111,20 +111,53 @@ export const grades = () => {
 export const internSignupValidationSchema = (selectedIDType) => {
   return yup
     .object({
-      fullname: yup
+      englishName: yup
         .string()
         .trim()
-        .required("Fullname is required")
+        .required("English name is required")
         .matches(
           /^[A-Za-z-]{2,}(\s[A-Za-z-]{2,}){3,}$/,
-          "Please enter your name as in your national ID"
+          "Please enter your English name as in your national ID"
         ),
+      arabicName: yup
+        .string()
+        .trim()
+        .required("Arabic name is required")
+        .matches(
+          /^[\u0600-\u06FF]+(\s[\u0600-\u06FF]+){1,3}$/,
+          "Please enter your Arabic name as in your national ID"
+        ),
+      dob: yup
+        .date()
+        .required("Date of birth is required")
+        .typeError("Please enter a valid date")
+        .max(new Date(), "Date of birth cannot be in the future")
+        .test("min-age", "You must be at least 18 years old", (dob) => {
+          if (!dob) return false;
+          const today = new Date();
+          const minAgeDate = new Date(
+            today.getFullYear() - 18,
+            today.getMonth(),
+            today.getDate()
+          );
+          return dob <= minAgeDate;
+        }),
+      internshipStartDate: yup
+        .date()
+        .required("Internship start date is required")
+        .typeError("Please enter a valid date")
+        .max(new Date(), "Internship start date cannot be in the future"),
       orderOfGraduate: yup
         .number()
         .required()
         .positive("Order must be positive")
         .typeError("Order is required"),
-      facultyIDNumber: yup
+      cummulativeTotal: yup
+        .number()
+        .required()
+        .positive("Cummulative total must be positive")
+        .typeError("Cummulative total is required"),
+      idNumber: yup
         .number()
         .required()
         .positive("Faculty ID must be positive")
@@ -147,6 +180,7 @@ export const internSignupValidationSchema = (selectedIDType) => {
                 "Please enter a valid passport number (6-12 alphanumeric characters)"
               ),
       nationality: yup.object().required("Nationality is required"),
+      internLevel: yup.object().required("Intern Level is required"),
       facultyOfGraduation: yup
         .object()
         .required("Faculty of graduation is required"),

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import Avatar from "@mui/material/Avatar";
 import Chip from "@mui/material/Chip";
 import Stack from "@mui/material/Stack";
-import { useGetAllSupervisorsQuery } from "../../../services/api/adminApiSlice";
+import { useGetAllSupervisorsQuery } from "../../../services/admin/adminApiSlice";
 import { Link } from "react-router";
 import _ from "lodash";
 import PagesHeader from "../../components/PagesHeader";

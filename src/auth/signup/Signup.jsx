@@ -1,20 +1,17 @@
 import React, { useState } from "react";
-import InternSignupForm from "./InternSignupForm";
+import InternSignupForm from "./";
 import SupervisorSignupForm from "./SupervisorSignupForm";
 
 const Signup = () => {
   const [selectedUser, setSelectedUser] = useState("intern");
 
   return (
-    <div className="flex flex-col bg-crispWhite w-full md:w-2/3 lg:w-4/6 p-4 md:p-10">
-      <h1 className="text-teal text-2xl md:text-3xl mb-6 md:mb-4 font-semibold">
-        Create Your Account to Begin
+    <div className="flex flex-col bg-white w-full md:w-2/3 lg:w-3/6 p-4 md:p-10 shadow-md rounded-md">
+      <h1 className="text-lightBlue text-2xl md:text-3xl mb-6 md:mb-4 font-semibold text-center">
+        Create an account
       </h1>
       {/* Select Type of User */}
-      <div className="flex gap-3">
-        <h2 className="w-fit text-xl text-mediumGray font-semibold">
-          Select your role:
-        </h2>
+      <div className="flex gap-3 text-mistyMorning">
         <div className="flex items-center justify-between gap-3">
           <label htmlFor="user-intern">Intern</label>
           <input
@@ -38,7 +35,7 @@ const Signup = () => {
           />
         </div>
       </div>
-      <div className="h-[1px] w-full bg-mediumGray my-4"></div>
+      <div className="h-[0.5px] w-full bg-silverFrost/40 my-4"></div>
 
       {selectedUser === "intern" ? (
         <InternSignupForm />

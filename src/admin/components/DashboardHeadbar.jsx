@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { FaCalendarPlus } from "react-icons/fa";
-import { useGetAdminQuery } from "../../services/api/adminApiSlice";
+import { useAdmin } from "../../services/admin/api/hooks/adminHooks.js";
 import AccountMenu from "./AccountMenu.jsx";
 import { useSelector } from "react-redux";
 import Loader from "../../components/Loader";
@@ -23,7 +23,7 @@ const DashboardHeadbar = () => {
 
   const { id, role } = useSelector((state) => state.auth?.user);
 
-  const { data, isLoading, isFetching, isSuccess } = useGetAdminQuery({
+  const { data, isLoading, isFetching, isSuccess } = useAdmin({
     adminId: id,
   });
 

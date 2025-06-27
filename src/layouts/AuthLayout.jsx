@@ -9,10 +9,7 @@ const AuthLayout = () => {
 
   return !isAuthenticated ? (
     <>
-      <Navbar />
-      <div className="bg-softGray min-h-screen flex justify-center items-center pt-20">
-        {/* ProfileSidebar */}
-
+      <div className="bg-flashWhite min-h-screen flex justify-center items-center">
         <Outlet />
       </div>
     </>

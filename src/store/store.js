@@ -9,13 +9,14 @@ import storage from "redux-persist/lib/storage";
 
 // Api Slices
 import internApiSlice from "../services/intern/api/";
-import { adminApiSlice } from "../services/admin/adminApiSlice";
+import adminApiSlice from "../services/admin/api/";
 import { authApiSlice } from "../services/common/authApiSlice";
 import { uploadApiSlice } from "../services/common/uploadApiSlice";
 
 // Slices
 import authReducer from "../services/slices/authSlice";
 import adminSlice from "../services/slices/adminSlice";
+import internFormSlice from "../services/slices/internSlice";
 
 const persistConfig = {
   key: "auth",
@@ -28,6 +29,7 @@ const persistConfig = {
 const rootReducer = combineReducers({
   auth: authReducer,
   admin: adminSlice,
+  internForm: internFormSlice,
   [adminApiSlice.reducerPath]: adminApiSlice.reducer,
   [internApiSlice.reducerPath]: internApiSlice.reducer,
   [authApiSlice.reducerPath]: authApiSlice.reducer,

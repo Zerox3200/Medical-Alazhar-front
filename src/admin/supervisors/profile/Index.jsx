@@ -3,14 +3,14 @@ import Header from "./components/Header";
 import SupervisorContent from "./components/SupervisorContent";
 import { useSelector } from "react-redux";
 import { useParams } from "react-router";
-import { useGetSingleSupervisorQuery } from "../../../services/api/adminApiSlice";
+import { useGetSupervisorQuery } from "../../../services/admin/api/hooks/supervisorHooks";
 import Loader from "../../../components/Loader";
 const SupervisorProfile = () => {
   const { supervisorId } = useParams();
 
   const { id } = useSelector((state) => state.auth.user || {});
 
-  const { data, error, isLoading } = useGetSingleSupervisorQuery({
+  const { data, error, isLoading } = useGetSupervisorQuery({
     supervisorId,
   });
 

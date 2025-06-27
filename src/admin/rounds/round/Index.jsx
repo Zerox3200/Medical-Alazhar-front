@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Link, useParams } from "react-router";
-import { useGetRoundQuery } from "../../../services/api/adminApiSlice";
+import { useGetRoundQuery } from "../../../services/admin/api/hooks/roundHooks";
 import { Chip } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 

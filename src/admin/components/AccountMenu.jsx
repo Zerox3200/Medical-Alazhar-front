@@ -4,7 +4,7 @@ import { Link } from "react-router";
 import { FaUserLarge } from "react-icons/fa6";
 import { MdLogout } from "react-icons/md";
 import { BsFillGearFill } from "react-icons/bs";
-import { useLogoutMutation } from "../../services/api/authApiSlice";
+import { useLogoutMutation } from "../../services/common/authApiSlice";
 
 const AccountMenu = ({ name, role, profileImage }) => {
   const [opened, setOpened] = useState(false);

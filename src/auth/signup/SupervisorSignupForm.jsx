@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { toast, ToastContainer } from "react-toastify";
+import { toast, Toaster } from "react-hot-toast";
 import { FaEye, FaEyeSlash } from "react-icons/fa6";
 import { Controller, useForm } from "react-hook-form";
 import { Link } from "react-router";
@@ -80,7 +80,7 @@ const SupervisorSignupForm = () => {
 
   return (
     <div className="m-auto">
-      <ToastContainer position="bottom-left" />
+      <Toaster />
       <form className="w-full" onSubmit={handleSubmit(onSubmit)}>
         <div className="flex items-center gap-4 w-full">
           {/* Firstname */}

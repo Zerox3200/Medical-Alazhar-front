@@ -3,7 +3,7 @@ import { DataGrid } from "@mui/x-data-grid";
 import { TbMoodCry } from "react-icons/tb";
 import { Link } from "react-router";
 import _ from "lodash";
-import { useGetAllSupervisorsQuery } from "../../../services/api/adminApiSlice";
+import { useSupervisors } from "../../../services/admin/api/hooks/supervisorHooks";
 
 const columns = [
   {
@@ -67,11 +67,11 @@ const EmptyData = () => {
   );
 };
 const TabsContent = ({ userType }) => {
-  const { data, isLoading } = useGetAllSupervisorsQuery({
+  const { supervisorsData, isLoading } = useSupervisors({
     role: userType === "all" ? undefined : userType.slice(0, -1),
   });
 
-  let supervisors = data?.supervisors?.map((supervisor) => {
+  let supervisors = supervisorsData?.supervisors?.map((supervisor) => {
     return {
       ...supervisor,
       id: supervisor._id,
