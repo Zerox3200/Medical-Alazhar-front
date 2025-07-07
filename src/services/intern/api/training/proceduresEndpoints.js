@@ -20,11 +20,10 @@ const proceduresEndpoints = (builder) => ({
   }),
   // Add New Procedure
   addProcedure: builder.mutation({
-    query: ({ roundId, ...procedureData }) => ({
+    query: ({ ...procedureData }) => ({
       url: "/intern/training/procedures/add",
       method: "POST",
       body: procedureData,
-      params: { roundId },
     }),
     invalidatesTags: ["Procedures"],
   }),

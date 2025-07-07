@@ -32,7 +32,7 @@ const Procedures = () => {
     isError,
   } = useProcedures({
     filters: {
-      procedureState: _.snakeCase(chipValue),
+      state: _.snakeCase(chipValue),
       dateFrom: dateFrom?.toISOString(),
       dateTo: dateTo?.toISOString(),
       venue: _.snakeCase(venue?.value),
@@ -97,7 +97,7 @@ const Procedures = () => {
       },
     },
     {
-      field: "procedureState",
+      field: "state",
       headerName: "State",
       width: 120,
       renderCell: (cell) => {
@@ -155,15 +155,15 @@ const Procedures = () => {
   });
 
   const acceptedProcedures = procedures?.filter(
-    ({ procedureState }) => procedureState === "accepted"
+    ({ state }) => state === "accepted"
   );
 
   const rejectedProcedures = procedures?.filter(
-    ({ procedureState }) => procedureState === "rejected"
+    ({ state }) => state === "rejected"
   );
 
   const underReviewProcedures = procedures?.filter(
-    ({ procedureState }) => procedureState === "under_review"
+    ({ state }) => state === "under_review"
   );
 
   return (

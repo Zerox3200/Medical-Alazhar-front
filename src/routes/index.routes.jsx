@@ -1,7 +1,7 @@
 import React, { lazy } from "react";
 import AuthRoutes from "./auth.routes.jsx";
 import AdminRoutes from "./admin.routes.jsx";
-import NotAuthorized from "../pages/NotAuthorized.jsx";
+import SupervisorRoutes from "./supervisor.route.jsx";
 import InternRoutes from "./intern.routes.jsx";
 import ProtectedRoute from "../utils/ProtectedRoute.jsx";
 import { Navigate } from "react-router";
@@ -13,9 +13,17 @@ const createRoutes = (userRole, token) => {
   return [
     AuthRoutes,
     {
-      element: <ProtectedRoute allowedRoles={["admin", "intern"]} />,
+      element: (
+        <ProtectedRoute
+          allowedRoles={["admin", "intern", "coordinator", "supervisor"]}
+        />
+      ),
       children: [
         ...(token && userRole === "admin" ? AdminRoutes : []),
+        ...((token && userRole === "coordinator") ||
+        (token && userRole === "supervisor")
+          ? SupervisorRoutes
+          : []),
         ...(token && userRole === "intern" ? InternRoutes : []),
       ],
     },

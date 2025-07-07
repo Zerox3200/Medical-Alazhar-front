@@ -66,6 +66,7 @@ export const baseApiSlice = createApi({
     "Self_Learning_Activity",
     "Direct_Learning_Activity",
     "Course",
+    "Supervisor_Interns_Domain_Review",
   ],
   endpoints: () => ({}),
 });

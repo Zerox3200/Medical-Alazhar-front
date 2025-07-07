@@ -1,5 +1,5 @@
 const supervisorEndpoints = (builder) => ({
-  getSupervisors: builder.query({
+  getAdminSupervisors: builder.query({
     query: (params = {}) => ({
       url: "/admin/supervisors",
       method: "GET",
@@ -9,7 +9,7 @@ const supervisorEndpoints = (builder) => ({
     providesTags: ["Supervisor"],
   }),
 
-  getSupervisor: builder.query({
+  getAdminSupervisor: builder.query({
     query: ({ supervisorId }) => ({
       url: `/admin/supervisors/${supervisorId}`,
       method: "GET",

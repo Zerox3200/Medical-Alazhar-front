@@ -10,6 +10,7 @@ import storage from "redux-persist/lib/storage";
 // Api Slices
 import internApiSlice from "../services/intern/api/";
 import adminApiSlice from "../services/admin/api/";
+import supervisorApiSlice from "../services/supervisor/api/";
 import { authApiSlice } from "../services/common/authApiSlice";
 import { uploadApiSlice } from "../services/common/uploadApiSlice";
 
@@ -32,6 +33,7 @@ const rootReducer = combineReducers({
   internForm: internFormSlice,
   [adminApiSlice.reducerPath]: adminApiSlice.reducer,
   [internApiSlice.reducerPath]: internApiSlice.reducer,
+  [supervisorApiSlice.reducerPath]: supervisorApiSlice.reducer,
   [authApiSlice.reducerPath]: authApiSlice.reducer,
   [uploadApiSlice.reducerPath]: uploadApiSlice.reducer,
 });

@@ -3,6 +3,7 @@ import { Link, NavLink } from "react-router";
 import { useSelector } from "react-redux";
 
 import logo from "../assets/images/logo.jpg";
+import AccountMenu from "./AccountMenu";
 
 // Supervisors Navbar
 const supervisorsNavLinks = [
@@ -11,20 +12,12 @@ const supervisorsNavLinks = [
     label: "Home",
   },
   {
-    title: "rounds?round_name=internal_medicine",
-    label: "Rounds",
-  },
-  {
     title: "interns",
     label: "Interns",
   },
   {
-    title: "supervisors",
-    label: "Supervisors",
-  },
-  {
-    title: "coordinators",
-    label: "Coordinators",
+    title: "assessments",
+    label: "Assessments",
   },
 ];
 
@@ -53,7 +46,6 @@ const navLinks = [
 
 const Navbar = () => {
   const { token, user } = useSelector((state) => state.auth);
-
   const isAuthenticated = !!token && !!user;
 
   return (
@@ -67,7 +59,7 @@ const Navbar = () => {
       {/* Links */}
       {isAuthenticated && (
         <ul className="flex gap-8">
-          {user.role === "admin"
+          {user.role !== "intern"
             ? supervisorsNavLinks.map((navLink, i) => {
                 return (
                   <React.Fragment key={i}>
@@ -77,9 +69,7 @@ const Navbar = () => {
                           isActive ? "text-lightBlue" : null
                         }
                         to={
-                          navLink.title === "home"
-                            ? "/"
-                            : `/admin/${navLink.title}`
+                          navLink.title === "home" ? "/" : `/${navLink.title}`
                         }
                       >
                         {navLink.label}
@@ -108,21 +98,8 @@ const Navbar = () => {
               })}
         </ul>
       )}
-
-      {/* Authentication Links */}
-      {isAuthenticated ? (
-        <div>{/* <UserProfileMenu /> */}</div>
-      ) : (
-        <div className="flex">
-          <Link to="/auth/login" className="hover:underline">
-            Login
-          </Link>
-          <p className="mx-2">/</p>
-          <Link to="/auth/signup" className="hover:underline">
-            Signup
-          </Link>
-        </div>
-      )}
+      {/* Account Menu */}
+      {isAuthenticated && <AccountMenu role={user.role} />}
     </div>
   );
 };

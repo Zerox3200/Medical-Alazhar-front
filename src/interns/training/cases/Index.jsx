@@ -39,7 +39,7 @@ const CasesSummary = () => {
     isError,
   } = useCases({
     filters: {
-      caseState: _.snakeCase(chipValue),
+      state: _.snakeCase(chipValue),
       dateFrom: dateFrom?.toISOString(),
       dateTo: dateTo?.toISOString(),
       venue: _.snakeCase(venue?.value),
@@ -100,7 +100,7 @@ const CasesSummary = () => {
       width: 120,
     },
     {
-      field: "caseState",
+      field: "state",
       headerName: "State",
       width: 120,
       renderCell: (cell) => {
@@ -157,16 +157,12 @@ const CasesSummary = () => {
     };
   });
 
-  const acceptedCases = cases?.filter(
-    ({ caseState }) => caseState === "accepted"
-  );
+  const acceptedCases = cases?.filter(({ state }) => state === "accepted");
 
-  const rejectedCases = cases?.filter(
-    ({ caseState }) => caseState === "rejected"
-  );
+  const rejectedCases = cases?.filter(({ state }) => state === "rejected");
 
   const underReviewCases = cases?.filter(
-    ({ caseState }) => caseState === "under_review"
+    ({ state }) => state === "under_review"
   );
 
   return (

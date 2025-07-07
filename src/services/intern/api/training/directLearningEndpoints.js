@@ -20,11 +20,10 @@ const directLearningEndpoints = (builder) => ({
   }),
   // Add New Direct Learning Activity
   addDirectLearning: builder.mutation({
-    query: ({ roundId, ...activitiyData }) => ({
+    query: ({ ...activitiyData }) => ({
       url: "/intern/training/direct-learning-activities/add",
       method: "POST",
       body: activitiyData,
-      params: { roundId },
     }),
     invalidatesTags: ["direct_Learning_Activity"],
   }),

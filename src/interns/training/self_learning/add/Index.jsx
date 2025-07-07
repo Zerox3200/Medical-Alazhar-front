@@ -34,7 +34,7 @@ const AddActivity = () => {
 
   const onSubmit = async (data) => {
     const formData = new FormData();
-
+    formData.append("roundId", data.round.value);
     formData.append("learnedActivity", data.learnedActivity.value);
     formData.append("activityTitle", data.activityTitle);
     formData.append("date", data.date.toISOString());
@@ -45,7 +45,6 @@ const AddActivity = () => {
 
     try {
       const response = await addSelfLearningActivity({
-        roundId: data?.round?.value,
         formData,
       }).unwrap();
       if (response?.code === 201) {

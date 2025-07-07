@@ -31,14 +31,14 @@ const InternSignupForm = () => {
     setError,
     reset,
     trigger,
-    formState: { errors, isSubmitSuccessful, isValid, dirtyFields },
+    formState: { errors, isSubmitSuccessful, isValid },
   } = useForm({
     defaultValues: internFormState,
     resolver: yupResolver(internSignupValidationSchema(selectedIDType)),
     mode: "onChange",
     reValidateMode: "onChange",
   });
-
+  console.log(errors);
   const getStepFields = (stepIndex) => {
     const stepsFields = [
       ["englishName", "arabicName", "dob", "nationality", "email", "phone"],
@@ -61,7 +61,13 @@ const InternSignupForm = () => {
 
     if (isValidStep) {
       setStepValidity((prev) => ({ ...prev, [activeStep]: true }));
-      dispatch(updateFormData(getValues()));
+      dispatch(
+        updateFormData({
+          ...getValues(),
+          dob: getValues()?.dob?.toISOString(),
+          internshipStartDate: getValues()?.internshipStartDate?.toISOString(),
+        })
+      );
       setActiveStep((prev) => prev + 1);
     }
   };
@@ -80,6 +86,7 @@ const InternSignupForm = () => {
     grade,
     facultyOfGraduation,
     hospital,
+    internshipStartDate,
     nationality,
     yearOfGraduation,
   }) => {
@@ -91,6 +98,7 @@ const InternSignupForm = () => {
         idNumber,
         orderOfGraduate,
         cummulativeTotal,
+        internshipStartDate,
         idOrPassport: {
           type: selectedIDType,
           number: +idOrPassportNumber.replaceAll("-", ""),
@@ -128,6 +136,7 @@ const InternSignupForm = () => {
         idOrPassportNumber: "",
         email: "",
         phone: "",
+        internshipStartDate: "",
         password: "",
         grade: null,
         facultyOfGraduation: null,
@@ -187,6 +196,7 @@ const InternSignupForm = () => {
           stepComponent={stepComponent}
           handleNextStep={handleNextStep}
           isStepValid={isValid}
+          isValid={isValid}
         />
       </form>
     </div>

@@ -20,10 +20,9 @@ const selfLearningEndpoints = (builder) => ({
   }),
   // Add New Self Learning Activity
   addSelfLearning: builder.mutation({
-    query: ({ roundId, formData }) => ({
+    query: ({ formData }) => ({
       url: "/intern/training/self-learning-activities/add",
       method: "POST",
-      params: { roundId },
       body: formData,
     }),
     invalidatesTags: ["Self_Learning_Activity"],

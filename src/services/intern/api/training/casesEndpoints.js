@@ -20,11 +20,10 @@ const casesEndpoints = (builder) => ({
   }),
   // Add New Case
   addCase: builder.mutation({
-    query: ({ roundId, ...caseData }) => ({
+    query: ({ ...caseData }) => ({
       url: "/intern/training/cases/add",
       method: "POST",
       body: caseData,
-      params: { roundId },
     }),
     invalidatesTags: ["Cases"],
   }),

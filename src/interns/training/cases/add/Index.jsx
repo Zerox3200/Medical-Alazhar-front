@@ -65,13 +65,11 @@ const AddCase = () => {
         caseSummary,
         selfReflection,
       }).unwrap();
-      console.log(response);
       if (response?.code === 201) {
         toast.success(response?.message);
       }
       reset();
     } catch (error) {
-      console.log("error", error);
       if (error.data?.errors) {
         error.data.errors.forEach((err) => {
           setError(err.path, {

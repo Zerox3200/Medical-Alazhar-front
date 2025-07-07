@@ -21,7 +21,9 @@ const FormStepsProgress = ({
   stepComponent,
   handleNextStep,
   isStepValid,
+  isValid,
 }) => {
+  console.log(isValid);
   const [completed, setCompleted] = React.useState({});
 
   const stepperProps = {
@@ -65,7 +67,9 @@ const FormStepsProgress = ({
               customClass="!bg-flashWhite !border-silverFrost/40 !text-secondary"
             />
             <StepFormButton
-              type="button"
+              type={
+                stepperProps.totalSteps === 5 && isValid ? "submit" : "button"
+              }
               handleClick={handleNext}
               label="Next"
               disabled={isStepValid}

@@ -2,7 +2,7 @@ import React from "react";
 import { Outlet } from "react-router";
 import DashobardSidebar from "../admin/components/DashobardSidebar.jsx";
 import DashboardHeadbar from "../admin/components/DashboardHeadbar.jsx";
-import Footer from "../admin/components/Footer.jsx";
+import Footer from "../components/Footer.jsx";
 
 const AdminLayout = () => {
   return (
