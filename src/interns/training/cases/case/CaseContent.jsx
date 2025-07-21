@@ -38,14 +38,16 @@ const CaseContent = ({ internData, caseData, editMode, setEditMode }) => {
   );
 
   let roundOptions = [];
-  for (let round of rounds) {
-    roundOptions.push({
-      label: _.startCase(round?.name),
-      value: round?._id,
-    });
+  if (rounds) {
+    for (let round of rounds) {
+      roundOptions.push({
+        label: _.startCase(round?.name),
+        value: round?._id,
+      });
+    }
   }
 
-  const casesOptions = trainingData.cases.casesList.flatMap(
+  const casesOptions = trainingData?.cases?.casesList.flatMap(
     (opt) => opt.options
   );
 

@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { useGetInternQuery } from "../../../services/api/internApiSlice";
+import { useIntern } from "../../../services/intern/api/hooks/authHooks";
 import toast, { Toaster } from "react-hot-toast";
 import { FaChevronRight, FaChevronLeft } from "react-icons/fa";
-
 import Button from "../../components/Button";
-import { useSubmitQuizProgressMutation } from "../../../services/api/coursesApiSlice";
+import { useSubmitQuizProgressMutation } from "../../../services/intern/api/hooks/coursesHooks";
 import ForceRetake from "./ForceRetake";
+
 const Quiz = ({
   quiz,
   video,
@@ -18,9 +18,13 @@ const Quiz = ({
   currentQuestionIndex,
   setCurrentQuestionIndex,
 }) => {
-  const { id } = useSelector((state) => state.auth.user);
-  const { data: internDate } = useGetInternQuery({ internId: id });
-  const currentCourse = internDate?.intern?.coursesProgress?.filter(
+  const { id, role } = useSelector((state) => state.auth.user);
+  const { internData } = useIntern({
+    internId: id,
+    userId: id,
+    userRole: role,
+  });
+  const currentCourse = internData?.intern?.coursesProgress?.filter(
     (course) => course.courseId.toString() === quiz?.courseId
   );
   const currentFailedQuiz = currentCourse?.[0]?.quizzes?.failed?.filter(

@@ -25,7 +25,7 @@ const Procedure = () => {
         <EditHeader
           editMode={editMode}
           setEditMode={setEditMode}
-          objectData={procedureData?.data?.procedureState}
+          objectData={procedureData?.data}
         />
         {/* Procedure content */}
         <ProcedureContent

@@ -1,12 +1,12 @@
 import React from "react";
-import img from "../../../assets/images/profile.jpg";
 import _ from "lodash";
 
 const Header = ({ internData }) => {
+  console.log(internData?.data);
   return (
     <div className="p-6 flex gap-6 items-center border-b border-mistyMorning">
       <div className="w-32 h-32 rounded-full shadow-lg overflow-hidden">
-        <img src={img} />
+        <img src={"http://localhost:3000/" + internData?.data?.profileImage} />
       </div>
       <div className="flex justify-between gap-12 text-secondary font-semibold">
         <div className="">

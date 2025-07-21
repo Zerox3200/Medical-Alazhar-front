@@ -1,13 +1,11 @@
-import React, { useMemo, useState } from "react";
+import React, { useMemo } from "react";
 import { Controller } from "react-hook-form";
 import countryList from "react-select-country-list";
 import BirthdayPicker from "../../components/BirthdayPicker";
 import SelectBox from "../../components/SelectBox";
-import { LuEyeClosed, LuEye } from "react-icons/lu";
 import Input from "../../components/Input";
 
 const PersonalDetails = ({ register, errors, control }) => {
-  const [visiblePassword, setVisiblePassword] = useState(false);
   const countryListOptions = useMemo(() => countryList().getData(), []);
 
   return (
@@ -113,27 +111,6 @@ const PersonalDetails = ({ register, errors, control }) => {
           </p>
         )}
       </div>
-
-      {/* Password */}
-      {/* <div className="col-span-full relative">
-        <Input
-          placeholder="Password"
-          type={!visiblePassword ? "password" : "text"}
-          {...register("password")}
-          error={errors.password?.message}
-        />
-        <p
-          className="absolute right-2 top-3 cursor-pointer text-lg text-mediumGray/80"
-          onClick={() => setVisiblePassword(!visiblePassword)}
-        >
-          {visiblePassword ? <LuEyeClosed /> : <LuEye />}
-        </p>
-        {errors && (
-          <p className="text-red-500 text-sm">
-            {errors.idOrPassport?.password?.message}
-          </p>
-        )}
-      </div> */}
     </div>
   );
 };

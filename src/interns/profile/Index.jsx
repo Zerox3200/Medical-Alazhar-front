@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import ProfileSidebar from "./components/ProfileSidebar";
 import InternContent from "./components/InternContent";
 import { useSelector } from "react-redux";

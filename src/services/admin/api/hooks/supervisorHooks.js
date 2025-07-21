@@ -1,14 +1,14 @@
 import adminApiSlice from "..";
 
 export const {
-  useGetSupervisorsQuery,
-  useGetSupervisorQuery,
+  useGetAdminSupervisorsQuery,
+  useGetAdminSupervisorQuery,
   useChangeSupervisorRoleMutation,
 } = adminApiSlice;
 
-export const useSupervisors = (filters) => {
+export const useAdminSupervisors = (filters) => {
   const { data, isError, isFetching, isLoading } =
-    useGetSupervisorsQuery(filters);
+    useGetAdminSupervisorsQuery(filters);
 
   return {
     supervisors: data,

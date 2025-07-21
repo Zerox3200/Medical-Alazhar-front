@@ -7,6 +7,7 @@ import SearchBar from "./SearchBar";
 const Interns = () => {
   const { id } = useSelector((state) => state.auth.user);
   const { supervisorInternsData } = useSupervisorInterns({ supervisorId: id });
+
   return (
     <div className="p-6">
       {/* Header */}
@@ -19,16 +20,24 @@ const Interns = () => {
         </p>
       </div>
       <div className="grid grid-cols-4 gap-6">
-        {supervisorInternsData?.data?.map((internData) => (
+        {supervisorInternsData?.data?.map((internData, i) => (
           <InternBox
             internData={internData}
             casesCount={
-              supervisorInternsData?.data?.[0]?.trainingProgress?.[0]?.cases
+              supervisorInternsData?.data?.[i]?.trainingProgress?.[0]?.cases
                 ?.length
             }
             proceduresCount={
-              supervisorInternsData?.data?.[0]?.trainingProgress?.[0]
+              supervisorInternsData?.data?.[i]?.trainingProgress?.[0]
                 ?.procedures?.length
+            }
+            selfLearningCount={
+              supervisorInternsData?.data?.[i]?.trainingProgress?.[0]
+                ?.selfLearning?.length
+            }
+            directLearningCount={
+              supervisorInternsData?.data?.[i]?.trainingProgress?.[0]
+                ?.directLearning?.length
             }
           />
         ))}

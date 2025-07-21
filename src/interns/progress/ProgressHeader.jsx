@@ -1,4 +1,5 @@
 import React from "react";
+import _ from "lodash";
 
 const ProgressHeader = ({ internData }) => {
   return (
@@ -11,7 +12,8 @@ const ProgressHeader = ({ internData }) => {
           Training Progress
         </h1>
         <p className="text-gray-600">
-          {internData?.intern?.hospital} • {internData?.intern?.internLevel}
+          {_.startCase(internData?.intern?.hospital)} •{" "}
+          {_.chain(internData?.intern?.internLevel).toUpper().replace("_", "-")}
         </p>
       </div>
       <div className="flex items-center space-x-4">
@@ -32,7 +34,7 @@ const ProgressHeader = ({ internData }) => {
         <div className="text-center">
           <p className="text-sm text-gray-500">Current Round</p>
           <p className="font-medium">
-            {internData?.intern?.currentRound?.roundId?.name}
+            {_.startCase(internData?.intern?.currentRound?.roundId?.name)}
           </p>
         </div>
       </div>

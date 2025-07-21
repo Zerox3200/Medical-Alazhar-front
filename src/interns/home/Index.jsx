@@ -29,9 +29,9 @@ const InternHome = () => {
       {/* Intern Personal Information */}
       <div className="grid grid-cols-2">
         {/* Rotations Progress */}
-        <RotationsProgress />
+        {/* <RotationsProgress /> */}
         {/* Current Round Progress */}
-        <CurrentRoundProgress />
+        {/* <CurrentRoundProgress /> */}
       </div>
     </div>
   );

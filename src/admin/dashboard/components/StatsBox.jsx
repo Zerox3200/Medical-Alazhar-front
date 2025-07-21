@@ -30,10 +30,12 @@ const StatsBox = ({
         </p>
       </div>
 
-      <div className="flex-1 flex items-center gap-2">
-        {boxStatus}{" "}
-        <span className="text-mistyMorning text-md">since last month</span>
-      </div>
+      {boxStatus && (
+        <div className="flex-1 flex items-center gap-2">
+          {boxStatus}{" "}
+          <span className="text-mistyMorning text-md">since last month</span>
+        </div>
+      )}
     </div>
   );
 };

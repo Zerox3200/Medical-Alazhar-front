@@ -27,7 +27,7 @@ const DirectLearning = () => {
   const [deleteActivity] = useDeleteDirectLearningMutation();
   const { directLearnings, isError, isLoading } = useDirectLearnings({
     filters: {
-      activityState: _.snakeCase(chipValue),
+      state: _.snakeCase(chipValue),
       dateFrom: dateFrom?.toISOString(),
       dateTo: dateTo?.toISOString(),
       searchTerm: _.snakeCase(searchValue),
@@ -71,7 +71,7 @@ const DirectLearning = () => {
     },
     { field: "date", headerName: "Date", minWidth: 120, flex: 1 },
     {
-      field: "activityState",
+      field: "state",
       headerName: "State",
       width: 120,
       renderCell: (cell) => {
@@ -121,15 +121,15 @@ const DirectLearning = () => {
   ];
 
   const acceptedActivities = activities?.filter(
-    ({ activityState }) => activityState === "accepted"
+    ({ state }) => state === "accepted"
   );
 
   const rejectedActivities = activities?.filter(
-    ({ activityState }) => activityState === "rejected"
+    ({ state }) => state === "rejected"
   );
 
   const underReviewActivities = activities?.filter(
-    ({ activityState }) => activityState === "under_review"
+    ({ state }) => state === "under_review"
   );
 
   return (

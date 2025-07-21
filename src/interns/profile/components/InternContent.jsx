@@ -138,14 +138,14 @@ const InternContent = ({ intern, linkIndex, linkValue }) => {
           </div>
           <div className="mt-6 text-md grid grid-cols-2 gap-4">
             <InfoBox
-              label="englishName"
+              label="English name"
               value={englishNameValue}
               id="fullname"
               handleChange={(e) => setEnglishNameValue(e.target.value)}
             />
             <InfoBox
               label="Date of birth"
-              value={dateOfBirthValue}
+              value={DOB}
               id="dob"
               handleChange={(e) => setDateOfBirthValue(e.target.value)}
             />

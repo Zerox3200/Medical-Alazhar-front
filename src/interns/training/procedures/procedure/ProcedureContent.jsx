@@ -36,11 +36,13 @@ const ProcedureContent = ({
   );
 
   let roundOptions = [];
-  for (let round of rounds) {
-    roundOptions.push({
-      label: _.startCase(round?.name),
-      value: round?._id,
-    });
+  if (rounds) {
+    for (let round of rounds) {
+      roundOptions.push({
+        label: _.startCase(round?.name),
+        value: round?._id,
+      });
+    }
   }
 
   const proceduresOptions = trainingData?.procedures?.proceduresList.flatMap(

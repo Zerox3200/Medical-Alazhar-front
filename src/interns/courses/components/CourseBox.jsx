@@ -10,8 +10,6 @@ const CourseBox = ({
   courseImage = "",
   courseId,
 }) => {
-  console.log("isCompleted", isCompleted);
-
   return (
     <div className="bg-white col-span-1 flex flex-col gap-4 p-4 rounded-md shadow-lg ">
       {/* Course Image */}

@@ -1,4 +1,5 @@
 import React, { useEffect } from "react";
+import { Link } from "react-router";
 import { DataGrid } from "@mui/x-data-grid";
 import { ToastContainer, toast } from "react-toastify";
 import { FaCheckCircle } from "react-icons/fa";
@@ -9,21 +10,27 @@ import {
 
 const getColumns = (handleAction) => [
   {
-    field: "fullname",
-    headerName: "Fullname",
+    field: "name",
+    headerName: "Name",
     width: 200,
     flex: 1,
-    renderCell: () => {
-      // return (
-      //   <Link
-      //     to={`/admin/interns/${cell.row._id}`}
-      //     className="hover:text-mediumBlue"
-      //   >
-      //     {cell.value}
-      //   </Link>
-      // );
+    valueGetter: (params) => {
+      return params?.row.englishName || params?.row.fullname || "Unnamed";
+    },
+    renderCell: (params) => {
+      const displayName =
+        params?.row.englishName || params?.row.fullname || "Unnamed";
+      return (
+        <Link
+          to={`/admin/interns/${params?.row._id}`}
+          className="hover:text-mediumBlue"
+        >
+          {displayName}
+        </Link>
+      );
     },
   },
+
   {
     field: "hospital",
     headerName: "Hospital",

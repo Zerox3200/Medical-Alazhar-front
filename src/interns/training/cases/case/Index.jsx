@@ -25,7 +25,7 @@ const Case = () => {
         <EditHeader
           editMode={editMode}
           setEditMode={setEditMode}
-          objectData={caseData?.data?.state}
+          objectData={caseData?.data}
         />
         {/* Case content */}
         <CaseContent

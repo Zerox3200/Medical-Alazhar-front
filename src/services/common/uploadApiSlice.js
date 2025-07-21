@@ -2,7 +2,7 @@ import { baseApiSlice } from "./baseApiSlice";
 
 export const uploadApiSlice = baseApiSlice.injectEndpoints({
   endpoints: (builder) => ({
-    uploadProfileImage: builder.mutation({
+    uploadInternProfileImage: builder.mutation({
       query: ({ role, userId, imageFile }) => ({
         url: `/${role}/${userId}/uploads/profile-image`,
         method: "POST",
@@ -35,7 +35,7 @@ export const uploadApiSlice = baseApiSlice.injectEndpoints({
 });
 
 export const {
-  useUploadProfileImageMutation,
+  useUploadInternProfileImageMutation,
   useUploadNationalIDImageMutation,
   useUploadMBBCHCertificateImageMutation,
 } = uploadApiSlice;

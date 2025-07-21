@@ -1,16 +1,27 @@
 import React from "react";
 import Header from "../components/Header";
 import CourseBox from "./components/CourseBox";
-import { useGetAllCoursesQuery } from "../../services/api/coursesApiSlice";
-import { useGetInternQuery } from "../../services/api/internApiSlice";
+import { useCourses } from "../../services/intern/api/hooks/coursesHooks";
+import { useIntern } from "../../services/intern/api/hooks/authHooks";
 import { useSelector } from "react-redux";
 import SearchWithFilters from "../components/SearchWithFilters";
+import Loader from "../../components/Loader";
 
 const Courses = () => {
-  const { id } = useSelector((state) => state.auth.user);
-  const { data: internData } = useGetInternQuery({ internId: id });
+  const { id, role } = useSelector((state) => state.auth.user);
+  const { internData, isLoading, error } = useIntern({
+    userRole: role,
+    userId: id,
+    internId: id,
+  });
 
-  const { data: coursesData } = useGetAllCoursesQuery();
+  const { courses } = useCourses();
+
+  if (!id) return <div>Please log in.</div>;
+  if (isLoading) return <Loader />;
+  if (error) {
+    return <div>Error: {error.data?.message || "Failed to load user"}</div>;
+  }
 
   return (
     <div className="p-6">
@@ -21,7 +32,7 @@ const Courses = () => {
         </div>
 
         <div className="grid grid-cols-4 gap-6 mt-10">
-          {coursesData?.courses?.map((course, i) => {
+          {courses?.courses?.map((course, i) => {
             return (
               <CourseBox
                 courseId={course._id}

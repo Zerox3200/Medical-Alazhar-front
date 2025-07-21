@@ -1,16 +1,15 @@
 import React from "react";
-import { FaCheck, FaCheckCircle, FaEnvelope } from "react-icons/fa";
+import { FaCheckCircle, FaEnvelope } from "react-icons/fa";
 import { FaPhoneAlt } from "react-icons/fa";
 import { useAdmin } from "../../services/admin/api/hooks/adminHooks";
 import { useSelector } from "react-redux";
-import { MdEdit } from "react-icons/md";
 
 import _ from "lodash";
 
 const Profile = () => {
   const { id } = useSelector((state) => state.auth?.user);
 
-  const { adminData, isLoading, isFetching, isSuccess } = useAdmin({
+  const { adminData } = useAdmin({
     adminId: id,
   });
 
@@ -18,12 +17,8 @@ const Profile = () => {
   const seenDate = new Date(adminData?.admin?.lastLogin);
   const lastLoginDate = seenDate.toLocaleString();
 
-  // Join At
-  const joinDate = new Date(adminData?.admin?.createdAt);
-  const joinAtDate = joinDate.toLocaleString();
-
   return (
-    <div className="flex flex-col gap-10">
+    <div className="flex flex-col gap-10 m-6">
       <div className="bg-white shadow-md flex items-center justify-between p-6 rounded-md">
         {/* Header */}
         <div className="flex items-center justify-between gap-4">
@@ -36,11 +31,8 @@ const Profile = () => {
           </div>
           <div className="flex flex-col gap-2">
             <h1 className="font-semibold text-xl text-secondary">
-              {data?.admin?.fullname}
+              {adminData?.admin?.fullname}
             </h1>
-            <h2 className="text-lg text-primary">
-              Professor of Vascular Surgery
-            </h2>
             <p>
               Last Login: <span className="text-hotPink">{lastLoginDate}</span>
             </p>
@@ -57,25 +49,6 @@ const Profile = () => {
           <p className="flex items-center gap-2">
             <FaPhoneAlt className="text-hotPink" /> +201012458574
           </p>
-        </div>
-      </div>
-
-      {/* Personal Details */}
-      <div className="bg-white shadow-md rounded-md">
-        <div className="flex justify-between items-center border-b-[1px] border-cloudVeil p-6">
-          <h1 className="text-primary text-xl font-medium">Personal Details</h1>
-          <p>
-            <MdEdit className="text-mistyMorning cursor-pointer hover:text-silverFrost text-xl" />
-          </p>
-        </div>
-
-        <div className="p-6">
-          <div>
-            <div className="flex gap-2">
-              <span>Joined</span>
-              <span className="font-medium">{joinAtDate}</span>
-            </div>
-          </div>
         </div>
       </div>
     </div>

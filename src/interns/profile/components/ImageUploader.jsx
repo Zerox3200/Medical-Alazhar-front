@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Modal } from "@mui/material";
 import { FaCamera, FaUpload } from "react-icons/fa";
 import toast from "react-hot-toast";
-import { useUploadProfileImageMutation } from "../../../services/common/uploadApiSlice";
+import { useUploadInternProfileImageMutation } from "../../../services/common/uploadApiSlice";
 import { useSelector } from "react-redux";
 import Button from "../../components/Button";
 
@@ -13,8 +13,8 @@ const ImageUploader = ({
   const [image, setImage] = useState(null);
   const { id, role } = useSelector((state) => state.auth.user);
 
-  const [uploadProfileImage, { isSuccess, isLoading }] =
-    useUploadProfileImageMutation();
+  const [uploadInternProfileImage, { isSuccess, isLoading }] =
+    useUploadInternProfileImageMutation();
 
   const handleUploadProfileImage = async () => {
     if (!image) {
@@ -23,17 +23,17 @@ const ImageUploader = ({
     const formData = new FormData();
 
     formData.append("profile-image", image);
-    console.log("formData", formData);
+
     try {
-      const response = await uploadProfileImage({
+      const response = await uploadInternProfileImage({
         role,
         userId: id,
         imageFile: formData,
       });
-      if (response?.data?.code === 200) {
-        toast.success(response?.data?.message);
-      }
+      if (response?.error) toast.error(response?.error?.data?.message);
+      if (response?.data?.code === 200) toast.success(response?.data?.message);
     } catch (error) {
+      console.log("error", error);
       toast.error(error?.message);
     }
   };

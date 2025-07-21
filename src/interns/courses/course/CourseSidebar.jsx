@@ -1,5 +1,5 @@
 import React from "react";
-import { useGetInternQuery } from "../../../services/api/internApiSlice";
+import { useIntern } from "../../../services/intern/api/hooks/authHooks";
 import { useSelector } from "react-redux";
 import { IoMdDownload } from "react-icons/io";
 import { FaCircleCheck } from "react-icons/fa6";
@@ -16,8 +16,14 @@ const CourseSidebar = ({
   setCurrentQuestionNavIndex,
   setCurrentQuestionIndex,
 }) => {
-  const { id } = useSelector((state) => state.auth.user);
-  const { data: internData } = useGetInternQuery({ internId: id });
+  const { id, role } = useSelector((state) => state.auth.user);
+  const { internData } = useIntern({
+    internId: id,
+    userId: id,
+    userRole: role,
+  });
+
+  console.log(course);
 
   const courseProgress = internData?.intern?.coursesProgress?.find(
     (progress) => progress.courseId === course?._id

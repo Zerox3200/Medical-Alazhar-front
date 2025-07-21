@@ -5,11 +5,11 @@ import { FaCheckCircle } from "react-icons/fa";
 import { useParams } from "react-router";
 import {
   useGetQuizQuery,
-  useGetSingleCourseQuery,
+  useGetCourseQuery,
   useGetVideoQuery,
   useSubmitQuizProgressMutation,
   useSubmitVideoProgressMutation,
-} from "../../../services/api/coursesApiSlice";
+} from "../../../services/intern/api/hooks/coursesHooks";
 import CourseSidebar from "./CourseSidebar";
 import Video from "./Video";
 import Quiz from "./Quiz";
@@ -23,7 +23,7 @@ const Course = () => {
   const [submitVideoProgress] = useSubmitVideoProgressMutation();
 
   const { courseId } = useParams();
-  const { data: courseData } = useGetSingleCourseQuery({ courseId });
+  const { data: courseData } = useGetCourseQuery({ courseId });
   const { data: videoData } = useGetVideoQuery(
     {
       courseId,
@@ -31,6 +31,8 @@ const Course = () => {
     },
     { skip: activeItem.index % 2 !== 0 || !activeItem.id }
   );
+
+  console.log(courseData);
 
   const { data: quizData } = useGetQuizQuery(
     { courseId, quizId: activeItem.id },
@@ -103,7 +105,7 @@ const Course = () => {
       if (courseData?.course?.videos?.[nextVideoIndex / 2]?._id) {
         setActiveItem({
           index: nextVideoIndex,
-          id: courseData.course.videos[nextVideoIndex / 2]._id,
+          id: courseData?.course?.videos[nextVideoIndex / 2]._id,
         });
       }
     } catch (error) {

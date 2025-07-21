@@ -3,7 +3,7 @@ import { DataGrid } from "@mui/x-data-grid";
 import { TbMoodCry } from "react-icons/tb";
 import { Link } from "react-router";
 import _ from "lodash";
-import { useSupervisors } from "../../../services/admin/api/hooks/supervisorHooks";
+import { useAdminSupervisors } from "../../../services/admin/api/hooks/supervisorHooks";
 
 const columns = [
   {
@@ -67,7 +67,7 @@ const EmptyData = () => {
   );
 };
 const TabsContent = ({ userType }) => {
-  const { supervisorsData, isLoading } = useSupervisors({
+  const { supervisorsData, isLoading } = useAdminSupervisors({
     role: userType === "all" ? undefined : userType.slice(0, -1),
   });
 

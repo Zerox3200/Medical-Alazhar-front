@@ -26,7 +26,7 @@ const SelfLearning = () => {
         <EditHeader
           editMode={editMode}
           setEditMode={setEditMode}
-          objectData={selfLearningData?.data?.activityState}
+          objectData={selfLearningData?.data}
         />
         {/* Self Learning content */}
         <SelfLearningContent

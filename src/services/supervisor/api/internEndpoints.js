@@ -40,6 +40,23 @@ const internEndpoints = (builder) => ({
     }),
     providesTags: ["Waves"],
   }),
+  getAssessments: builder.query({
+    query: ({ roundId, supervisorId }) => ({
+      url: `/supervisor/${supervisorId}/rounds/${roundId}/assessments`,
+      method: "GET",
+      credentials: "include",
+    }),
+    providesTags: ["Assessments"],
+  }),
+  addAssessment: builder.mutation({
+    query: ({ roundId, supervisorId, ...assessmentData }) => ({
+      url: `/supervisor/${supervisorId}/rounds/${roundId}/assessments/add`,
+      method: "PATCH",
+      body: assessmentData,
+      credentials: "include",
+    }),
+    providesTags: ["Assessments"],
+  }),
 });
 
 export default internEndpoints;

@@ -11,6 +11,7 @@ import AcademicDetails from "./multistepForm/AcademicDetails";
 import InternshipDetails from "./multistepForm/InternshipDetails";
 import IdentificationDocuments from "./multistepForm/IdentificationDocuments";
 import { useDispatch, useSelector } from "react-redux";
+import FinalStep from "./multistepForm/FinalStep";
 
 const InternSignupForm = () => {
   const [internSignup] = useInternSignupMutation();
@@ -38,7 +39,6 @@ const InternSignupForm = () => {
     mode: "onChange",
     reValidateMode: "onChange",
   });
-  console.log(errors);
   const getStepFields = (stepIndex) => {
     const stepsFields = [
       ["englishName", "arabicName", "dob", "nationality", "email", "phone"],
@@ -51,6 +51,7 @@ const InternSignupForm = () => {
       ],
       ["hospital", "internLevel", "internshipStartDate", "idNumber"],
       ["idOrPassportNumber"],
+      ["password", "confirmPassword"],
     ];
     return stepsFields[stepIndex] || [];
   };
@@ -183,6 +184,8 @@ const InternSignupForm = () => {
             register={register}
           />
         );
+      case 4:
+        return <FinalStep errors={errors} register={register} />;
     }
   };
 

@@ -26,7 +26,7 @@ const SelfLearning = () => {
   const [activityId, setActivityId] = useState(null);
   const { selfLearnings, isError, isLoading } = useSelfLearnings({
     filters: {
-      activityState: _.snakeCase(chipValue),
+      state: _.snakeCase(chipValue),
       dateFrom: dateFrom?.toISOString(),
       dateTo: dateTo?.toISOString(),
       searchTerm: _.snakeCase(searchValue),
@@ -73,7 +73,7 @@ const SelfLearning = () => {
       },
     },
     {
-      field: "activityState",
+      field: "state",
       headerName: "State",
       width: 120,
       renderCell: (cell) => {
@@ -131,15 +131,15 @@ const SelfLearning = () => {
   });
 
   const acceptedActivities = activities?.filter(
-    ({ activityState }) => activityState === "accepted"
+    ({ state }) => state === "accepted"
   );
 
   const rejectedActivities = activities?.filter(
-    ({ activityState }) => activityState === "rejected"
+    ({ state }) => state === "rejected"
   );
 
   const underReviewActivities = activities?.filter(
-    ({ activityState }) => activityState === "under_review"
+    ({ state }) => state === "under_review"
   );
 
   return (

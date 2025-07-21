@@ -5,6 +5,9 @@ export const {
   useGetMyInternQuery,
   useAcceptTrainingDomainsMutation,
   useGetRoundWavesQuery,
+  useGetAssessmentsQuery,
+  useAddAssessmentMutation,
+  useUploadProfileImageMutation,
 } = supervisorApiSlice;
 
 export const useSupervisor = ({ supervisorId }) => {

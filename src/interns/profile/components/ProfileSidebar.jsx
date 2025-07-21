@@ -63,7 +63,10 @@ const ProfileSidebar = ({ intern, linkIndex, setLinkIndex, setLinkValue }) => {
               setOpenImageUploaderModal={setOpenImageUploaderModal}
             />
           ) : (
-            <div className="h-42 flex justify-center items-center">
+            <div
+              className="h-42 flex justify-center items-center cursor-pointer hover:bg-mistyMorning/20 transition-colors duration-100 w-full"
+              onClick={setOpenImageUploaderModal}
+            >
               <FaRegCircleUser className="text-6xl block m-auto text-mistyMorning" />
             </div>
           )}

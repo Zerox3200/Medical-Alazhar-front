@@ -73,7 +73,7 @@ export const specialities = [
   { label: "Clinical Pathology", value: "clinical_pathology" },
   { label: "Dermatology", value: "dermatology" },
   { label: "Psychiatry", value: "psychiatry" },
-  { label: "Obstetrics & Gynecology", value: "obgyn" },
+  { label: "Obstetrics & Gynecology", value: "obsgyn" },
   { label: "Ophthalmology", value: "ophthalmology" },
 ];
 
@@ -212,6 +212,10 @@ export const internSignupValidationSchema = (selectedIDType) => {
           /[!@#$%^&*(),.?"_:{}|<>]/,
           "Password must contain at least one special character."
         ),
+      confirmPassword: yup
+        .string()
+        .required("Please confirm your password")
+        .oneOf([yup.ref("password")], "Passwords must match"),
     })
     .required();
 };

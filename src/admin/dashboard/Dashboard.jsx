@@ -7,19 +7,15 @@ import {
 } from "react-icons/hi";
 import { FaHeartPulse } from "react-icons/fa6";
 import { MdSupervisorAccount } from "react-icons/md";
-import {
-  // useGetAllCasesQuery,
-  // useGetAllInternsQuery,
-  useSupervisors,
-} from "../../services/admin/api/hooks/supervisorHooks";
+import { useAdminSupervisors } from "../../services/admin/api/hooks/supervisorHooks";
+import { useAdminInterns } from "../../services/admin/api/hooks/internHooks";
 import CasesLogged from "./charts/CasesLogged";
 import PassedRounds from "./charts/PassedRounds";
 import RecentAccounts from "./components/RecentAccounts";
 
 const Dashboard = () => {
-  // const { data: interns } = useGetAllInternsQuery();
-  // const { data: cases } = useGetAllCasesQuery();
-  const { supervisors } = useSupervisors();
+  const { supervisors } = useAdminSupervisors();
+  const { interns } = useAdminInterns();
 
   return (
     <div className="flex flex-col gap-10 p-6">
@@ -29,17 +25,22 @@ const Dashboard = () => {
         <StatsBox
           heading="Interns"
           lineColor="bg-pink"
-          // subHeading={interns?.count}
+          subHeading={interns?.count}
           icon={<FaUserMd />}
           iconBg="bg-pink/30"
           iconColor="text-hotPink"
-          boxStatus={
-            <span className="text-emeraldGreen flex items-center gap-[1px]">
-              <HiOutlineArrowNarrowUp />
-              6.4%
-            </span>
-          }
         />
+
+        {/* Supervisors Logged */}
+        <StatsBox
+          heading="Supervisors"
+          lineColor="bg-lightRed"
+          subHeading={supervisors?.count}
+          icon={<MdSupervisorAccount />}
+          iconBg="bg-lightRed/20"
+          iconColor="text-darkRed"
+        />
+
         {/* Cases Logged */}
         <StatsBox
           heading="Cases"
@@ -60,7 +61,7 @@ const Dashboard = () => {
         <StatsBox
           heading="Procedures"
           lineColor="bg-emeraldGreen"
-          subHeading="5,902"
+          // subHeading={procedures?.count}
           icon={<FaBookMedical />}
           iconBg="bg-mediumGreen/20"
           iconColor="text-emeraldGreen"
@@ -71,33 +72,16 @@ const Dashboard = () => {
             </span>
           }
         />
-
-        {/* Supervisors Logged */}
-        <StatsBox
-          heading="Supervisors"
-          lineColor="bg-lightRed"
-          subHeading={supervisors?.count}
-          icon={<MdSupervisorAccount />}
-          iconBg="bg-lightRed/20"
-          iconColor="text-darkRed"
-          boxStatus={
-            <span className="text-emeraldGreen flex items-center gap-[1px]">
-              <HiOutlineArrowNarrowUp />
-              9.1%
-            </span>
-          }
-        />
       </div>
-
       {/* Charts */}
-      <div className="bg-white p-6 grid grid-cols-2 shadow-md rounded-sm shadow-silverFrost">
+      {/* <div className="bg-white p-6 grid grid-cols-2 shadow-md rounded-sm shadow-silverFrost">
         <div className="col-span-1">
           <CasesLogged />
         </div>
         <div className="col-span-1">
           <PassedRounds />
         </div>
-      </div>
+      </div> */}
 
       {/* Recent accounts */}
       <div className="bg-white shadow-md rounded-sm shadow-silverFrost">

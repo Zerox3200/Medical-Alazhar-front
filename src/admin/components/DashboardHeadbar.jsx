@@ -7,7 +7,6 @@ import Loader from "../../components/Loader";
 
 const DashboardHeadbar = () => {
   const [time, setTime] = useState(new Date().toLocaleTimeString());
-  const [adminName, setAdminName] = useState("Guest");
   const date = new Date();
   const today = date.toDateString();
 
@@ -23,15 +22,9 @@ const DashboardHeadbar = () => {
 
   const { id, role } = useSelector((state) => state.auth?.user);
 
-  const { data, isLoading, isFetching, isSuccess } = useAdmin({
+  const { adminData, isLoading, isFetching } = useAdmin({
     adminId: id,
   });
-
-  useEffect(() => {
-    if (isSuccess) {
-      setAdminName(data?.admin?.fullname);
-    }
-  }, [data?.admin?.fullname, isSuccess]);
 
   if (isLoading)
     return (
@@ -47,7 +40,9 @@ const DashboardHeadbar = () => {
       <div className="">
         <h1 className="text-2xl text-secondary">
           Welcome Back Dr.{" "}
-          <span className="font-bold">{adminName.split(" ")[0]}</span>
+          <span className="font-bold">
+            {adminData?.admin?.fullname?.split(" ")[0]}
+          </span>
         </h1>
         <p className="flex items-center gap-1 font-medium text-secondary mt-1">
           <span className="flex items-center gap-1">
@@ -59,8 +54,12 @@ const DashboardHeadbar = () => {
       </div>
       <div className="flex justify-end">
         <AccountMenu
-          profileImage={data?.admin?.profileImage}
-          name={adminName.split(" ")[0] + " " + adminName.split(" ")[1]}
+          profileImage={adminData?.admin?.profileImage}
+          name={
+            adminData?.admin?.fullname.split(" ")[0] +
+            " " +
+            adminData?.admin?.fullname.split(" ")[1]
+          }
           role={role}
         />
       </div>

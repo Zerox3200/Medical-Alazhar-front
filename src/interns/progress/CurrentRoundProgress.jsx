@@ -15,6 +15,11 @@ const CurrentRoundProgress = ({
       100 || "0%"
   );
 
+  // Calc passed assessments
+  const passedAssessments = currentRound?.assessments.filter((assessment) =>
+    Boolean(assessment.isPassed)
+  );
+
   return (
     <div>
       {currentRound && (
@@ -125,17 +130,22 @@ const CurrentRoundProgress = ({
               <div className="space-y-2 text-mistyMorning">
                 <div className="flex justify-between text-sm">
                   <span>Passed:</span>
-                  <span>2 assessments</span>
+                  <span>{passedAssessments?.length} assessments</span>
                 </div>
                 <div className="flex justify-between text-sm">
                   <span>Total:</span>
-                  <span>3 assessments</span>
+                  <span>{currentRound?.assessments?.length} assessments</span>
                 </div>
                 <div className="pt-2">
                   <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
                     <div
-                      className={`h-full bg-purple-500`}
-                      style={{ width: activitiesWidth + "%" }}
+                      className={`h-full bg-red-300`}
+                      style={{
+                        width:
+                          (passedAssessments?.length * 100) /
+                            currentRound?.assessments?.length +
+                          "%",
+                      }}
                     ></div>
                   </div>
                 </div>

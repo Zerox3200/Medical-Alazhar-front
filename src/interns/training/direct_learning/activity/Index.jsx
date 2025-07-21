@@ -27,7 +27,7 @@ const DirectLearning = () => {
         <EditHeader
           editMode={editMode}
           setEditMode={setEditMode}
-          objectData={directLearningData?.data?.activityState}
+          objectData={directLearningData?.data}
         />
         {/* Direct Learning content */}
         <DirectLearningContent

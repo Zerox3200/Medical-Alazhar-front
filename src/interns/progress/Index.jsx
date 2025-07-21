@@ -30,28 +30,18 @@ const Progress = () => {
   // Helper functions
   const calculateCompletionPercentage = (items) => {
     if (!items || items.length === 0) return 0;
-    const completed = items.filter(
-      (item) =>
-        item.caseState === "accepted" ||
-        item.procedureState === "accepted" ||
-        item.activityState === "accepted"
-    ).length;
+    const completed = items.filter((item) => item.state === "accepted").length;
     return Math.round((completed / items.length) * 100);
   };
 
   const countItemsByState = (items, state) => {
-    return items.filter(
-      (item) =>
-        item.caseState === state ||
-        item.procedureState === state ||
-        item.activityState === state
-    ).length;
+    return items.filter((item) => item.state === state).length;
   };
 
   // Current round data
   const currentRound = internData?.intern?.trainingProgress.find(
     (round) =>
-      round.roundId._id === internData?.intern?.currentRound.roundId._id
+      round.roundId._id === internData?.intern?.currentRound?.roundId._id
   );
 
   // Data for MUI DataGrid
@@ -110,7 +100,7 @@ const Progress = () => {
   ];
 
   const roundsRows = internData?.intern?.trainingProgress.map((round) => ({
-    id: round._id,
+    id: round?.roundId?._id,
     roundName: _.startCase(round?.roundId?.name),
     totalCases: round.cases?.length,
     approvedCases: countItemsByState(round.cases || [], "approved"),

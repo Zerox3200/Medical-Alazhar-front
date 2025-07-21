@@ -1,6 +1,4 @@
 import React from "react";
-import { BsThreeDotsVertical } from "react-icons/bs";
-import img from "../../assets/images/profile.jpg";
 import { Link } from "react-router";
 import { FaPhone } from "react-icons/fa";
 import { FaRegIdCard } from "react-icons/fa";
@@ -17,7 +15,10 @@ const InternBox = ({
     <div className="bg-white shadow-md rounded-md border-silverFrost/20 col-span-1 p-3">
       <div className="rounded-md flex items-start gap-4 mb-4">
         <div className="rounded-full w-16 h-16 overflow-hidden object-cover border-1 border-silverFrost">
-          <img src={internData?.profileIamge || img} className="w-full" />
+          <img
+            src={"http://localhost:3000/" + internData?.profileImage}
+            className="w-full"
+          />
         </div>
         <div className="flex flex-col gap-1">
           <h3 className="font-medium text-secondary">

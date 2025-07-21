@@ -19,7 +19,7 @@ const Input = ({
         onChange={handleChange}
         type={type}
         placeholder={placeholder}
-        className={`border-1 border-cloudVeil rounded-md p-2 outline-0 block w-full bg-white ${customStyle}`}
+        className={`border-1 border-silverFrost/40 focus:border-lightBlue rounded-md p-2 outline-0 block w-full bg-white ${customStyle}`}
         maxLength={maxLength}
         {...additionalParams}
       />

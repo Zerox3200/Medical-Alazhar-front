@@ -1,5 +1,5 @@
 const internEndpoints = (builder) => ({
-  getAllInterns: builder.query({
+  getAdminInterns: builder.query({
     query: () => ({
       url: "/admin/interns",
       method: "GET",
