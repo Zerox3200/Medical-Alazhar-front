@@ -79,7 +79,7 @@ const InternContent = ({ intern, linkIndex, linkValue }) => {
     }
   };
 
-  const [englishNameValue, setEnglishNameValue] = useState("");
+  const [fullnameValue, setfullnameValue] = useState("");
   const [emailValue, setEmailValue] = useState("");
   const [phoneValue, setPhoneValue] = useState("");
   const [nationalityValue, setNationalityValue] = useState("");
@@ -93,7 +93,7 @@ const InternContent = ({ intern, linkIndex, linkValue }) => {
   const DOB = date.toLocaleDateString();
 
   useEffect(() => {
-    setEnglishNameValue(intern?.englishName);
+    setfullnameValue(intern?.fullname);
     setEmailValue(intern?.email);
     setPhoneValue(intern?.phone);
     setNationalityValue(intern?.nationality);
@@ -139,9 +139,9 @@ const InternContent = ({ intern, linkIndex, linkValue }) => {
           <div className="mt-6 text-md grid grid-cols-2 gap-4">
             <InfoBox
               label="English name"
-              value={englishNameValue}
+              value={fullnameValue}
               id="fullname"
-              handleChange={(e) => setEnglishNameValue(e.target.value)}
+              handleChange={(e) => setfullnameValue(e.target.value)}
             />
             <InfoBox
               label="Date of birth"

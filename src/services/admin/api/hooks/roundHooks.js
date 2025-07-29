@@ -7,7 +7,7 @@ export const useRounds = (filters) => {
   const { data, isError, isFetching, isLoading } = useGetRoundsQuery(filters);
 
   return {
-    cases: data,
+    roundsData: data,
     isError,
     isFetching,
     isLoading,

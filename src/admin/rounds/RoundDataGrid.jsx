@@ -34,25 +34,6 @@ const columns = [
       return <span>{_.startCase(cell.value)}</span>;
     },
   },
-  { field: "cases", headerName: "Cases Logged", width: 120, flex: 1 },
-  { field: "procedures", headerName: "Procedures", width: 120, flex: 1 },
-  { field: "assessments", headerName: "Assessments", width: 120, flex: 1 },
-  {
-    field: "passed",
-    headerName: "Passed",
-    width: 120,
-    renderCell: (cell) => {
-      return (
-        <p className="text-2xl flex justify-center items-center h-full">
-          {cell.row.currentRound.passed ? (
-            <FaCheckCircle className="text-mediumGreen" />
-          ) : (
-            <IoCloseCircleSharp className="text-error" />
-          )}
-        </p>
-      );
-    },
-  },
 ];
 
 const RoundDataGrid = ({ roundName, selectedHospital }) => {

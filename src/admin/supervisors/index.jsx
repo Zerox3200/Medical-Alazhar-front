@@ -14,9 +14,8 @@ const Supervisors = () => {
         headerTitle="Supervisors"
         headerDescription="Manage your supervisors and coordinators"
         headerIcon={<RiTeamFill />}
-        buttonTitle="Add Supervisor"
       />
-      <TabsNavigation setUserType={setUserType} />
+      <TabsNavigation setUserType={setUserType} userType={userType} />
       <TabsContent userType={userType} />
     </>
   );

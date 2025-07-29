@@ -29,7 +29,7 @@ const Header = ({ data: { supervisor } }) => {
               color="info"
             />
             <Chip
-              label={_.capitalize(speciality)}
+              label={_.startCase(speciality)}
               className="!text-lg"
               color="secondary"
             />

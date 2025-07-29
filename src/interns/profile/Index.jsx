@@ -24,7 +24,7 @@ const Profile = () => {
     <div className="grid grid-cols-8 gap-6 p-6">
       <div className="col-span-2">
         <ProfileSidebar
-          intern={internData?.intern}
+          intern={internData?.data}
           linkIndex={linkIndex}
           setLinkIndex={setLinkIndex}
           linkValue={linkValue}
@@ -34,7 +34,7 @@ const Profile = () => {
 
       <div className="col-span-6 bg-white p-6 rounded-sm shadow-sm">
         <InternContent
-          intern={internData?.intern}
+          intern={internData?.data}
           linkIndex={linkIndex}
           linkValue={linkValue}
         />

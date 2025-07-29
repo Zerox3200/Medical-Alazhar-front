@@ -111,13 +111,13 @@ export const grades = () => {
 export const internSignupValidationSchema = (selectedIDType) => {
   return yup
     .object({
-      englishName: yup
+      fullname: yup
         .string()
         .trim()
-        .required("English name is required")
+        .required("Fullname is required")
         .matches(
           /^[A-Za-z-]{2,}(\s[A-Za-z-]{2,}){3,}$/,
-          "Please enter your English name as in your national ID"
+          "Please enter your name as in your national ID"
         ),
       arabicName: yup
         .string()
@@ -223,20 +223,12 @@ export const internSignupValidationSchema = (selectedIDType) => {
 export const supervisorSignupValidationSchema = () => {
   return yup
     .object({
-      firstname: yup
+      fullname: yup
         .string()
         .trim()
-        .required("Firstname is required")
+        .required("Fullname is required")
         .matches(
-          /^[A-Za-z-]{2,}$/,
-          "Please enter your name as in your national ID"
-        ),
-      lastname: yup
-        .string()
-        .trim()
-        .required("Lastname is required")
-        .matches(
-          /^[A-Za-z-]{2,}/,
+          /^[A-Za-z-]{2,}(\s[A-Za-z-]{2,}){3,}$/,
           "Please enter your name as in your national ID"
         ),
       hospital: yup.object().required("Hospital is required"),

@@ -1,5 +1,6 @@
-import { DataGrid } from "@mui/x-data-grid";
 import React from "react";
+import _ from "lodash";
+import { DataGrid } from "@mui/x-data-grid";
 import { Link } from "react-router";
 
 const columns = [
@@ -11,7 +12,7 @@ const columns = [
     renderCell: (cell) => {
       return (
         <Link to={`/rounds/${cell.row._id}`} className="hover:text-mediumBlue">
-          {cell.value}
+          {_.startCase(cell.value)}
         </Link>
       );
     },
@@ -34,40 +35,12 @@ const columns = [
     headerName: "Year level",
     width: 120,
   },
+
   {
-    field: "order",
-    headerName: "Order",
+    field: "hospital",
+    headerName: "Hospital",
     width: 120,
-  },
-  { field: "hospital", headerName: "Hospital", width: 120 },
-  { field: "startDate", headerName: "Start date", width: 120 },
-  { field: "endDate", headerName: "End date", width: 120 },
-  {
-    field: "state",
-    headerName: "State",
-    width: 120,
-    renderCell: (cell) => {
-      return (
-        <div className="text-center">
-          <span
-            className={`${
-              cell.value === "Completed"
-                ? "bg-emeraldGreen/40 text-mediumGreen"
-                : "bg-lightBlue/40 text-mediumBlue"
-            }  p-2 rounded-xl`}
-          >
-            <span className="mr-2"> {cell.value}</span>
-            <span
-              className={`${
-                cell.value === "Completed"
-                  ? "bg-emeraldGreen"
-                  : " bg-mediumBlue"
-              } rounded-full w-3 h-3 inline-block`}
-            ></span>
-          </span>
-        </div>
-      );
-    },
+    renderCell: (cell) => <span>{_.startCase(cell.value)}</span>,
   },
 ];
 
@@ -75,8 +48,6 @@ const RoundBox = ({ data }) => {
   const round = data?.round.map((roundData) => {
     return {
       ...roundData,
-      startDate: new Date(roundData.startDate).toDateString(),
-      endDate: new Date(roundData.endDate).toDateString(),
       id: roundData._id,
     };
   });

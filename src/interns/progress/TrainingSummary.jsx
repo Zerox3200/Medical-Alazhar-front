@@ -3,17 +3,17 @@ import { buildStyles, CircularProgressbar } from "react-circular-progressbar";
 
 const TrainingSummary = ({ internData, countItemsByState }) => {
   // All rounds data
-  const allCases = internData?.intern?.trainingProgress.flatMap(
+  const allCases = internData?.data?.trainingProgress.flatMap(
     (round) => round.cases || []
   );
 
-  const allProcedures = internData?.intern?.trainingProgress.flatMap(
+  const allProcedures = internData?.data?.trainingProgress.flatMap(
     (round) => round.procedures || []
   );
-  const allSelfLearning = internData?.intern?.trainingProgress.flatMap(
+  const allSelfLearning = internData?.data?.trainingProgress.flatMap(
     (round) => round.selfLearning || []
   );
-  const allDirectLearning = internData?.intern?.trainingProgress.flatMap(
+  const allDirectLearning = internData?.data?.trainingProgress.flatMap(
     (round) => round.directLearning || []
   );
 

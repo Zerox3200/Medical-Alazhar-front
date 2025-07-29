@@ -41,7 +41,7 @@ const InternSignupForm = () => {
   });
   const getStepFields = (stepIndex) => {
     const stepsFields = [
-      ["englishName", "arabicName", "dob", "nationality", "email", "phone"],
+      ["fullname", "arabicName", "dob", "nationality", "email", "phone"],
       [
         "facultyOfGraduation",
         "yearOfGraduation",
@@ -114,7 +114,6 @@ const InternSignupForm = () => {
         yearOfGraduation: yearOfGraduation.value,
       }).unwrap();
     } catch (error) {
-      console.log("error", error);
       Object.keys(error.data?.message).forEach((field) => {
         setError(error.data[field]?.path, {
           type: "manual",

@@ -31,12 +31,12 @@ const navLinks = [
     label: "Training",
   },
   {
-    title: "courses",
-    label: "Courses",
-  },
-  {
     title: "portfolio",
     label: "Portfolio",
+  },
+  {
+    title: "courses",
+    label: "Courses",
   },
   {
     title: "contact_us",

@@ -14,12 +14,12 @@ const navLinks = [
     label: "Training",
   },
   {
-    title: "courses",
-    label: "Courses",
-  },
-  {
     title: "progress",
     label: "Progress",
+  },
+  {
+    title: "courses",
+    label: "Courses",
   },
   {
     title: "portfolio",

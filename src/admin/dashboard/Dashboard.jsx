@@ -42,7 +42,7 @@ const Dashboard = () => {
         />
 
         {/* Cases Logged */}
-        <StatsBox
+        {/* <StatsBox
           heading="Cases"
           lineColor="bg-mediumBlue"
           // subHeading={cases?.count}
@@ -55,10 +55,10 @@ const Dashboard = () => {
               3.2%
             </span>
           }
-        />
+        /> */}
 
         {/* Procedures Logged */}
-        <StatsBox
+        {/* <StatsBox
           heading="Procedures"
           lineColor="bg-emeraldGreen"
           // subHeading={procedures?.count}
@@ -71,7 +71,7 @@ const Dashboard = () => {
               1.4%
             </span>
           }
-        />
+        /> */}
       </div>
       {/* Charts */}
       {/* <div className="bg-white p-6 grid grid-cols-2 shadow-md rounded-sm shadow-silverFrost">

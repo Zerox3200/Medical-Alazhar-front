@@ -7,7 +7,6 @@ import PagesHeader from "../components/PagesHeader";
 import RoundsFilterAndSearchBar from "./components/RoundsFilterAndSearchBar";
 
 const RoundsContent = () => {
-  const [stateValue, setStateValue] = useState();
   const [durationValue, setDurationValue] = useState();
   const [hospitalValue, setHospitalValue] = useState();
   const [levelValue, setLevelValue] = useState();
@@ -28,8 +27,6 @@ const RoundsContent = () => {
       />
 
       <RoundsFilterAndSearchBar
-        stateValue={stateValue}
-        setStateValue={setStateValue}
         durationValue={durationValue}
         setDurationValue={setDurationValue}
         hospitalValue={hospitalValue}
@@ -39,7 +36,6 @@ const RoundsContent = () => {
         setInputValue={setInputValue}
       />
       <RoundsData
-        stateValue={stateValue}
         durationValue={durationValue}
         hospitalValue={hospitalValue}
         levelValue={levelValue}

@@ -39,9 +39,8 @@ const Progress = () => {
   };
 
   // Current round data
-  const currentRound = internData?.intern?.trainingProgress.find(
-    (round) =>
-      round.roundId._id === internData?.intern?.currentRound?.roundId._id
+  const currentRound = internData?.data?.trainingProgress.find(
+    (round) => round.roundId._id === internData?.data?.currentRound?.roundId._id
   );
 
   // Data for MUI DataGrid

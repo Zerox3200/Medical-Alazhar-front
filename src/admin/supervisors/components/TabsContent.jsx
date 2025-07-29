@@ -34,6 +34,7 @@ const columns = [
     headerName: "Speciality",
     width: 140,
     flex: 1,
+    renderCell: (cell) => <span>{_.startCase(cell.value)}</span>,
   },
   {
     field: "phone",
@@ -41,37 +42,35 @@ const columns = [
     width: 140,
     flex: 1,
   },
-  { field: "hospital", headerName: "Hospital", width: 120, flex: 1 },
+  {
+    field: "hospital",
+    headerName: "Hospital",
+    width: 120,
+    flex: 1,
+    renderCell: (cell) => <span>{_.startCase(cell.value)}</span>,
+  },
   { field: "round", headerName: "Round", width: 120, flex: 1 },
 ];
 
 // This Component is rendered when there are no cases
 const EmptyData = () => {
   return (
-    <div className="flex justify-center items-center flex-col relative translate-y-52">
+    <div className="flex justify-center items-center flex-col relative translate-y-2/3">
       <p className="text-emeraldGreen text-5xl">
         <TbMoodCry />
       </p>
       <h3 className="text-4xl text-emeraldGreen font-semibold flex items-end">
-        No cases to show
+        No supervisors
       </h3>
-      <div className="mt-6">
-        <Link
-          to="/record_training/cases/add-case"
-          className="bg-emeraldGreen text-lg rounded-sm text-crispWhite cursor-pointer py-1 px-4"
-        >
-          New Case
-        </Link>
-      </div>
     </div>
   );
 };
 const TabsContent = ({ userType }) => {
-  const { supervisorsData, isLoading } = useAdminSupervisors({
+  const { adminSupervisors, isLoading } = useAdminSupervisors({
     role: userType === "all" ? undefined : userType.slice(0, -1),
   });
 
-  let supervisors = supervisorsData?.supervisors?.map((supervisor) => {
+  let supervisors = adminSupervisors?.supervisors?.map((supervisor) => {
     return {
       ...supervisor,
       id: supervisor._id,

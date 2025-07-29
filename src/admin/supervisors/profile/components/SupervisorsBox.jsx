@@ -1,6 +1,7 @@
 import { DataGrid } from "@mui/x-data-grid";
 import React from "react";
 import { Link } from "react-router";
+import _ from "lodash";
 
 const columns = [
   {
@@ -21,7 +22,15 @@ const columns = [
   },
   { field: "hospital", headerName: "Hospital", width: 120, flex: 1 },
   { field: "phone", headerName: "Phone", width: 120, flex: 1 },
-  { field: "speciality", headerName: "Speciality", width: 120, flex: 1 },
+  {
+    field: "speciality",
+    headerName: "Speciality",
+    width: 120,
+    flex: 1,
+    renderCell: (cell) => {
+      return <span t>{_.startCase(cell.value)}</span>;
+    },
+  },
   { field: "role", headerName: "Role", width: 120, flex: 1 },
   //   { field: "coordinator", headerName: "Coordinator", width: 120, flex: 1 },
   //   { field: "interns", headerName: "Interns", width: 120, flex: 1 },

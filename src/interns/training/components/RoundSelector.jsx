@@ -13,7 +13,7 @@ const RoundAndUnitSelector = ({ field }) => {
   });
 
   const rounds =
-    internData?.intern?.trainingProgress.map((progress) => progress.roundId) ||
+    internData?.data?.trainingProgress.map((progress) => progress.roundId) ||
     [];
 
   let roundsList = [];

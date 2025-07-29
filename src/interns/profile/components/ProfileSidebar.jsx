@@ -76,9 +76,9 @@ const ProfileSidebar = ({ intern, linkIndex, setLinkIndex, setLinkValue }) => {
           <div>
             <h1 className="font-semibold text-lg text-secondary flex gap-2 items-center justify-center">
               <span>
-                {intern?.englishName?.split(" ")[0] +
+                {intern?.fullname?.split(" ")[0] +
                   " " +
-                  intern?.englishName?.split(" ")[1]}
+                  intern?.fullname?.split(" ")[1]}
               </span>
 
               <span>

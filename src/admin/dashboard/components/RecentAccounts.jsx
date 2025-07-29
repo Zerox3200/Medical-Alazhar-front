@@ -14,18 +14,13 @@ const getColumns = (handleAction) => [
     headerName: "Name",
     width: 200,
     flex: 1,
-    valueGetter: (params) => {
-      return params?.row.englishName || params?.row.fullname || "Unnamed";
-    },
     renderCell: (params) => {
-      const displayName =
-        params?.row.englishName || params?.row.fullname || "Unnamed";
       return (
         <Link
           to={`/admin/interns/${params?.row._id}`}
           className="hover:text-mediumBlue"
         >
-          {displayName}
+          {params?.row.fullname}
         </Link>
       );
     },

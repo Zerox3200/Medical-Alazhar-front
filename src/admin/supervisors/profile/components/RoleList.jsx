@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { toast, ToastContainer } from "react-toastify";
+import { Toaster, toast } from "react-hot-toast";
 import {
   Box,
   Button,
@@ -106,7 +106,7 @@ const RoleList = () => {
 
   return (
     <Box>
-      <ToastContainer position="top-center" />
+      <Toaster position="top-center" />
       <List component="div" role="group">
         <DarkButton
           label="Change Role"

@@ -3,7 +3,7 @@ import Input from "../../components/Input";
 import { BiFilterAlt } from "react-icons/bi";
 import { FaSearch } from "react-icons/fa";
 import LightButton from "../../components/LightButton";
-import { NavLink, useLocation } from "react-router";
+import { NavLink } from "react-router";
 import _ from "lodash";
 import FilterMenu from "./FilterMenu";
 
@@ -14,11 +14,9 @@ const tabs = [
   { label: "Coordinators", value: "coordinators" },
   { label: "Supervisors", value: "supervisors" },
 ];
-const TabsNavigation = ({ setUserType }) => {
+const TabsNavigation = ({ userType, setUserType }) => {
   const [tabIndex, setTabIndex] = useState(0);
   const [activeMenuFilter, setActiveMenuFilter] = useState(false);
-
-  const location = useLocation();
 
   const handleTabClick = (i) => {
     setTabIndex(i);
@@ -47,7 +45,7 @@ const TabsNavigation = ({ setUserType }) => {
 
       <div className="flex justify-between items-center p-6">
         <h1 className="text-2xl font-medium text-secondary">
-          Manage {_.capitalize(location.search.slice(1))}
+          Manage {_.capitalize(userType)}
         </h1>
         {/* Search Bar */}
         <div className="flex items-center gap-2 w-1/2">

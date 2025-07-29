@@ -3,7 +3,7 @@ import InternSignupForm from "./";
 import SupervisorSignupForm from "./SupervisorSignupForm";
 
 const Signup = () => {
-  const [selectedUser, setSelectedUser] = useState("intern");
+  const [selectedUser, setSelectedUser] = useState("supervisor");
 
   return (
     <div className="flex flex-col bg-white w-full md:w-2/3 lg:w-3/6 p-4 md:p-10 shadow-md rounded-md">

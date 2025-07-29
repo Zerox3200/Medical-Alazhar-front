@@ -10,16 +10,16 @@ const PersonalDetails = ({ register, errors, control }) => {
 
   return (
     <div className="grid grid-cols-2 justify-between items-start gap-4">
-      {/* English Name */}
+      {/* Fullname */}
       <div className="col-span-1">
         <Input
-          placeholder="English name"
-          {...register("englishName")}
-          error={errors.englishName?.message}
+          placeholder="Fullname"
+          {...register("fullname")}
+          error={errors.fullname?.message}
         />
         {errors && (
           <p className="text-red-500 text-sm">
-            {errors.idOrPassport?.englishName?.message}
+            {errors.idOrPassport?.fullname?.message}
           </p>
         )}
       </div>

@@ -35,7 +35,7 @@ const AddAssessment = () => {
   );
 
   const internsOptions = getSelectedWave?.[0]?.interns?.map((intern) => {
-    return { label: intern.englishName, value: intern._id };
+    return { label: intern.fullname, value: intern._id };
   });
 
   /****************************************************************/

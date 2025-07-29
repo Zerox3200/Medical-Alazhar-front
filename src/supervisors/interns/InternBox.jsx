@@ -23,7 +23,7 @@ const InternBox = ({
         <div className="flex flex-col gap-1">
           <h3 className="font-medium text-secondary">
             <Link to={`/interns/${internData?._id}`}>
-              {internData?.englishName.split(" ").slice(0, 3).join(" ")}
+              {internData?.fullname.split(" ").slice(0, 3).join(" ")}
             </Link>
           </h3>
           <h4 className="text-primary text-sm flex items-center">

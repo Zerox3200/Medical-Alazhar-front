@@ -6,7 +6,7 @@ const AssessmentBox = ({ assessment }) => {
   return (
     <div className="col-span-1 bg-white p-6 rounded-md shadow-sm text-secondary">
       <h1 className="text-xl flex justify-between items-center mb-2 font-bold">
-        <Link>{assessment?.internId?.englishName}</Link>
+        <Link>{assessment?.internId?.fullname}</Link>
       </h1>
       <div className="flex justify-between items-center mb-2">
         <h2>ID: {assessment?.internId?.facultyIDNumber} </h2>

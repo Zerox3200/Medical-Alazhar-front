@@ -15,9 +15,9 @@ const AccountMenu = () => {
   const accountMenuRef = useRef(null);
 
   const fullname =
-    internData?.intern?.englishName?.split(" ")[0] +
+    internData?.data?.fullname?.split(" ")[0] +
     " " +
-    internData?.intern?.englishName?.split(" ")[1];
+    internData?.data?.fullname?.split(" ")[1];
 
   const [logout] = useLogoutMutation();
 
@@ -44,7 +44,7 @@ const AccountMenu = () => {
       >
         <h2 className="relative">
           <img
-            src={"http://localhost:3000/" + internData?.intern?.profileImage}
+            src={"http://localhost:3000/" + internData?.data?.profileImage}
             alt="profile-image-icon"
             className="w-12 h-12 rounded-full object-cover border-[1px] border-silverFrost"
           />

@@ -10,7 +10,7 @@ const Header = ({ internData }) => {
       </div>
       <div className="flex justify-between gap-12 text-secondary font-semibold">
         <div className="">
-          <h1>{internData?.data?.englishName}</h1>
+          <h1>{internData?.data?.fullname}</h1>
           <h2>{internData?.data?.arabicName}</h2>
         </div>
         <div>

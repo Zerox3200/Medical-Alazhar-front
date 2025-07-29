@@ -4,8 +4,6 @@ import Select from "react-select";
 import selectOptions from "../../constants/selectOptions";
 
 const RoundsFilterAndSearchBar = ({
-  stateValue,
-  setStateValue,
   durationValue,
   setDurationValue,
   hospitalValue,
@@ -14,7 +12,6 @@ const RoundsFilterAndSearchBar = ({
   setLevelValue,
   setInputValue,
 }) => {
-  const handleStateValue = (value) => setStateValue(value);
   const handleDurationValue = (value) => setDurationValue(value);
   const handleHospitalValue = (value) => setHospitalValue(value);
   const handleLevelValue = (value) => setLevelValue(value);
@@ -29,15 +26,6 @@ const RoundsFilterAndSearchBar = ({
       </div>
 
       <div className="col-span-7 flex items-center gap-6">
-        <div className="flex-1">
-          <Select
-            options={selectOptions.stateOptions}
-            placeholder="State"
-            value={stateValue}
-            onChange={handleStateValue}
-            isClearable
-          />
-        </div>
         <div className="flex-1">
           <Select
             options={selectOptions.durationOptions}

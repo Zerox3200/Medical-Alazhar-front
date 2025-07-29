@@ -13,12 +13,29 @@ const columns = [
     renderCell: (cell) => {
       return (
         <Link to={`/rounds/${cell.row._id}`} className="hover:text-mediumBlue">
-          {cell.value}
+          {_.startCase(cell.value)}
         </Link>
       );
     },
   },
-
+  {
+    field: "waves",
+    headerName: "Number of waves",
+    width: 150,
+    renderCell: (cell) => {
+      return <div>{cell?.value?.length} waves</div>;
+    },
+  },
+  {
+    field: "interns",
+    headerName: "Total number of interns",
+    width: 180,
+    renderCell: (cell) => {
+      return (
+        <div>{cell?.row?.waves?.flatMap((w) => w.interns)?.length} interns</div>
+      );
+    },
+  },
   {
     field: "duration",
     headerName: "Duartion",
@@ -31,70 +48,40 @@ const columns = [
       );
     },
   },
+
   {
     field: "numericYear",
     headerName: "Year level",
     width: 90,
   },
   {
-    field: "order",
-    headerName: "Order",
-    width: 90,
-  },
-  { field: "hospital", headerName: "Hospital", width: 120 },
-  { field: "startDate", headerName: "Start date", width: 150 },
-  { field: "endDate", headerName: "End date", width: 150 },
-  {
-    field: "state",
-    headerName: "State",
+    field: "hospital",
+    headerName: "Hospital",
     width: 120,
     renderCell: (cell) => {
-      return (
-        <div className="text-center">
-          <span
-            className={`${
-              cell.value === "Completed"
-                ? "bg-emeraldGreen/40 text-mediumGreen"
-                : "bg-lightBlue/40 text-mediumBlue"
-            }  p-2 rounded-xl`}
-          >
-            <span className="mr-2"> {cell.value}</span>
-            <span
-              className={`${
-                cell.value === "Completed"
-                  ? "bg-emeraldGreen"
-                  : " bg-mediumBlue"
-              } rounded-full w-3 h-3 inline-block`}
-            ></span>
-          </span>
-        </div>
-      );
+      return <span>{_.startCase(cell.value)}</span>;
     },
   },
 ];
 
 const RoundsData = ({
-  stateValue,
   durationValue,
   hospitalValue,
   levelValue,
   inputValue,
 }) => {
   const filters = {};
-  if (stateValue?.value) filters.state = stateValue.value;
   if (durationValue?.value) filters.duration = durationValue.value;
   if (hospitalValue?.value) filters.hospital = _.startCase(hospitalValue.value);
   if (levelValue?.value) filters.numericYear = levelValue.value;
   if (inputValue) filters.name = inputValue;
 
-  const { data } = useRounds(filters);
+  const { roundsData } = useRounds(filters);
 
-  const rounds = data?.rounds?.map((round) => {
+  const rounds = roundsData?.rounds?.map((round) => {
     return {
       ...round,
       id: round._id,
-      startDate: new Date(round.startDate).toDateString(),
-      endDate: new Date(round.endDate).toDateString(),
     };
   });
 

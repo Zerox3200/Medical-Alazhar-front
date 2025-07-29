@@ -23,9 +23,7 @@ const CourseSidebar = ({
     userRole: role,
   });
 
-  console.log(course);
-
-  const courseProgress = internData?.intern?.coursesProgress?.find(
+  const courseProgress = internData?.data?.coursesProgress?.find(
     (progress) => progress.courseId === course?._id
   ) || { videos: [], quizzes: { passed: [] } };
 

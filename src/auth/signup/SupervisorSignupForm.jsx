@@ -1,38 +1,36 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { toast, Toaster } from "react-hot-toast";
-import { FaEye, FaEyeSlash } from "react-icons/fa6";
+import { LuEyeClosed, LuEye } from "react-icons/lu";
 import { Controller, useForm } from "react-hook-form";
 import { Link } from "react-router";
 import Input from "../components/Input";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { useSupervisorSignupMutation } from "../../services/common/apiSlice";
+import { useSupervisorSignupMutation } from "../../services/common/authApiSlice";
 import {
   specialities,
   supervisorSignupValidationSchema,
 } from "../../constants/authFormData";
 import SelectBox from "../components/SelectBox";
 
+import SubmitButton from "../components/SubmitButton";
+
 const SupervisorSignupForm = () => {
-  const [supervisorSignup, { isLoading, isSuccess }] =
-    useSupervisorSignupMutation();
+  const [supervisorSignup, { isLoading }] = useSupervisorSignupMutation();
 
   const [visiblePassword, setVisiblePassword] = useState(false);
 
   const {
     register,
     handleSubmit,
-    setValue,
     control,
-    setError,
     reset,
-    formState: { errors, isSubmitSuccessful, isSubmitting },
+    formState: { errors, isSubmitting },
   } = useForm({
     resolver: yupResolver(supervisorSignupValidationSchema()),
   });
 
   const onSubmit = async ({
-    firstname,
-    lastname,
+    fullname,
     speciality,
     hospital,
     email,
@@ -41,68 +39,39 @@ const SupervisorSignupForm = () => {
   }) => {
     try {
       const response = await supervisorSignup({
-        firstname,
-        lastname,
+        fullname,
         email,
         hospital: hospital.value,
         speciality: speciality.value,
         phone: "+20" + phone,
         password,
       }).unwrap();
-
-      if (isSuccess) {
+      if (response.status === "success") {
         toast.success(response.message);
+        reset();
       }
     } catch (error) {
-      Object.keys(error.data?.errors).forEach((field) => {
-        setError(error.data?.errors[field]?.path, {
-          type: "manual",
-          message: toast.error(error.data?.errors[field]?.msg),
-        });
-      });
+      toast.error(error.data?.message);
     }
   };
 
-  // Reset form fields after Successful submission
-  useEffect(() => {
-    if (isSubmitSuccessful) {
-      reset({
-        firstname: "",
-        lastname: "",
-        email: "",
-        phone: "",
-        password: "",
-        hospital: null,
-        speciality: null,
-      });
-    }
-  }, [reset, isSubmitSuccessful, setValue]);
-
   return (
-    <div className="m-auto">
+    <div className="w-2/3 m-auto">
       <Toaster />
-      <form className="w-full" onSubmit={handleSubmit(onSubmit)}>
-        <div className="flex items-center gap-4 w-full">
-          {/* Firstname */}
-          <div>
-            <Input
-              placeholder="Firstname"
-              {...register("firstname")}
-              error={errors.firstname?.message}
-            />
-          </div>
-          {/* Lastname */}
-          <div>
-            <Input
-              placeholder="Lastname"
-              type="text"
-              {...register("lastname")}
-              error={errors.lastname?.message}
-            />
-          </div>
+      <form
+        className="w-full flex flex-col gap-4"
+        onSubmit={handleSubmit(onSubmit)}
+      >
+        <div>
+          {/* Fullname */}
+          <Input
+            placeholder="Fullname"
+            {...register("fullname")}
+            error={errors.fullname?.message}
+          />
         </div>
 
-        <div className="flex items-center gap-4 w-full">
+        <div className="flex flex-col items-center gap-2 w-full">
           {/* Hospital */}
           <div className="w-full">
             <Controller
@@ -123,7 +92,7 @@ const SupervisorSignupForm = () => {
             {errors && (
               <p className="text-red-500 text-md">{errors.hospital?.message}</p>
             )}
-          </div>{" "}
+          </div>
           {/* Speciality */}
           <div className="w-full">
             <Controller
@@ -157,7 +126,7 @@ const SupervisorSignupForm = () => {
 
         {/* Phone */}
         <div className="relative flex items-center">
-          <p className="absolute w-fit left-0 top-2 bg-mediumGray/30 rounded-l-sm border-1 border-mediumGray/30 p-2 text-mediumGray">
+          <p className="absolute w-fit left-0 top-0 bg-mistyMorning/30 rounded-l-sm border-1 border-mistyMorning/30 p-2 text-mistyMorning">
             +20
           </p>
           <Input
@@ -185,22 +154,17 @@ const SupervisorSignupForm = () => {
             className="absolute right-2 top-3 cursor-pointer text-lg text-mediumGray/80"
             onClick={() => setVisiblePassword(!visiblePassword)}
           >
-            {visiblePassword ? <FaEyeSlash /> : <FaEye />}
+            {visiblePassword ? <LuEyeClosed /> : <LuEye />}
           </p>
         </div>
 
         <div className="w-full mt-6">
-          <button
-            type="submit"
-            className={`w-full transition-colors duration-200 text-crispWhite p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-teal ${
-              isLoading || isSubmitting
-                ? "bg-lightBlue cursor-not-allowed hover:bg-lightBlue"
-                : "cursor-pointer hover:bg-teal bg-deepBlue"
-            }`}
-            disabled={isLoading || isSubmitting}
-          >
-            Signup
-          </button>
+          <SubmitButton
+            isLoading={isLoading}
+            isSubmitting={isSubmitting}
+            label="Signup"
+          />
+
           <p className="mt-2">
             Already have an email?{" "}
             <Link to="/auth/login" className="text-deepBlue">

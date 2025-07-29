@@ -25,11 +25,13 @@ const PagesHeader = ({
 
       <div className="flex items-center gap-4">
         <LightButton icon={<IoMdDownload />} label="Export" />
-        <DarkButton
-          icon={<FaPlus />}
-          label={buttonTitle}
-          handleClick={handleDarkButtonClick}
-        />
+        {buttonTitle?.length > 0 && (
+          <DarkButton
+            icon={<FaPlus />}
+            label={buttonTitle}
+            handleClick={handleDarkButtonClick}
+          />
+        )}
       </div>
     </div>
   );

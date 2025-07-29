@@ -41,17 +41,69 @@ export const authApiSlice = baseApiSlice.injectEndpoints({
       }),
     }),
 
-    getUser: builder.query({
-      query: ({ userId, role }) => ({
-        url:
-          ((role === "supervisor" || role === "coordinator") &&
-            `/supervisor/${userId}`) ||
-          (role === "intern" && `/intern/${userId}`),
-        method: "GET",
+    // Intern Signup
+    internSignup: builder.mutation({
+      query: ({ ...formData }) => ({
+        url: `/intern/auth/signup`,
+        method: "POST",
+        body: formData,
+      }),
+      invalidatesTags: ["User"],
+    }),
+
+    // Supervisor Signup
+    supervisorSignup: builder.mutation({
+      query: ({ ...formData }) => ({
+        url: `/supervisor/auth/signup`,
+        method: "POST",
+        body: formData,
+      }),
+      invalidatesTags: ["User"],
+    }),
+
+    // Profile Image Upload
+    uploadProfileImage: builder.mutation({
+      query: ({ role, internId, imageFile }) => ({
+        url: `/${role}/${internId}/uploads/profile-image`,
+        method: "POST",
+        body: imageFile,
         credentials: "include",
       }),
-      providesTags: ["User"],
+      invalidatesTags: ["User"],
     }),
+
+    // NationalID Image Upload
+    uploadNationalIDImage: builder.mutation({
+      query: ({ internId, imageFile }) => ({
+        url: `/intern/${internId}/uploads/nationalID-image`,
+        method: "POST",
+        body: imageFile,
+        credentials: "include",
+      }),
+      invalidatesTags: ["User"],
+    }),
+    // MBBCH Certificate Image Upload
+    uploadMBBCHCertificateImage: builder.mutation({
+      query: ({ internId, imageFile }) => ({
+        url: `/intern/${internId}/uploads/mbbch-certificate-image`,
+        method: "POST",
+        body: imageFile,
+        credentials: "include",
+      }),
+      invalidatesTags: ["User"],
+    }),
+
+    // getUser: builder.query({
+    //   query: ({ userId, role }) => ({
+    //     url:
+    //       ((role === "supervisor" || role === "coordinator") &&
+    //         `/supervisor/${userId}`) ||
+    //       (role === "intern" && `/intern/${userId}`),
+    //     method: "GET",
+    //     credentials: "include",
+    //   }),
+    //   providesTags: ["User"],
+    // }),
   }),
 });
 
@@ -60,4 +112,9 @@ export const {
   useLogoutMutation,
   useChangePasswordMutation,
   useGetUserQuery,
+  useInternSignupMutation,
+  useSupervisorSignupMutation,
+  useUploadProfileImageMutation,
+  useUploadNationalIDImageMutation,
+  useUploadMBBCHCertificateImageMutation,
 } = authApiSlice;

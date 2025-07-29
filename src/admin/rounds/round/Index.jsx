@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import _ from "lodash";
 import { Link, useParams } from "react-router";
 import { useGetRoundQuery } from "../../../services/admin/api/hooks/roundHooks";
 import { Chip } from "@mui/material";
@@ -21,12 +22,34 @@ const columns = [
       );
     },
   },
-  { field: "hospital", headerName: "Hospital", width: 120, flex: 1 },
+  {
+    field: "hospital",
+    headerName: "Hospital",
+    width: 120,
+    flex: 1,
+    renderCell: (cell) => {
+      return <span>{_.startCase(cell.value)}</span>;
+    },
+  },
   { field: "phone", headerName: "Phone", width: 120, flex: 1 },
-  { field: "speciality", headerName: "Speciality", width: 120, flex: 1 },
-  { field: "role", headerName: "Role", width: 120, flex: 1 },
-  //   { field: "coordinator", headerName: "Coordinator", width: 120, flex: 1 },
-  //   { field: "interns", headerName: "Interns", width: 120, flex: 1 },
+  {
+    field: "speciality",
+    headerName: "Speciality",
+    width: 120,
+    flex: 1,
+    renderCell: (cell) => {
+      return <span>{_.startCase(cell.value)}</span>;
+    },
+  },
+  {
+    field: "role",
+    headerName: "Role",
+    width: 120,
+    flex: 1,
+    renderCell: (cell) => {
+      return <span>{_.capitalize(cell.value)}</span>;
+    },
+  },
 ];
 
 const RoundDataBox = ({ label, data, customPStyle }) => {
@@ -48,7 +71,7 @@ const Round = () => {
 
   const roundData = data?.round?.[0] || {};
 
-  const { coordinator, supervisors = [], interns = [] } = roundData;
+  const { coordinator, supervisors = [] } = roundData;
   let members = [];
   switch (tabIndex) {
     case 0:
@@ -58,14 +81,13 @@ const Round = () => {
       members = supervisors.map((member) => ({ ...member, id: member._id }));
       break;
     case 2:
-      members = interns.map((member) => ({ ...member, id: member._id }));
+      members = roundData?.waves
+        ?.flatMap((wave) => wave.interns)
+        ?.map((member) => ({ ...member, id: member._id }));
       break;
     default:
       members = [];
   }
-
-  const startDate = new Date(roundData?.startDate);
-  const endDate = new Date(roundData?.endDate);
 
   if (isLoading) return <div>Loading...</div>;
   if (isError) return <div>Error loading round data</div>;
@@ -76,20 +98,10 @@ const Round = () => {
         <div className="shadow-md rounded-md bg-white border-1 border-cloudVeil">
           <div className="flex items-center gap-6 p-4 border-b-1 border-cloudVeil ">
             <h1 className="text-2xl font-medium text-secondary">
-              {roundData?.name}
+              {_.startCase(roundData?.name)}
             </h1>
-
-            <Chip
-              label={roundData?.state}
-              color={`${
-                roundData?.state === "Completed" ? "success" : "primary"
-              }`}
-              className="!text-lg"
-            />
           </div>
           <div className="grid grid-cols-5">
-            <RoundDataBox label="Start Date" data={startDate.toDateString()} />
-            <RoundDataBox label="End Date" data={endDate.toDateString()} />
             <RoundDataBox
               label="Duration"
               data={
@@ -102,11 +114,7 @@ const Round = () => {
               label="Year Level"
               data={roundData?.numericYear === 1 ? "MI-1" : "MI-2"}
             />
-            <RoundDataBox
-              label="Order"
-              data={roundData?.order}
-              customPStyle="!border-r-0"
-            />
+            <RoundDataBox label="Waves" data={roundData?.waves?.length} />
           </div>
         </div>
       </div>
