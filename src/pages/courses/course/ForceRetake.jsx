@@ -5,7 +5,7 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import toast from "react-hot-toast";
-import { useSubmitQuizProgressMutation } from "../../../services/intern/api/hooks/coursesHooks";
+import { useSubmitQuizProgressMutation } from "../../../services/course/api/hooks/courseHooks";
 
 const EnforceRetake = ({
   open,

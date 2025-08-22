@@ -1,26 +1,24 @@
-export const coursesEndpoints = (builder) => ({
+export const courseEndpoints = (builder) => ({
   // Fetch courses
   getCourses: builder.query({
     query: () => ({
-      url: `/intern/courses`,
+      url: `/course`,
       method: "GET",
-      credentials: "include",
     }),
     providesTags: ["Course"],
   }),
   // Fetch course
   getCourse: builder.query({
     query: ({ courseId }) => ({
-      url: `/intern/courses/${courseId}`,
+      url: `/course/${courseId}`,
       method: "GET",
-      credentials: "include",
     }),
     providesTags: ["Course"],
   }),
   // Fetch Quiz
   getQuiz: builder.query({
     query: ({ courseId, quizId }) => ({
-      url: `/intern/courses/${courseId}/quizzes`,
+      url: `/courses/${courseId}/quizzes`,
       method: "GET",
       params: { quizId },
       credentials: "include",
@@ -30,7 +28,7 @@ export const coursesEndpoints = (builder) => ({
   // Fetch Video
   getVideo: builder.query({
     query: ({ courseId, videoId }) => ({
-      url: `/intern/courses/${courseId}/videos`,
+      url: `/courses/${courseId}/videos`,
       method: "GET",
       params: { videoId },
       credentials: "include",
@@ -41,7 +39,7 @@ export const coursesEndpoints = (builder) => ({
   // Mark video completed
   submitVideoProgress: builder.mutation({
     query: ({ courseId, videoId, isCompleted }) => ({
-      url: `/intern/courses/${courseId}/videos/submit`,
+      url: `/courses/${courseId}/videos/submit`,
       method: "PATCH",
       params: { videoId },
       body: { isCompleted },
@@ -52,7 +50,7 @@ export const coursesEndpoints = (builder) => ({
   // Mark quiz completed
   submitQuizProgress: builder.mutation({
     query: ({ courseId, quizId, forceRetake, answers }) => ({
-      url: `/intern/courses/${courseId}/quizzes/submit`,
+      url: `/courses/${courseId}/quizzes/submit`,
       method: "PATCH",
       params: { quizId, forceRetake },
       body: { answers },

@@ -8,6 +8,7 @@ import {
 import storage from "redux-persist/lib/storage";
 
 // Api Slices
+import courseApiSlice from "../services/course/api/";
 import internApiSlice from "../services/intern/api/";
 import adminApiSlice from "../services/admin/api/";
 import supervisorApiSlice from "../services/supervisor/api/";
@@ -31,6 +32,7 @@ const rootReducer = combineReducers({
   auth: authReducer,
   admin: adminSlice,
   internForm: internFormSlice,
+  [courseApiSlice.reducerPath]: courseApiSlice.reducer,
   [adminApiSlice.reducerPath]: adminApiSlice.reducer,
   [internApiSlice.reducerPath]: internApiSlice.reducer,
   [supervisorApiSlice.reducerPath]: supervisorApiSlice.reducer,
@@ -48,6 +50,7 @@ export const store = configureStore({
         ignoredActions: [PERSIST, REHYDRATE],
       },
     }).concat(
+      courseApiSlice.middleware,
       adminApiSlice.middleware,
       internApiSlice.middleware,
       authApiSlice.middleware,

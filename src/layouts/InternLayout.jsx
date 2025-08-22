@@ -1,7 +1,7 @@
 import React from "react";
 import Navbar from "../interns/components/Navbar.jsx";
 import { Outlet } from "react-router";
-import Footer from "../components/Footer.jsx";
+import Copyright from "../components/Copyright.jsx";
 
 const InternLayout = () => {
   return (
@@ -14,7 +14,7 @@ const InternLayout = () => {
           <Outlet />
         </div>
         <div className="absolute bottom-0 left-0 w-full h-16">
-          <Footer />
+          <Copyright />
         </div>
       </div>
     </div>

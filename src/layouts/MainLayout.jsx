@@ -1,16 +1,16 @@
 import React from "react";
 import { Outlet } from "react-router";
-import Navbar from "../components/Navbar.jsx";
+import MainNavbar from "../components/MainNavbar.jsx";
 import Copyright from "../components/Copyright.jsx";
 
-const SupervisorLayout = () => {
+const MainLayout = () => {
   return (
     <div className="relative">
       <div className="font-ubuntu min-h-screen">
         <div>
-          <Navbar />
+          <MainNavbar />
         </div>
-        <div className="bg-flashWhite pt-[96px] min-h-screen pb-22">
+        <div className="bg-flashWhite min-h-screen pt-[96px]">
           <Outlet />
         </div>
         <div className="absolute bottom-0 left-0 w-full h-16">
@@ -21,4 +21,4 @@ const SupervisorLayout = () => {
   );
 };
 
-export default SupervisorLayout;
+export default MainLayout;

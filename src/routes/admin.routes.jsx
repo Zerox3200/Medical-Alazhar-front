@@ -17,6 +17,7 @@ const AdminRoutes = [
     element: <ProtectedRoute allowedRoles={["admin"]} />,
     children: [
       {
+        path: "/admin",
         element: <AdminLayout />,
         children: [
           {
@@ -24,32 +25,32 @@ const AdminRoutes = [
             element: <AdminDashboard />,
           },
           {
-            path: "/courses",
+            path: "/admin/courses",
             element: <Courses />,
           },
           {
-            path: "/rounds",
+            path: "/admin/rounds",
             element: <Rounds />,
           },
           {
-            path: "/rounds/:roundId",
+            path: "/admin/rounds/:roundId",
             element: <Round />,
           },
           {
-            path: "/supervisors",
+            path: "/admin/supervisors",
             element: <Supervisors />,
           },
           {
-            path: "/supervisors/:supervisorId",
+            path: "/admin/supervisors/:supervisorId",
             element: <SupervisorProfile />,
           },
 
           {
-            path: "/interns",
+            path: "/admin/interns",
             element: <Interns />,
           },
           {
-            path: "/profile",
+            path: "/admin/profile",
             element: <Profile />,
           },
         ],

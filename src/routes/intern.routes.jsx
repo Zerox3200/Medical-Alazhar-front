@@ -3,8 +3,6 @@ const ProtectedRoute = lazy(() => import("../utils/ProtectedRoute.jsx"));
 const InternLayout = lazy(() => import("../layouts/InternLayout.jsx"));
 const InternHome = lazy(() => import("../interns/home"));
 const InternProfile = lazy(() => import("../interns/profile"));
-const Courses = lazy(() => import("../interns/courses"));
-const Course = lazy(() => import("../interns/courses/course"));
 
 const TrainingLayout = lazy(() =>
   import("../interns/training/TrainingLayout.jsx")
@@ -61,14 +59,7 @@ const InternRoutes = [
             path: "profile",
             element: <InternProfile />,
           },
-          {
-            path: "courses",
-            element: <Courses />,
-          },
-          {
-            path: "courses/:courseId",
-            element: <Course />,
-          },
+
           {
             path: "training",
             element: <TrainingLayout />,

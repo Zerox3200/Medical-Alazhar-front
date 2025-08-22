@@ -26,7 +26,7 @@ const CourseBox = ({
       <h2 className="bg-flashWhite rounded-sm p-2">
         <Link
           className="text-secondary hover:text-lightBlue text-lg font-semibold"
-          to={`/courses/${courseId}`}
+          to={`/courses/${courseId}/overview`}
         >
           {courseTitle}
         </Link>

@@ -11,37 +11,37 @@ const DashboardLinks = [
   {
     icon: <GoHomeFill />,
     label: "Dashboard",
-    value: "/",
+    value: "/admin",
   },
   {
     icon: <IoCalendarClear />,
     label: "Calendar",
-    value: "calendar",
+    value: "/admin/calendar",
   },
   {
     icon: <FaVideo />,
     label: "Courses",
-    value: "courses",
+    value: "/admin/courses",
   },
   {
     icon: <FaHospital />,
     label: "Hospitals",
-    value: "/hospitals",
+    value: "/admin/hospitals",
   },
   {
     icon: <FaHouseMedical />,
     label: "Rounds",
-    value: "/rounds",
+    value: "/admin/rounds",
   },
   {
     icon: <FaUsers />,
     label: "Supervisors",
-    value: "supervisors",
+    value: "/admin/supervisors",
   },
   {
     icon: <FaStethoscope />,
     label: "Interns",
-    value: "interns",
+    value: "/admin/interns",
   },
   {
     icon: <BsFillGearFill />,

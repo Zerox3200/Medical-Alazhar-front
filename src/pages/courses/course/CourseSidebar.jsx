@@ -6,7 +6,7 @@ import { FaCircleCheck } from "react-icons/fa6";
 import instructorImage from "../../../assets/images/instructor.png";
 import { HiMiniArrowLongLeft } from "react-icons/hi2";
 import { Link } from "react-router";
-import Button from "../../components/Button";
+import PrimaryButton from "../../../components/PrimaryButton";
 
 const CourseSidebar = ({
   course,
@@ -16,7 +16,9 @@ const CourseSidebar = ({
   setCurrentQuestionNavIndex,
   setCurrentQuestionIndex,
 }) => {
-  const { id, role } = useSelector((state) => state.auth.user);
+  // const { id, role } = useSelector((state) => state.auth.user);
+  const id = 0;
+  const role = "intern";
   const { internData } = useIntern({
     internId: id,
     userId: id,
@@ -137,7 +139,7 @@ const CourseSidebar = ({
       {/* Certificate */}
       {courseProgress?.isCompleted && (
         <div className="mt-10">
-          <Button
+          <PrimaryButton
             customClass="!px-10 !py-4 !bg-emeraldGreen !text-center !border-0 !rounded-none"
             label="Get my certificate"
             icon={<IoMdDownload />}

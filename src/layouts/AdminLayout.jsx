@@ -2,7 +2,7 @@ import React from "react";
 import { Outlet } from "react-router";
 import DashobardSidebar from "../admin/components/DashobardSidebar.jsx";
 import DashboardHeadbar from "../admin/components/DashboardHeadbar.jsx";
-import Footer from "../components/Footer.jsx";
+import Copyright from "../components/Copyright.jsx";
 
 const AdminLayout = () => {
   return (
@@ -18,7 +18,7 @@ const AdminLayout = () => {
           </div>
         </div>
         <div className="col-span-full">
-          <Footer />
+          <Copyright />
         </div>
       </div>
     </div>

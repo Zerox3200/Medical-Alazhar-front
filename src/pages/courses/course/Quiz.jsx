@@ -3,8 +3,8 @@ import { useSelector } from "react-redux";
 import { useIntern } from "../../../services/intern/api/hooks/authHooks";
 import toast, { Toaster } from "react-hot-toast";
 import { FaChevronRight, FaChevronLeft } from "react-icons/fa";
-import Button from "../../components/Button";
-import { useSubmitQuizProgressMutation } from "../../../services/intern/api/hooks/coursesHooks";
+import PrimaryButton from "../../../components/PrimaryButton";
+import { useSubmitQuizProgressMutation } from "../../../services/course/api/hooks/courseHooks";
 import ForceRetake from "./ForceRetake";
 
 const Quiz = ({
@@ -18,7 +18,9 @@ const Quiz = ({
   currentQuestionIndex,
   setCurrentQuestionIndex,
 }) => {
-  const { id, role } = useSelector((state) => state.auth.user);
+  // const { id, role } = useSelector((state) => state.auth.user);
+  const id = 0;
+  const role = "intern";
   const { internData } = useIntern({
     internId: id,
     userId: id,
@@ -166,7 +168,7 @@ const Quiz = ({
             </p>
           </div>
           <div className="mt-10 flex justify-between gap-8 w-96">
-            <Button
+            <PrimaryButton
               label="Study again"
               handleClick={() => {
                 setQuizAttentionOverlay(false);
@@ -175,7 +177,7 @@ const Quiz = ({
               }}
             />
 
-            <Button
+            <PrimaryButton
               label="Take next attempt"
               customClass="!bg-red-400 !border-red-400 hover:!bg-lightRed"
               handleClick={() => {

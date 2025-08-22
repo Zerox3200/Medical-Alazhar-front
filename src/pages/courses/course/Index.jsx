@@ -9,7 +9,7 @@ import {
   useGetVideoQuery,
   useSubmitQuizProgressMutation,
   useSubmitVideoProgressMutation,
-} from "../../../services/intern/api/hooks/coursesHooks";
+} from "../../../services/course/api/hooks/courseHooks";
 import CourseSidebar from "./CourseSidebar";
 import Video from "./Video";
 import Quiz from "./Quiz";
@@ -31,8 +31,6 @@ const Course = () => {
     },
     { skip: activeItem.index % 2 !== 0 || !activeItem.id }
   );
-
-  console.log(courseData);
 
   const { data: quizData } = useGetQuizQuery(
     { courseId, quizId: activeItem.id },

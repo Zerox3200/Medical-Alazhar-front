@@ -1,4 +1,4 @@
-import internApiSlice from "..";
+import courseApiSlice from "..";
 
 export const {
   useGetCoursesQuery,
@@ -7,7 +7,7 @@ export const {
   useSubmitQuizProgressMutation,
   useGetQuizQuery,
   useGetVideoQuery,
-} = internApiSlice;
+} = courseApiSlice;
 
 export const useCourses = () => {
   const { data, isLoading, error } = useGetCoursesQuery();

@@ -1,7 +1,7 @@
 import React from "react";
 import Plyr from "plyr-react";
 import "plyr-react/plyr.css";
-import Button from "../../components/Button";
+import PrimaryButton from "../../../components/PrimaryButton";
 
 const Video = ({ video, onComplete }) => {
   return (
@@ -18,7 +18,7 @@ const Video = ({ video, onComplete }) => {
           </div>
         </div>
         <div className="w-50">
-          <Button
+          <PrimaryButton
             handleClick={onComplete}
             label="Mark as Completed"
             customClass="!bg-emeraldGreen !border-emeraldGreen !rounded-none hover:!bg-mediumGreen"
