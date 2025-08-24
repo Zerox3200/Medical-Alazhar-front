@@ -1,10 +1,10 @@
 @import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap");
 
 @import "tailwindcss";
+
 @theme {
   /* Intern Layout Colors */
   --color-coral: #ff6f61;
-  /* --color-lightBlue: #a6d5e8; */
   --color-deepBlue: #2e5a88;
   --color-crispWhite: #ffffff;
   --color-softGray: #f5f5f5;
@@ -12,11 +12,34 @@
   --color-mediumGray: #666666;
   --color-teal: #2d9c9c;
   --color-error: #f44336;
-  /* --color-emeraldGreen: #4caf50;
 
-  /*Admin Dashboard*/
-  --color-primary: #1a2d42;
-  --color-secondary: #2e4156;
+  /* Admin Dashboard */
+  --color-primary-50: #f9f8eb;
+  --color-primary-100: #f3f0d6;
+  --color-primary-200: #e6e1ad;
+  --color-primary-300: #d8d384;
+  --color-primary-400: #cbc55b;
+  --color-primary-500: #bbab30;
+
+  /* main */
+  --color-primary-600: #968926;
+  --color-primary-700: #71661d;
+  --color-primary-800: #4b4413;
+  --color-primary-900: #26220a;
+
+  --color-secondary-50: #feecec;
+  --color-secondary-100: #fed9d9;
+  --color-secondary-200: #fdb3b3;
+  --color-secondary-300: #fc8d8d;
+  --color-secondary-400: #fb6767;
+  --color-secondary-500: #db0300;
+
+  /* secondary */
+  --color-secondary-600: #af0200;
+  --color-secondary-700: #830200;
+  --color-secondary-800: #570100;
+  --color-secondary-900: #2c0100;
+
   --color-silverFrost: #c0c8ca;
   --color-mistyMorning: #aab7b7;
   --color-cloudVeil: #d4d8dd;
@@ -33,15 +56,6 @@
 
   --color-darkRed: #ab2e3c;
   --color-lightRed: #ff999c;
-
-  /* Separator */
-  /* --color-primary: #191c24;
-  --color-secondary: #af1763;
-  --color-mediumBlue: #0d6efd;
-  --color-mediumGreen: #198754;
-  --color-lightBlue2: #0dcaf0;
-  --color-darkRed: #ab2e3c;
-  --color-mediumYellow: #ffc107; */
 
   --font-ubuntu: "Ubuntu", sans-serif;
   --font-poppins: "Poppins", sans-serif;

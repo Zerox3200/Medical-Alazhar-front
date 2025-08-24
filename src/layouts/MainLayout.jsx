@@ -1,6 +1,6 @@
 import React from "react";
 import { Outlet } from "react-router";
-import MainNavbar from "../components/MainNavbar.jsx";
+import MainNavbar from "../components/Navbar/MainNavbar.jsx";
 import Copyright from "../components/Copyright.jsx";
 
 const MainLayout = () => {
@@ -10,11 +10,8 @@ const MainLayout = () => {
         <div>
           <MainNavbar />
         </div>
-        <div className="bg-flashWhite min-h-screen pt-[96px]">
+        <div className="bg-flashWhite min-h-screen">
           <Outlet />
-        </div>
-        <div className="absolute bottom-0 left-0 w-full h-16">
-          <Copyright />
         </div>
       </div>
     </div>

@@ -1,7 +1,7 @@
 import React, { lazy } from "react";
 import { Navigate } from "react-router";
 import MainLayout from "../layouts/MainLayout.jsx";
-import Home from "../pages/home/index.jsx";
+import Home from "../pages/home/Home.jsx";
 import About from "../pages/about/About.jsx";
 import AuthRoutes from "./auth.routes.jsx";
 import AdminRoutes from "./admin.routes.jsx";
@@ -54,7 +54,7 @@ const createRoutes = (userRole, token) => {
       children: [
         ...(token && userRole === "admin" ? AdminRoutes : []),
         ...((token && userRole === "coordinator") ||
-        (token && userRole === "supervisor")
+          (token && userRole === "supervisor")
           ? SupervisorRoutes
           : []),
         ...(token && userRole === "intern" ? InternRoutes : []),
