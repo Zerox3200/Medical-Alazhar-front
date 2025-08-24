@@ -114,13 +114,6 @@ const HeadCMEMessage = () => {
             className="relative"
             variants={containerVariants}
           >
-            {/* Timeline Line */}
-            <motion.div
-              className="absolute left-1/2 transform -translate-x-1/2 w-1 h-full bg-gradient-to-b from-blue-600 to-indigo-600 hidden lg:block"
-              initial={{ scaleY: 0 }}
-              whileInView={{ scaleY: 1 }}
-              transition={{ duration: 1, delay: 0.5 }}
-            ></motion.div>
 
             {/* Content Grid */}
             <motion.div

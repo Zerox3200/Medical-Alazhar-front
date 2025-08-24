@@ -4,6 +4,9 @@ import FacultyOverview from "./FacultyOverview";
 import MissionVision from "./MissionVision";
 import DeanMessage from "./DeanMEssage";
 import HeadCMEMessage from "./HeadCMEMessage";
+import Statistics from "./Statistics";
+import Awards from "./Awards";
+import CallToAction from "./CallToAction";
 import FooterLinks from "../../components/FooterLinks";
 import History from "./History";
 
@@ -11,6 +14,8 @@ const About = () => {
   return (
     <div className="min-h-screen bg-flashWhite">
       <Hero />
+
+      <Statistics />
 
       <FacultyOverview />
 
@@ -20,9 +25,12 @@ const About = () => {
 
       <HeadCMEMessage />
 
-      {/* <Vision /> */}
+
+      <Awards />
 
       <History />
+
+      <CallToAction />
 
       <FooterLinks />
     </div>

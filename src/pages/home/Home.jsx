@@ -1,6 +1,7 @@
 import React from "react";
 import FooterLinks from "../../components/FooterLinks";
 import Hero from "./Hero";
+import Statistics from "./Statistics";
 import Features from "./Features";
 // import UpcomingEvents from "./UpcomingEvents";
 // import LatestNews from "./LatestNews";
@@ -13,9 +14,10 @@ const Home = () => {
     <div className="relative">
       <div className="bg-flashWhite min-h-screen">
         <Hero />
+        <Statistics />
         <Breif />
-        <Testimonials />
         <Features />
+        <Testimonials />
         {/* <UpcomingEvents /> */}
         {/* <LatestNews /> */}
         <CTA />
