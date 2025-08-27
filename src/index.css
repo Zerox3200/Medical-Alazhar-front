@@ -112,3 +112,7 @@ input[type="number"] {
     transform: rotate(1turn);
   }
 }
+
+button {
+  cursor: pointer;
+}

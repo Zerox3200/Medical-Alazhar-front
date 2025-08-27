@@ -92,18 +92,17 @@ export const authApiSlice = baseApiSlice.injectEndpoints({
       }),
       invalidatesTags: ["User"],
     }),
-
-    // getUser: builder.query({
-    //   query: ({ userId, role }) => ({
-    //     url:
-    //       ((role === "supervisor" || role === "coordinator") &&
-    //         `/supervisor/${userId}`) ||
-    //       (role === "intern" && `/intern/${userId}`),
-    //     method: "GET",
-    //     credentials: "include",
-    //   }),
-    //   providesTags: ["User"],
-    // }),
+    // getUser
+    getUser: builder.query({
+      query: (token) => ({
+        url: `/auth/me`,
+        method: "GET",
+        credentials: "include",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }),
+    }),
   }),
 });
 
@@ -111,10 +110,11 @@ export const {
   useLoginMutation,
   useLogoutMutation,
   useChangePasswordMutation,
-  useGetUserQuery,
+  // useGetUserQuery,
   useInternSignupMutation,
   useSupervisorSignupMutation,
   useUploadProfileImageMutation,
   useUploadNationalIDImageMutation,
   useUploadMBBCHCertificateImageMutation,
+  useGetUserQuery,
 } = authApiSlice;

@@ -10,9 +10,13 @@ import { useLoginMutation } from "../services/common/authApiSlice";
 import { setAuth } from "../services/slices/authSlice";
 import { LuEyeClosed, LuEye } from "react-icons/lu";
 import SubmitButton from "./components/SubmitButton";
+import { useCookies } from "react-cookie";
 
 const Login = () => {
   const [visiblePassword, setVisiblePassword] = useState(false);
+
+  const [Token, setToken] = useCookies(["Al-Azhar"]);
+
 
   const [login] = useLoginMutation();
   const dispatch = useDispatch();
@@ -35,11 +39,14 @@ const Login = () => {
 
       const { data, accessToken, message, status } = response;
 
+
       if (status === "success") {
         toast.success(message);
-        dispatch(setAuth({ token: accessToken, ...data }));
+        dispatch(setAuth({ token: accessToken, user: data?.data }));
+        setToken("Al-Azhar", accessToken);
         setTimeout(() => navigate("/"), 200);
       }
+
     } catch (err) {
       if (err.status === 403) {
         toast.error("Account locked due to too many failed attempts.");
@@ -55,7 +62,6 @@ const Login = () => {
 
   return (
     <div className="bg-white w-2/6 p-12 shadow-md rounded-md">
-      <Toaster />
 
       <h1 className="text-lightBlue text-4xl mb-8 font-semibold text-center">
         Welcome Back

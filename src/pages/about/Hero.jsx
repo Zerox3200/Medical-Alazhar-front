@@ -153,19 +153,17 @@ const Hero = () => {
             variants={itemVariants}
           >
             <motion.button
-              className="bg-lightBlue text-white px-8 py-4 rounded-full font-semibold text-lg flex items-center space-x-2 hover:bg-blue-600 transition-all duration-300 shadow-lg hover:shadow-xl"
-              whileHover={{ scale: 1.05, y: -2 }}
-              whileTap={{ scale: 0.95 }}
+              className="bg-lightBlue text-white px-8 cursor-pointer py-4 rounded-full font-semibold text-lg flex items-center 
+              space-x-2 hover:bg-blue-600 transition-all duration-300 shadow-lg hover:shadow-xl"
             >
               <span>Explore Our Programs</span>
               <FaPlay className="text-sm" />
             </motion.button>
 
             <motion.button
-              className="border-2 border-white text-white px-8 py-4 rounded-full font-semibold text-lg hover:bg-white hover:text-secondary transition-all duration-300 backdrop-blur-sm"
-              whileHover={{ scale: 1.05, y: -2 }}
-              whileTap={{ scale: 0.95 }}
-            >
+              className="border-2 border-lightBlue text-white px-8 cursor-pointer py-4 rounded-full font-semibold text-lg
+              hover:text-secondary transition-all duration-300 backdrop-blur-sm"
+              whileTap={{ scale: 0.95 }}            >
               Watch Our Story
             </motion.button>
           </motion.div>
@@ -207,21 +205,7 @@ const Hero = () => {
             ))}
           </motion.div>
 
-          {/* Scroll Indicator */}
-          <motion.div
-            className="absolute bottom-8 left-1/2 transform -translate-x-1/2"
-            variants={floatingVariants}
-            animate="animate"
-          >
-            <motion.div
-              className="flex flex-col items-center text-white/70 hover:text-white cursor-pointer"
-              whileHover={{ scale: 1.1 }}
-              transition={{ duration: 0.3 }}
-            >
-              <span className="text-sm mb-2">Scroll to explore</span>
-              <FaArrowDown className="text-xl animate-bounce" />
-            </motion.div>
-          </motion.div>
+
         </motion.div>
       </div>
 
