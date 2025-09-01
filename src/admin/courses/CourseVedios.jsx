@@ -1,37 +1,33 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Link } from 'react-router';
-import { useParams } from 'react-router';
-import { CoursesRequests, CourseVediosRequests, QuizesRequests } from '../../Api/apiRequests';
+import { useParams, Link } from 'react-router';
+import { CoursesRequests, QuizesRequests } from '../../Api/apiRequests';
 import { useCookies } from 'react-cookie';
 import { useQuery } from 'react-query';
 import Loader from '../../components/Loader';
-import VideoUploadForm from '../components/VideoUploadForm';
-import VideoUpdateForm from '../components/VideoUpdateForm';
-import VideoPlayerPopup from '../components/VideoPlayerPopup';
 import {
     FaPlay,
     FaBook,
-    FaUser,
-    FaTag,
-    FaPlus,
-    FaEye,
+    FaFolder,
+    FaList,
     FaEdit,
     FaTrash,
 } from 'react-icons/fa';
 import { toast } from 'react-hot-toast';
-import { timeFromMinutes } from '../../helpers/timeFromMinutes';
-import { FaLongArrowAltRight } from "react-icons/fa";
+
+// Import new components
+import SectionsManager from './components/SectionsManager';
+import CourseHeader from './components/CourseHeader';
+import CourseStats from './components/CourseStats';
+import VideoPlayerPopup from '../components/VideoPlayerPopup';
 
 export default function CourseVedios() {
     const { courseId } = useParams();
     const [Token] = useCookies(['Al-Azhar']);
-    const [isVideoUploadOpen, setIsVideoUploadOpen] = useState(false);
-    const [isVideoUpdateOpen, setIsVideoUpdateOpen] = useState(false);
-    const [isUploading, setIsUploading] = useState(false);
+    const [activeTab, setActiveTab] = useState('sections');
+
     const [isVideoPlayerOpen, setIsVideoPlayerOpen] = useState(false);
     const [selectedVideo, setSelectedVideo] = useState(null);
-    const [videoToUpdate, setVideoToUpdate] = useState(null);
 
     const getCourseMainData = async () => {
         const response = await CoursesRequests.getCourseById(courseId, Token['Al-Azhar']);
@@ -42,66 +38,19 @@ export default function CourseVedios() {
         enabled: !!courseId && !!Token['Al-Azhar']
     });
 
-    const handleVideoUpload = async (formData, setUploadProgress) => {
-        setIsUploading(true);
+    const handleDeleteQuiz = async (quizId) => {
         try {
-            const response = await CourseVediosRequests.createVedioInsideCourse(formData, Token['Al-Azhar'], setUploadProgress);
-            return response;
-        } catch (error) {
-            console.error('Error uploading video:', error);
-        } finally {
-            setIsUploading(false);
-        }
-    };
-
-    const handleVideoUpdate = async (formData, setUploadProgress) => {
-        setIsUploading(true);
-        try {
-            const response = await CourseVediosRequests.updateVedioInsideCourse(formData, Token['Al-Azhar'], setUploadProgress);
-            if (response?.data?.success) {
-                await refetch();
-                toast.success('Video data updated');
-            }
-            return response;
-        } catch (error) {
-            console.error('Error updating video:', error);
-        } finally {
-            setIsUploading(false);
-        }
-    };
-
-    const handleDeleteVideo = async (videoId) => {
-        try {
-            const response = await CourseVediosRequests.deleteVedioInsideCourse(videoId, Token['Al-Azhar']);
-            console.log(response);
+            const response = await QuizesRequests.deleteQuiz(quizId, Token['Al-Azhar']);
             if (response?.success) {
-                await refetch();
-                toast.success('Video deleted');
+                toast.success('Quiz deleted successfully');
+                refetch();
+            } else {
+                toast.error('Failed to delete quiz');
             }
         } catch (error) {
-            console.error('Error deleting video:', error);
-            toast.error('Failed to delete video');
+            console.error('Error deleting quiz:', error);
+            toast.error('Failed to delete quiz');
         }
-    }
-
-    const handlePlayVideo = (video) => {
-        setSelectedVideo(video);
-        setIsVideoPlayerOpen(true);
-    };
-
-    const handleCloseVideoPlayer = () => {
-        setIsVideoPlayerOpen(false);
-        setSelectedVideo(null);
-    };
-
-    const handleEditVideo = (video) => {
-        setVideoToUpdate(video);
-        setIsVideoUpdateOpen(true);
-    };
-
-    const handleCloseVideoUpdate = () => {
-        setIsVideoUpdateOpen(false);
-        setVideoToUpdate(null);
     };
 
     const containerVariants = {
@@ -114,14 +63,6 @@ export default function CourseVedios() {
         }
     };
 
-    const handleDeleteQuiz = async (quizId, videoId) => {
-        const response = await QuizesRequests.deleteQuiz(quizId, Token['Al-Azhar'], videoId);
-        if (response?.success) {
-            await refetch();
-            toast.success('Quiz deleted');
-        }
-    }
-
     const itemVariants = {
         hidden: { opacity: 0, y: 20 },
         visible: { opacity: 1, y: 0 }
@@ -129,7 +70,7 @@ export default function CourseVedios() {
 
     if (courseMainDataLoading) return <Loader />;
 
-    return <>
+    return (
         <div className="min-h-screen bg-gradient-to-br from-gray-50 to-blue-50 p-4 sm:p-6">
             <motion.div
                 className="max-w-7xl mx-auto"
@@ -137,311 +78,319 @@ export default function CourseVedios() {
                 initial="hidden"
                 animate="visible"
             >
-                {/* Header */}
-                <motion.div className="mb-6 sm:mb-8" variants={itemVariants}>
-                    <div className="w-full p-3">
-                        <Link to="/admin/all-courses" className='text-gray-500'>courses / </Link>
-                        <span className='text-blue-500 font-bold'>{courseMainData?.title} </span>
-                    </div>
-                    <div className="bg-white rounded-2xl shadow-lg p-4 sm:p-8 border border-gray-100">
-                        <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 sm:gap-6">
-                            <div>
-                                <h1 className="text-2xl sm:text-3xl font-bold text-gray-800 mb-2">Course Content</h1>
-                                <p className="text-sm sm:text-base text-gray-600">Manage videos and quizzes for this course</p>
-                            </div>
-                            <div className="flex flex-col sm:flex-row gap-3">
-                                <Link
-                                    to="/admin/all-courses"
-                                    className="inline-flex items-center justify-center space-x-2 px-4 sm:px-6 py-3 bg-gray-100 text-gray-700 rounded-xl font-semibold hover:bg-gray-200 transition-all duration-200 text-sm sm:text-base"
-                                >
-                                    <FaEye className="text-sm" />
-                                    <span>Back to Courses</span>
-                                </Link>
-                                <Link
-                                    to={`/admin/update-course/${courseId}`}
-                                    className="inline-flex items-center justify-center space-x-2 px-4 sm:px-6 py-3 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-xl font-semibold hover:from-blue-600 hover:to-purple-700 transition-all duration-200 text-sm sm:text-base"
-                                >
-                                    <FaEdit className="text-sm" />
-                                    <span>Edit Course</span>
-                                </Link>
-                            </div>
-                        </div>
-                    </div>
-                </motion.div>
 
-                {/* Course Main Data */}
-                <motion.div className="mb-6" variants={itemVariants}>
-                    <div className="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden">
-                        {/* Course Banner */}
-                        <div className="relative h-48 sm:h-64">
-                            <img
-                                src={courseMainData?.courseBanner || 'https://images.unsplash.com/photo-1559757148-5c350d0d3c56?w=500&h=300&fit=crop'}
-                                alt={courseMainData?.title}
-                                className="w-full h-full object-cover"
-                                onError={(e) => {
-                                    e.target.src = 'https://images.unsplash.com/photo-1559757148-5c350d0d3c56?w=500&h=300&fit=crop';
-                                }}
-                            />
-                            <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
-                            <div className="absolute bottom-4 left-4 right-4">
-                                <div className="flex items-center space-x-2 mb-2">
-                                    <span className={`px-3 py-1 rounded-full text-xs font-semibold ${courseMainData?.published
-                                        ? 'bg-green-100 text-green-700'
-                                        : 'bg-yellow-100 text-yellow-700'
-                                        }`}>
-                                        {courseMainData?.published ? 'Published' : 'Draft'}
-                                    </span>
-                                </div>
-                                <h2 className="text-xl sm:text-2xl font-bold text-white mb-2">
-                                    {courseMainData?.title || 'Course Title'}
-                                </h2>
-                                <p className="text-white/90 text-sm sm:text-base line-clamp-2">
-                                    {courseMainData?.description || 'Course description will appear here'}
-                                </p>
-                            </div>
-                        </div>
+                <CourseHeader
+                    courseMainData={courseMainData}
+                    courseId={courseId}
+                    variants={itemVariants}
+                />
 
-                        {/* Course Details */}
-                        <div className="p-4 sm:p-6">
-                            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-                                <div className="flex items-center space-x-3">
-                                    <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
-                                        <FaUser className="text-blue-600" />
-                                    </div>
-                                    <div>
-                                        <p className="text-sm text-gray-500">Mentor</p>
-                                        <p className="font-semibold text-gray-800">{courseMainData?.mentor || 'Dr. Mentor Name'}</p>
-                                    </div>
-                                </div>
 
-                                <div className="flex items-center space-x-3">
-                                    <div className="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center">
-                                        <FaPlay className="text-green-600" />
-                                    </div>
-                                    <div>
-                                        <p className="text-sm text-gray-500">Videos</p>
-                                        <p className="font-semibold text-gray-800">{courseMainData?.videos?.length || 0}</p>
-                                    </div>
-                                </div>
+                <CourseStats
+                    courseMainData={courseMainData}
+                    variants={itemVariants}
+                />
 
-                                <div className="flex items-center space-x-3">
-                                    <div className="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center">
-                                        <FaBook className="text-purple-600" />
-                                    </div>
-                                    <div>
-                                        <p className="text-sm text-gray-500">Quizzes</p>
-                                        <p className="font-semibold text-gray-800">{courseMainData?.quizzes?.length || 0}</p>
-                                    </div>
-                                </div>
 
-                                <div className="flex items-center space-x-3">
-                                    <div className="w-10 h-10 bg-orange-100 rounded-lg flex items-center justify-center">
-                                        <FaTag className="text-orange-600" />
-                                    </div>
-                                    <div>
-                                        <p className="text-sm text-gray-500">Tags</p>
-                                        <p className="font-semibold text-gray-800">{courseMainData?.tags?.length || 0}</p>
-                                    </div>
-                                </div>
-                            </div>
-
-                            {/* Tags */}
-                            {courseMainData?.tags && courseMainData.tags.length > 0 && (
-                                <div className="flex flex-wrap gap-2">
-                                    {courseMainData.tags.map((tag, index) => (
-                                        <span
-                                            key={index}
-                                            className="px-3 py-1 bg-blue-100 text-blue-700 text-sm rounded-full"
-                                        >
-                                            {tag}
-                                        </span>
-                                    ))}
-                                </div>
-                            )}
-                        </div>
-                    </div>
-                </motion.div>
-
-                {/* Course Videos Section */}
                 <motion.div className="mb-6" variants={itemVariants}>
                     <div className="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden">
                         <div className="p-4 sm:p-6 border-b border-gray-100">
                             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                                 <div className="flex items-center space-x-3">
                                     <div className="w-10 h-10 bg-blue-500 rounded-lg flex items-center justify-center">
-                                        <FaPlay className="text-white" />
+                                        <FaList className="text-white" />
                                     </div>
                                     <div>
-                                        <h3 className="text-lg sm:text-xl font-bold text-gray-800">Course Videos</h3>
-                                        <p className="text-sm text-gray-600">Manage video content for this course</p>
+                                        <h3 className="text-lg sm:text-xl font-bold text-gray-800">Course Content</h3>
+                                        <p className="text-sm text-gray-600">Organize your course with sections and chapters</p>
                                     </div>
                                 </div>
+                            </div>
+                        </div>
+
+                        {/* Tab Navigation */}
+                        <div className="border-b border-gray-200">
+                            <nav className="flex space-x-8 px-6">
                                 <button
-                                    onClick={() => setIsVideoUploadOpen(true)}
-                                    className="w-full sm:w-auto inline-flex items-center justify-center space-x-2 px-4 py-3 sm:py-2 bg-blue-500 text-white rounded-lg font-medium hover:bg-blue-600 transition-colors duration-200 text-sm"
+                                    onClick={() => setActiveTab('sections')}
+                                    className={`py-4 px-1 border-b-2 font-medium text-sm transition-colors duration-200 ${activeTab === 'sections'
+                                        ? 'border-blue-500 text-blue-600'
+                                        : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                                        }`}
                                 >
-                                    <FaPlus className="text-sm" />
-                                    <span>Add Video</span>
+                                    <div className="flex items-center space-x-2">
+                                        <FaFolder className="text-sm" />
+                                        <span>Sections & Chapters</span>
+                                    </div>
                                 </button>
-                            </div>
+                                <button
+                                    onClick={() => setActiveTab('videos')}
+                                    className={`py-4 px-1 border-b-2 font-medium text-sm transition-colors duration-200 ${activeTab === 'videos'
+                                        ? 'border-blue-500 text-blue-600'
+                                        : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                                        }`}
+                                >
+                                    <div className="flex items-center space-x-2">
+                                        <FaPlay className="text-sm" />
+                                        <span>All Videos</span>
+                                    </div>
+                                </button>
+                                <button
+                                    onClick={() => setActiveTab('quizzes')}
+                                    className={`py-4 px-1 border-b-2 font-medium text-sm transition-colors duration-200 ${activeTab === 'quizzes'
+                                        ? 'border-blue-500 text-blue-600'
+                                        : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                                        }`}
+                                >
+                                    <div className="flex items-center space-x-2">
+                                        <FaBook className="text-sm" />
+                                        <span>All Quizzes</span>
+                                    </div>
+                                </button>
+                            </nav>
                         </div>
 
                         <div className="p-4 sm:p-6">
-                            {courseMainData?.videos && courseMainData.videos.length > 0 ? (
-                                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                                    {courseMainData.videos.map((video, index) => (
-                                        <div key={index} className="bg-gray-50 rounded-xl p-4 border border-gray-200 hover:shadow-lg transition-all duration-200">
-                                            <div
-                                                className="aspect-video bg-gray-200 rounded-lg mb-3 flex items-center justify-center cursor-pointer hover:bg-gray-300 transition-all duration-200 relative group"
-                                                onClick={() => handlePlayVideo(video)}
-                                            >
-                                                <FaPlay className="text-gray-400 text-2xl group-hover:text-blue-500 transition-all duration-200" />
-                                                <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-all duration-200 rounded-lg flex items-center justify-center">
-                                                    <div className="w-12 h-12 bg-blue-500 rounded-full flex items-center justify-center">
-                                                        <FaPlay className="text-white text-lg ml-1" />
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <h4 className="font-semibold text-gray-800 mb-2">{video.title}</h4>
-                                            <p className="text-sm text-gray-600 mb-3 line-clamp-2">{video?.description}</p>
-                                            <div className="flex items-center justify-between">
-                                                <span className="text-xs text-gray-500">Duration: {timeFromMinutes(video.duration)}</span>
-                                                <div className="flex space-x-2">
-                                                    <button
-                                                        onClick={() => handleEditVideo(video)}
-                                                        className="p-1 text-gray-400 hover:text-blue-500 transition-colors duration-200"
-                                                    >
-                                                        <FaEdit className="text-sm" />
-                                                    </button>
-                                                    <button
-                                                        onClick={() => handleDeleteVideo(video._id)}
-                                                        className="p-1 text-gray-400 hover:text-red-500 transition-colors duration-200"
-                                                    >
-                                                        <FaTrash className="text-sm" />
-                                                    </button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    ))}
-                                </div>
-                            ) : (
-                                <div className="text-center py-12">
-                                    <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                                        <FaPlay className="text-2xl text-gray-400" />
-                                    </div>
-                                    <h4 className="text-lg font-semibold text-gray-700 mb-2">No videos yet</h4>
-                                    <p className="text-gray-500 mb-4">Start by adding your first video to this course</p>
-                                    <button
-                                        onClick={() => setIsVideoUploadOpen(true)}
-                                        className="w-full sm:w-auto inline-flex items-center justify-center space-x-2 px-4 py-3 sm:py-2 bg-blue-500 text-white rounded-lg font-medium hover:bg-blue-600 transition-colors duration-200"
-                                    >
-                                        <FaPlus className="text-sm" />
-                                        <span>Add First Video</span>
-                                    </button>
-                                </div>
+
+                            {activeTab === 'sections' && (
+                                <SectionsManager
+                                    courseId={courseId}
+                                    courseMainData={courseMainData}
+                                    refetch={refetch}
+                                />
                             )}
-                        </div>
-                    </div>
-                </motion.div>
 
-                {/* Course Quizzes Section */}
-                <motion.div className="mb-6" variants={itemVariants}>
-                    <div className="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden">
-                        <div className="p-4 sm:p-6 border-b border-gray-100">
-                            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-                                <div className="flex items-center space-x-3">
-                                    <div className="w-10 h-10 bg-purple-500 rounded-lg flex items-center justify-center">
-                                        <FaBook className="text-white" />
-                                    </div>
-                                    <div>
-                                        <h3 className="text-lg sm:text-xl font-bold text-gray-800">Course Quizzes</h3>
-                                        <p className="text-sm text-gray-600">Manage quiz content for this course</p>
-                                    </div>
-                                </div>
-                                <Link to={`/admin/add-quiz/${courseId}`} className="w-full sm:w-auto inline-flex items-center justify-center space-x-2 px-4 py-3 sm:py-2 bg-purple-500 text-white rounded-lg font-medium hover:bg-purple-600 transition-colors duration-200 text-sm">
-                                    <FaPlus className="text-sm" />
-                                    <span>Add Quiz</span>
-                                </Link>
-                            </div>
-                        </div>
+                            {activeTab === 'videos' && (
+                                <div className="space-y-6">
 
-                        <div className="p-4 sm:p-6">
-                            {courseMainData?.quizzes && courseMainData.quizzes.length > 0 ? (
-                                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                                    {courseMainData.quizzes.map((quiz, index) => (
-                                        <div key={index} className="bg-gray-50 rounded-xl p-4 border border-gray-200">
-                                            <div className="aspect-video bg-gray-200 rounded-lg mb-3 flex items-center justify-center">
-                                                <FaBook className="text-gray-400 text-2xl" />
-                                            </div>
-                                            <h4 className="font-semibold text-gray-800 mb-2">Quiz {index + 1}</h4>
-                                            <p className="text-sm text-gray-600 mb-3 flex items-center gap-2">Video <FaLongArrowAltRight /> <span>{quiz?.videoId?.title}</span>
+                                    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                                        <div>
+                                            <h4 className="text-lg font-semibold text-gray-800 mb-1">All Course Videos</h4>
+                                            <p className="text-sm text-gray-600">
+                                                {courseMainData?.videos?.length || 0} videos available in this course
                                             </p>
-
-                                            <div className="flex items-center justify-between">
-                                                <span className="text-xs text-gray-500">Questions: {quiz?.questions?.length || 0}</span>
-                                                <div className="flex space-x-2">
-                                                    <Link to={`/admin/update-quiz/${courseId}/${quiz._id}`} className="p-1 text-gray-400 hover:text-blue-500">
-                                                        <FaEdit className="text-sm" />
-                                                    </Link>
-                                                    <button onClick={() => handleDeleteQuiz(quiz._id, quiz.videoId?._id)}
-                                                        className="p-1 text-gray-400 hover:text-red-500">
-                                                        <FaTrash className="text-sm" />
-                                                    </button>
-                                                </div>
-                                            </div>
-
                                         </div>
-                                    ))}
-                                </div>
-                            ) : (
-                                <div className="text-center py-12">
-                                    <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                                        <FaBook className="text-2xl text-gray-400" />
+                                        <div className="flex items-center space-x-2">
+                                            <span className="text-sm text-gray-500">
+                                                Total Duration: {courseMainData?.videos?.reduce((total, video) => total + (parseInt(video.duration) || 0), 0)} min
+                                            </span>
+                                        </div>
                                     </div>
-                                    <h4 className="text-lg font-semibold text-gray-700 mb-2">No quizzes yet</h4>
-                                    <p className="text-gray-500 mb-4">Start by adding your first quiz to this course</p>
-                                    <Link to={`/admin/add-quiz/${courseId}`} className="w-full sm:w-auto inline-flex items-center justify-center space-x-2 px-4 py-3 sm:py-2 bg-purple-500 text-white rounded-lg font-medium hover:bg-purple-600 transition-colors duration-200">
-                                        <FaPlus className="text-sm" />
-                                        <span>Add First Quiz</span>
-                                    </Link>
+
+
+                                    {!courseMainData?.videos || courseMainData.videos.length === 0 ? (
+                                        <div className="text-center py-12 bg-gray-50 rounded-xl">
+                                            <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                                                <FaPlay className="text-2xl text-gray-400" />
+                                            </div>
+                                            <h4 className="text-lg font-semibold text-gray-700 mb-2">No videos yet</h4>
+                                            <p className="text-gray-500 mb-4">Add videos to chapters to see them here</p>
+                                        </div>
+                                    ) : (
+                                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                                            {courseMainData.videos.map((video, index) => (
+                                                <motion.div
+                                                    key={video._id}
+                                                    initial={{ opacity: 0, y: 20 }}
+                                                    animate={{ opacity: 1, y: 0 }}
+                                                    transition={{ delay: index * 0.1 }}
+                                                    className="bg-white rounded-xl border border-gray-200 overflow-hidden hover:shadow-lg transition-shadow duration-200"
+                                                >
+
+                                                    <div className="relative h-48 bg-gradient-to-br from-blue-50 to-purple-50">
+                                                        <div className="absolute inset-0 flex items-center justify-center">
+                                                            <div className="w-16 h-16 bg-white bg-opacity-90 rounded-full flex items-center justify-center shadow-lg">
+                                                                <FaPlay className="text-2xl text-blue-600" />
+                                                            </div>
+                                                        </div>
+
+                                                        {video.level && (
+                                                            <div className="absolute top-3 right-3">
+                                                                <span className={`px-3 py-1 rounded-full text-xs font-medium ${video.level === 'entry' ? 'bg-green-100 text-green-700' :
+                                                                    video.level === 'intermediate' ? 'bg-yellow-100 text-yellow-700' :
+                                                                        'bg-red-100 text-red-700'
+                                                                    }`}>
+                                                                    {video.level.charAt(0).toUpperCase() + video.level.slice(1)}
+                                                                </span>
+                                                            </div>
+                                                        )}
+                                                    </div>
+
+
+                                                    <div className="p-4">
+                                                        <h5 className="font-semibold text-gray-800 mb-2 line-clamp-2">
+                                                            {video.title}
+                                                        </h5>
+                                                        {video.description && (
+                                                            <p className="text-sm text-gray-600 mb-3 line-clamp-2">
+                                                                {video.description}
+                                                            </p>
+                                                        )}
+
+
+                                                        <div className="flex items-center justify-between text-sm text-gray-500 mb-3">
+                                                            <span className="flex items-center space-x-1">
+                                                                <FaPlay className="text-xs" />
+                                                                <span>{video.duration} min</span>
+                                                            </span>
+                                                        </div>
+
+
+                                                        {video.quizId && (
+                                                            <div className="mb-3 p-2 bg-purple-50 border border-purple-200 rounded-lg">
+                                                                <div className="flex items-center justify-between">
+                                                                    <div className="flex items-center space-x-2">
+                                                                        <FaBook className="text-xs text-purple-600" />
+                                                                        <span className="text-xs text-purple-700 font-medium">
+                                                                            Quiz: {video.quizId.questions?.length || 0} questions
+                                                                        </span>
+                                                                    </div>
+                                                                    <Link
+                                                                        to={`/admin/update-quiz/${courseId}/${video.quizId._id}`}
+                                                                        className="text-xs text-purple-600 hover:text-purple-800 font-medium underline"
+                                                                    >
+                                                                        Update Quiz
+                                                                    </Link>
+                                                                </div>
+                                                            </div>
+                                                        )}
+
+
+                                                        <div className="flex items-center space-x-2">
+                                                            <button
+                                                                onClick={() => {
+                                                                    setSelectedVideo(video);
+                                                                    setIsVideoPlayerOpen(true);
+                                                                }}
+                                                                className="flex-1 bg-blue-500 text-white px-3 py-2 rounded-lg text-sm font-medium hover:bg-blue-600 transition-colors duration-200 flex items-center justify-center space-x-2"
+                                                            >
+                                                                <FaPlay className="text-xs" />
+                                                                <span>Play</span>
+                                                            </button>
+                                                            <button
+                                                                className="px-3 py-2 text-gray-400 hover:text-blue-500 
+                                                                transition-colors duration-200"
+                                                                title="Edit Video"
+                                                            >
+                                                                <FaEdit className="text-sm" />
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </motion.div>
+                                            ))}
+                                        </div>
+                                    )}
                                 </div>
                             )}
+
+                            {activeTab === 'quizzes' && (
+                                <div className="space-y-6">
+                                    {/* Quizzes Header */}
+                                    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                                        <div>
+                                            <h4 className="text-lg font-semibold text-gray-800 mb-1">All Course Quizzes</h4>
+                                            <p className="text-sm text-gray-600">
+                                                {courseMainData?.quizzes?.length || 0} quizzes available in this course
+                                            </p>
+                                        </div>
+                                        <div className="flex items-center space-x-2">
+                                            <span className="text-sm text-gray-500">
+                                                Total Questions: {courseMainData?.quizzes?.reduce((total, quiz) => total + (quiz.questions?.length || 0), 0)}
+                                            </span>
+                                        </div>
+                                    </div>
+
+                                    {/* Quizzes Grid */}
+                                    {!courseMainData?.quizzes || courseMainData.quizzes.length === 0 ? (
+                                        <div className="text-center py-12 bg-gray-50 rounded-xl">
+                                            <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                                                <FaBook className="text-2xl text-gray-400" />
+                                            </div>
+                                            <h4 className="text-lg font-semibold text-gray-700 mb-2">No quizzes yet</h4>
+                                            <p className="text-gray-500 mb-4">Add quizzes to videos to see them here</p>
+                                        </div>
+                                    ) : (
+                                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                                            {courseMainData.quizzes.map((quiz, index) => (
+                                                <motion.div
+                                                    key={quiz._id}
+                                                    initial={{ opacity: 0, y: 20 }}
+                                                    animate={{ opacity: 1, y: 0 }}
+                                                    transition={{ delay: index * 0.1 }}
+                                                    className="bg-white rounded-xl border border-gray-200 overflow-hidden hover:shadow-lg transition-shadow duration-200"
+                                                >
+                                                    {/* Quiz Header */}
+                                                    <div className="relative h-32 bg-gradient-to-br from-purple-50 to-pink-50">
+                                                        <div className="absolute inset-0 flex items-center justify-center">
+                                                            <div className="w-16 h-16 bg-white bg-opacity-90 rounded-full flex items-center justify-center shadow-lg">
+                                                                <FaBook className="text-2xl text-purple-600" />
+                                                            </div>
+                                                        </div>
+                                                        {/* Questions Count Badge */}
+                                                        <div className="absolute top-3 right-3">
+                                                            <span className="px-3 py-1 bg-purple-100 text-purple-700 rounded-full text-xs font-medium">
+                                                                {quiz.questions?.length || 0} Q
+                                                            </span>
+                                                        </div>
+                                                    </div>
+
+                                                    {/* Quiz Content */}
+                                                    <div className="p-4">
+                                                        <h5 className="font-semibold text-gray-800 mb-2 line-clamp-2">
+                                                            Quiz for: {quiz.videoId?.title || 'Unknown Video'}
+                                                        </h5>
+
+                                                        {/* Quiz Details */}
+                                                        <div className="space-y-2 mb-3">
+                                                            <div className="text-sm text-gray-600">
+                                                                <span className="font-medium">Questions:</span> {quiz.questions?.length || 0}
+                                                            </div>
+                                                            {quiz.questions && quiz.questions.length > 0 && (
+                                                                <div className="text-xs text-gray-500">
+                                                                    Sample: {quiz.questions[0]?.questionText?.slice(0, 50)}...
+                                                                </div>
+                                                            )}
+                                                        </div>
+
+                                                        {/* Action Buttons */}
+                                                        <div className="flex items-center space-x-2">
+                                                            <Link
+                                                                to={`/admin/update-quiz/${courseId}/${quiz._id}`}
+                                                                className="flex-1 bg-purple-500 text-white px-3 py-2 rounded-lg text-sm font-medium hover:bg-purple-600 transition-colors duration-200 flex items-center justify-center space-x-2"
+                                                            >
+                                                                <FaBook className="text-xs" />
+                                                                <span>Update Quiz</span>
+                                                            </Link>
+                                                            <button
+                                                                onClick={() => handleDeleteQuiz(quiz._id)}
+                                                                className="px-3 py-2 text-gray-400 hover:text-red-500 transition-colors duration-200 rounded-lg hover:bg-red-50"
+                                                                title="Delete Quiz"
+                                                            >
+                                                                <FaTrash className="text-sm" />
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </motion.div>
+                                            ))}
+                                        </div>
+                                    )}
+                                </div>
+                            )}
+
                         </div>
                     </div>
                 </motion.div>
             </motion.div>
 
-            {/* Video Upload Form Modal */}
-            <VideoUploadForm
-                isOpen={isVideoUploadOpen}
-                onClose={() => {
-                    if (isUploading) return;
-                    setIsVideoUploadOpen(false)
-                }}
-                onSubmit={handleVideoUpload}
-                isLoading={isUploading}
-                refetch={refetch}
-            />
-
-            {/* Video Update Form Modal */}
-            <VideoUpdateForm
-                isOpen={isVideoUpdateOpen}
-                onClose={() => {
-                    if (isUploading) return;
-                    handleCloseVideoUpdate();
-                }}
-                onSubmit={handleVideoUpdate}
-                isLoading={isUploading}
-                refetch={refetch}
-                videoData={videoToUpdate}
-            />
-
             {/* Video Player Popup */}
             <VideoPlayerPopup
                 isOpen={isVideoPlayerOpen}
-                onClose={handleCloseVideoPlayer}
+                onClose={() => {
+                    setIsVideoPlayerOpen(false);
+                    setSelectedVideo(null);
+                }}
                 video={selectedVideo}
             />
         </div>
-    </>
+    );
 }

@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from "react";
-import { Link, NavLink } from "react-router";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 import logo from "../../assets/images/logo.jpg";
 import './MainNavbar.scss'
 import { IoMdMenu } from "react-icons/io";
 import MobileMenu from "../MobileMenu/MobileMenu";
 import { AnimatePresence } from "framer-motion";
+import { useSelector } from "react-redux";
+import { useCookies } from "react-cookie";
+import { useLogoutMutation } from "../../services/common/authApiSlice";
 
 const navLinks = [
   {
@@ -28,9 +31,33 @@ const navLinks = [
 const MainNavbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [Token, , removeCookies] = useCookies(['Al-Azhar']);
+  const { user } = useSelector((state) => state.auth);
 
   const toggleMobileMenu = () => setIsMobileMenuOpen(!isMobileMenuOpen);
+  const navigate = useNavigate();
 
+  const [logout] = useLogoutMutation();
+
+  const handleLogout = async () => {
+    try {
+      await logout().unwrap();
+      removeCookies('Al-Azhar', { path: '/' });
+      navigate("/auth/login");
+    } catch (error) {
+      toast.error(error);
+    }
+  };
+
+  const handleDashboard = () => {
+    if (user?.role === "admin") {
+      navigate("/admin");
+    } else if (user?.role === "supervisor") {
+      navigate("/supervisor/dashboard");
+    } else {
+      navigate("/");
+    }
+  }
 
   useEffect(() => {
     const handleScroll = () => {
@@ -70,10 +97,23 @@ const MainNavbar = () => {
         </div>
 
         {/* CTA Button */}
-        <div className="navbar__cta">
-          <Link to="/auth/login" className="navbar__cta-button">
-            Get Started
-          </Link>
+        <div className="navbar__cta flex items-center gap-4">
+          {Token['Al-Azhar'] ? <>
+            <button onClick={handleDashboard} className="navbar__cta-button">
+              Dashboard
+            </button>
+            <button onClick={handleLogout} className="navbar__cta-button">
+              Logout
+            </button>
+          </> : <>
+            <Link to="/auth/login" className="navbar__cta-button">
+              Login
+            </Link>
+            <Link to="/auth/signup" className="navbar__cta-button">
+              Register
+            </Link>
+          </>
+          }
           <IoMdMenu className="mobile-icon" onClick={toggleMobileMenu} />
         </div>
       </div>

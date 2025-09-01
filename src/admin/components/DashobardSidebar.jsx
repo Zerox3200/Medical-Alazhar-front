@@ -6,7 +6,7 @@ import { GoHomeFill } from "react-icons/go";
 import { FaHouseMedical, FaVideo } from "react-icons/fa6";
 import { IoCalendarClear } from "react-icons/io5";
 import { BsFillGearFill } from "react-icons/bs";
-import { FaHospital, FaStethoscope, FaUsers } from "react-icons/fa";
+import { FaHospital, FaStethoscope, FaUsers, FaGlobe } from "react-icons/fa";
 import { IoTimeSharp } from "react-icons/io5";
 
 const DashboardLinks = [
@@ -59,6 +59,13 @@ const DashboardLinks = [
     description: "System configuration"
   },
 ];
+
+const MainWebsiteLink = {
+  icon: <FaGlobe />,
+  label: "Home",
+  value: "/",
+  description: "Back to Home"
+};
 
 const DashobardSidebar = ({ onClose }) => {
   const containerVariants = {
@@ -161,6 +168,34 @@ const DashobardSidebar = ({ onClose }) => {
             </motion.li>
           ))}
         </motion.ul>
+
+        {/* Divider */}
+        <div className="my-6 border-t border-gray-200"></div>
+
+        {/* Back to Main Website Link */}
+        <motion.div variants={itemVariants}>
+          <Link
+            to={MainWebsiteLink.value}
+            className="group relative p-3 rounded-xl transition-all duration-300 flex items-center space-x-3 text-gray-600 hover:bg-gray-50 hover:text-secondary"
+            onClick={onClose}
+          >
+            <motion.div
+              className="p-2 rounded-lg transition-all duration-300 bg-gray-100 group-hover:bg-lightBlue/10"
+              whileHover={{ scale: 1.1, rotate: 5 }}
+              transition={{ duration: 0.2 }}
+            >
+              <span className="text-lg">{MainWebsiteLink.icon}</span>
+            </motion.div>
+            <div className="flex-1">
+              <span className="font-medium">{MainWebsiteLink.label}</span>
+              <p className="text-xs text-gray-400 mt-0.5">{MainWebsiteLink.description}</p>
+            </div>
+            <motion.div
+              className="w-2 h-2 rounded-full transition-all duration-300 bg-transparent"
+              whileHover={{ scale: 1.5 }}
+            />
+          </Link>
+        </motion.div>
       </nav>
     </motion.div>
   );

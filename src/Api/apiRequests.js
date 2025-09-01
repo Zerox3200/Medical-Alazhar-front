@@ -119,6 +119,96 @@ export const CoursesRequests = {
     }
 }
 
+export const SectionsRequests = {
+    getAllSectionsForCourse: async (courseId, Token) => {
+        try {
+            const { data } = await axios.get(`${API_URL}/admin/courses/${courseId}/sections`, {
+                headers: {
+                    "Authorization": `Bearer ${Token}`
+                }
+            });
+            return data;
+        }
+        catch (error) {
+            console.error("Error getting all sections for course:", error);
+            return
+        }
+    },
+    addSection: async (sectionData, Token) => {
+        try {
+            const { data } = await axios.post(`${API_URL}/admin/courses/${sectionData?.courseId}/sections`, {
+                title: sectionData?.title,
+                description: sectionData?.description,
+                order: sectionData?.order
+            }, {
+                headers: {
+                    "Authorization": `Bearer ${Token}`
+                }
+            });
+            return data;
+        }
+        catch (error) {
+            console.error("Error adding section:", error);
+            return
+        }
+    },
+    updateSection: async (sectionData, Token) => {
+        try {
+            const { data } = await axios.patch(`${API_URL}/admin/courses/${sectionData?.courseId}/sections/${sectionData?.sectionId}`, {
+                title: sectionData?.title,
+                description: sectionData?.description
+            }, {
+                headers: {
+                    "Authorization": `Bearer ${Token}`
+                }
+            });
+            return data;
+        }
+        catch (error) {
+            console.error("Error updating section:", error);
+            return
+        }
+    },
+    deleteSection: async (courseId, sectionId, Token, oldOrder) => {
+        try {
+            const { data } = await axios.delete(`${API_URL}/admin/courses/${courseId}/sections/${sectionId}`, {
+                headers: {
+                    "Authorization": `Bearer ${Token}`
+                },
+                data: {
+                    oldOrder
+                }
+            });
+            return data;
+        }
+        catch (error) {
+            console.error("Error deleting section:", error);
+            return
+        }
+    }
+}
+
+export const ChaptersRequests = {
+    CreateChapter: async (chapterData, Token) => {
+        try {
+            const { data } = await axios.post(`${API_URL}/admin/courses/${chapterData?.courseId}/sections/${chapterData?.sectionId}/chapters`, {
+                title: chapterData?.title,
+                description: chapterData?.description,
+                order: chapterData?.order
+            }, {
+                headers: {
+                    "Authorization": `Bearer ${Token}`
+                }
+            });
+            return data;
+        }
+        catch (error) {
+            console.error("Error getting all chapters for course:", error);
+            return
+        }
+    }
+}
+
 export const CourseVediosRequests = {
     getCloudinarySignature: async (Token) => {
         try {
@@ -141,6 +231,7 @@ export const CourseVediosRequests = {
         formData.append("title", CourseData.title);
         formData.append("description", CourseData.description);
         formData.append("level", CourseData.level);
+        formData.append("chapterId", CourseData.chapterId);
 
         try {
             const response = await axios.post(`${API_URL}/admin/courses/${CourseData.courseId}/videos/add`, formData, {
@@ -153,6 +244,7 @@ export const CourseVediosRequests = {
                     setUploadProgress(percentCompleted);
                 }
             });
+            console.log(response);
             return response;
         }
         catch (error) {
@@ -160,7 +252,8 @@ export const CourseVediosRequests = {
             return
         }
     },
-    updateVedioInsideCourse: async (CourseData, Token, setUploadProgress) => {
+    updateVedioInsideCourse: async (CourseData, Token, setUploadProgress, chapterId) => {
+        console.log(CourseData);
         const formData = new FormData();
 
         if (CourseData.videoFile) {
@@ -173,7 +266,7 @@ export const CourseVediosRequests = {
         formData.append("level", CourseData.level);
 
         try {
-            const response = await axios.patch(`${API_URL}/admin/courses/update-video/${CourseData.videoId}`, formData, {
+            const response = await axios.patch(`${API_URL}/admin/courses/update-video/${CourseData.videoId}/chapter/${chapterId}`, formData, {
                 headers: {
                     "Content-Type": "multipart/form-data",
                     "Authorization": `Bearer ${Token}`
@@ -189,9 +282,9 @@ export const CourseVediosRequests = {
             return
         }
     },
-    deleteVedioInsideCourse: async (videoId, Token) => {
+    deleteVedioInsideCourse: async (videoId, chapterId, Token) => {
         try {
-            const { data } = await axios.delete(`${API_URL}/admin/courses/delete-video/${videoId}`, {
+            const { data } = await axios.delete(`${API_URL}/admin/courses/delete-video/${videoId}/chapter/${chapterId}`, {
                 headers: {
                     "Authorization": `Bearer ${Token}`
                 }
@@ -219,9 +312,9 @@ export const QuizesRequests = {
             return
         }
     },
-    deleteQuiz: async (quizId, Token, videoId) => {
+    deleteQuiz: async (quizId, Token) => {
         try {
-            const { data } = await axios.delete(`${API_URL}/admin/courses/videos/${videoId}/quizzes/${quizId}`, {
+            const { data } = await axios.delete(`${API_URL}/admin/courses/videos/quizzes/${quizId}`, {
                 headers: {
                     "Authorization": `Bearer ${Token}`
                 }

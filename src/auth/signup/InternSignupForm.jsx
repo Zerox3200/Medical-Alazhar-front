@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { Toaster } from "react-hot-toast";
 import { useForm } from "react-hook-form";
 import { updateFormData } from "../../services/slices/internSlice";
 import FormStepsProgress from "./multistepForm/FormStepsProgress";
@@ -190,7 +189,6 @@ const InternSignupForm = () => {
 
   return (
     <div className="flex flex-col justify-between gap-4">
-      <Toaster />
       <form onSubmit={handleSubmit(onSubmit)}>
         <FormStepsProgress
           activeStep={activeStep}

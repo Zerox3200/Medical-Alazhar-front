@@ -43,6 +43,7 @@ const FormStepsProgress = ({
 
   return (
     <Box sx={{ width: "100%" }}>
+
       <Stepper nonLinear activeStep={activeStep} alternativeLabel>
         {steps.map((label, index) => (
           <Step key={label} completed={completed[index]}>
@@ -50,8 +51,10 @@ const FormStepsProgress = ({
           </Step>
         ))}
       </Stepper>
+
       <div>
         <div className="min-h-[200px] my-4">{stepComponent()}</div>
+
         <div className="flex items-center gap-4 justify-between">
           <p className="mt-2">
             Already have an email?{" "}

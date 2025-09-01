@@ -97,11 +97,6 @@ const AdminLayout = () => {
               <Outlet />
             </div>
           </main>
-
-          {/* Footer */}
-          <footer className="bg-white border-t border-gray-200 mt-auto">
-            <Copyright />
-          </footer>
         </div>
       </div>
     </div>

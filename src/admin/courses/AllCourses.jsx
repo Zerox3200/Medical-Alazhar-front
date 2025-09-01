@@ -313,7 +313,7 @@ const AllCourses = () => {
                                                     <button className="w-8 h-8 bg-white/80 backdrop-blur-sm rounded-full flex items-center justify-center hover:bg-white transition-all duration-200">
                                                         <BsThreeDotsVertical className="text-gray-600" />
                                                     </button>
-                                                    <div className="absolute right-0 top-full mt-2 w-48 bg-white rounded-xl shadow-lg border border-gray-200 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-10 sm:right-0 right-0">
+                                                    <div className="absolute top-full mt-2 w-48 bg-white rounded-xl shadow-lg border border-gray-200 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-10 sm:right-0 right-0">
                                                         <div className="py-2">
                                                             <button className="w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-50 flex items-center space-x-2">
                                                                 <FaEdit className="text-gray-400" />
