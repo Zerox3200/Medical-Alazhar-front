@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { useParams, Link } from 'react-router';
-import { CoursesRequests, QuizesRequests } from '../../Api/apiRequests';
+import { CoursesRequests, CourseVediosRequests, QuizesRequests } from '../../Api/apiRequests';
 import { useCookies } from 'react-cookie';
 import { useQuery } from 'react-query';
 import Loader from '../../components/Loader';
@@ -68,6 +68,7 @@ export default function CourseVedios() {
         visible: { opacity: 1, y: 0 }
     };
 
+
     if (courseMainDataLoading) return <Loader />;
 
     return (
@@ -110,7 +111,7 @@ export default function CourseVedios() {
 
                         {/* Tab Navigation */}
                         <div className="border-b border-gray-200">
-                            <nav className="flex space-x-8 px-6">
+                            <nav className="grid lg:grid-cols-3 grid-cols-1 gap-4  px-6">
                                 <button
                                     onClick={() => setActiveTab('sections')}
                                     className={`py-4 px-1 border-b-2 font-medium text-sm transition-colors duration-200 ${activeTab === 'sections'
@@ -266,13 +267,6 @@ export default function CourseVedios() {
                                                             >
                                                                 <FaPlay className="text-xs" />
                                                                 <span>Play</span>
-                                                            </button>
-                                                            <button
-                                                                className="px-3 py-2 text-gray-400 hover:text-blue-500 
-                                                                transition-colors duration-200"
-                                                                title="Edit Video"
-                                                            >
-                                                                <FaEdit className="text-sm" />
                                                             </button>
                                                         </div>
                                                     </div>

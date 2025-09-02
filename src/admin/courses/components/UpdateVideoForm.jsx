@@ -4,7 +4,7 @@ import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { FaTimes, FaPlay, FaSave, FaUpload } from 'react-icons/fa';
 
-const UpdateVideoForm = ({ isOpen, onClose, onSubmit, chapter, courseId, uploadProgress, videoData }) => {
+const UpdateVideoForm = ({ isOpen, onClose, onSubmit, chapter, courseId, uploadProgress, videoData, refetch }) => {
     const [selectedFile, setSelectedFile] = useState(null);
     const [VideoUploadProgress, setVideoUploadProgress] = useState(0);
 
@@ -52,6 +52,7 @@ const UpdateVideoForm = ({ isOpen, onClose, onSubmit, chapter, courseId, uploadP
             formik.resetForm();
             setSelectedFile(null);
             setVideoUploadProgress(0);
+            refetch();
         },
         enableReinitialize: true
     });

@@ -223,28 +223,9 @@ const SectionsManager = ({ courseId, courseMainData, refetch }) => {
         }
     };
 
-    const handleDeleteQuiz = async (sectionId, chapterId, quizId) => {
-        if (window.confirm('Are you sure you want to delete this quiz?')) {
-            try {
-                const response = await QuizesRequests.deleteQuiz(quizId, Token['Al-Azhar']);
-                if (response?.success) {
-                    toast.success('Quiz deleted successfully');
-                    // Refetch sections data
-                    sectionsRefetch();
-                } else {
-                    toast.error('Failed to delete quiz');
-                }
-            } catch (error) {
-                console.error('Error deleting quiz:', error);
-                toast.error('Failed to delete quiz');
-            }
-        }
-    };
 
-    // Loading state
     if (isLoading) return <Loader />
 
-    // Error state
     if (isError) {
         return (
             <div className="space-y-6">
@@ -277,7 +258,7 @@ const SectionsManager = ({ courseId, courseMainData, refetch }) => {
 
     return (
         <div className="space-y-6">
-            {/* Add Section Button */}
+
             <div className="flex justify-between items-center">
                 <h3 className="text-lg font-semibold text-gray-800">Course Structure</h3>
                 <button
@@ -289,7 +270,7 @@ const SectionsManager = ({ courseId, courseMainData, refetch }) => {
                 </button>
             </div>
 
-            {/* Sections List */}
+
             {sections?.sections?.length === 0 ? (
                 <div className="text-center py-12 bg-gray-50 rounded-xl">
                     <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
@@ -315,16 +296,16 @@ const SectionsManager = ({ courseId, courseMainData, refetch }) => {
                             transition={{ delay: sectionIndex * 0.1 }}
                             className="bg-white rounded-xl border border-gray-200 overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-200"
                         >
-                            {/* Section Header - Clickable to expand */}
                             <div
-                                className="p-4 bg-gray-50 border-b border-gray-200 cursor-pointer hover:bg-gray-100 transition-colors duration-200"
+                                className="p-3 sm:p-4 bg-gray-50 border-b border-gray-200 cursor-pointer hover:bg-gray-100 transition-colors duration-200"
                                 onClick={() => toggleSection(section._id)}
                             >
-                                <div className="flex items-center justify-between">
-                                    <div className="flex items-center space-x-3">
+                                <div className="flex items-start justify-between gap-2 sm:gap-4">
+                                    <div className="flex items-start space-x-2 sm:space-x-3 flex-1 min-w-0">
                                         <motion.div
                                             animate={{ rotate: expandedSections.has(section._id) ? 90 : 0 }}
                                             transition={{ duration: 0.2 }}
+                                            className="flex-shrink-0 mt-1"
                                         >
                                             {expandedSections.has(section._id) ? (
                                                 <FaChevronDown className="text-blue-500 text-sm" />
@@ -332,25 +313,31 @@ const SectionsManager = ({ courseId, courseMainData, refetch }) => {
                                                 <FaChevronRight className="text-blue-500 text-sm" />
                                             )}
                                         </motion.div>
-                                        <div className="w-8 h-8 bg-blue-500 rounded-lg flex items-center justify-center">
-                                            <FaFolder className="text-white text-sm" />
+
+                                        <div className="w-6 h-6 sm:w-8 sm:h-8 bg-blue-500 rounded-lg flex items-center justify-center flex-shrink-0">
+                                            <FaFolder className="text-white text-xs sm:text-sm" />
                                         </div>
-                                        <div>
-                                            <h4 className="font-semibold text-gray-800">{section.title}</h4>
-                                            <p className="text-sm text-gray-600">{section.description}</p>
+
+                                        <div className="flex-1 min-w-0">
+                                            <h4 className="font-semibold text-gray-800 text-sm sm:text-base mb-1 line-clamp-1">
+                                                {section.title}
+                                            </h4>
+                                            <p className="text-xs sm:text-sm text-gray-600 line-clamp-2 leading-relaxed">
+                                                {section.description}
+                                            </p>
                                         </div>
                                     </div>
-                                    <div className="flex items-center space-x-2">
+                                    <div className="flex items-center space-x-1 sm:space-x-2 flex-shrink-0">
                                         <button
                                             onClick={(e) => {
                                                 e.stopPropagation();
                                                 setSelectedSection(section);
                                                 setIsAddChapterOpen(true);
                                             }}
-                                            className="p-2 text-gray-400 hover:text-blue-500 transition-colors duration-200"
+                                            className="p-1.5 sm:p-2 text-gray-400 hover:text-blue-500 transition-colors duration-200"
                                             title="Add Chapter"
                                         >
-                                            <FaPlus className="text-sm" />
+                                            <FaPlus className="text-xs sm:text-sm" />
                                         </button>
                                         <button
                                             onClick={(e) => {
@@ -358,26 +345,26 @@ const SectionsManager = ({ courseId, courseMainData, refetch }) => {
                                                 setSelectedSection(section);
                                                 setIsUpdateSectionOpen(true);
                                             }}
-                                            className="p-2 text-gray-400 hover:text-blue-500 transition-colors duration-200"
+                                            className="p-1.5 sm:p-2 text-gray-400 hover:text-blue-500 transition-colors duration-200"
                                             title="Update Section"
                                         >
-                                            <FaEdit className="text-sm" />
+                                            <FaEdit className="text-xs sm:text-sm" />
                                         </button>
                                         <button
                                             onClick={(e) => {
                                                 e.stopPropagation();
                                                 handleDeleteSectionRequest(section._id, section.order);
                                             }}
-                                            className="p-2 text-gray-400 hover:text-red-500 transition-colors duration-200"
+                                            className="p-1.5 sm:p-2 text-gray-400 hover:text-red-500 transition-colors duration-200"
                                             title="Delete Section"
                                         >
-                                            <FaTrash className="text-sm" />
+                                            <FaTrash className="text-xs sm:text-sm" />
                                         </button>
                                     </div>
                                 </div>
                             </div>
 
-                            {/* Section Content - Animated Expand/Collapse */}
+
                             <AnimatePresence>
                                 {expandedSections.has(section._id) && (
                                     <motion.div
@@ -398,7 +385,7 @@ const SectionsManager = ({ courseId, courseMainData, refetch }) => {
                                                         transition={{ delay: videoIndex * 0.05 }}
                                                         className="bg-white rounded-lg border border-gray-200 overflow-hidden hover:shadow-md transition-all duration-200 group"
                                                     >
-                                                        {/* Video Header with Thumbnail */}
+
                                                         <div className="relative h-20 bg-gradient-to-r from-green-50 to-blue-50">
                                                             <div className="absolute inset-0 flex items-center justify-center">
                                                                 <div className="w-8 h-8 bg-white bg-opacity-90 rounded-full flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-200">
@@ -406,7 +393,7 @@ const SectionsManager = ({ courseId, courseMainData, refetch }) => {
                                                                 </div>
                                                             </div>
 
-                                                            {/* Level Badge */}
+
                                                             {video.level && (
                                                                 <div className="absolute top-2 right-2">
                                                                     <span className={`px-2 py-1 rounded-full text-xs font-medium ${video.level === 'entry' ? 'bg-green-100 text-green-700' :
@@ -418,7 +405,7 @@ const SectionsManager = ({ courseId, courseMainData, refetch }) => {
                                                                 </div>
                                                             )}
 
-                                                            {/* Duration Badge */}
+
                                                             {video.duration && (
                                                                 <div className="absolute bottom-2 left-2">
                                                                     <span className="px-2 py-1 bg-black bg-opacity-70 text-white text-xs font-medium rounded">
@@ -443,7 +430,7 @@ const SectionsManager = ({ courseId, courseMainData, refetch }) => {
                                                                 </div>
                                                             </div>
 
-                                                            {/* Video Actions */}
+
                                                             <div className="flex items-center justify-between pt-2 border-t border-gray-100">
                                                                 <div className="flex items-center space-x-1">
                                                                     <button
@@ -470,7 +457,7 @@ const SectionsManager = ({ courseId, courseMainData, refetch }) => {
                                                                 </div>
                                                             </div>
 
-                                                            {/* Quiz Section */}
+
                                                             {video.quizId && (
                                                                 <div className="mt-2 p-2 bg-purple-50 border border-purple-200 rounded-lg">
                                                                     <div className="flex items-center justify-between">
@@ -495,7 +482,7 @@ const SectionsManager = ({ courseId, courseMainData, refetch }) => {
                                             </div>
                                         </div>
 
-                                        {/* Chapters List */}
+
                                         <div className="p-4">
                                             {section?.chapters?.length === 0 ? (
                                                 <div className="text-center py-8 bg-gray-50 rounded-lg">
@@ -525,16 +512,17 @@ const SectionsManager = ({ courseId, courseMainData, refetch }) => {
                                                             transition={{ delay: chapterIndex * 0.05 }}
                                                             className="bg-gray-50 rounded-lg border border-gray-200 overflow-hidden"
                                                         >
-                                                            {/* Chapter Header - Clickable to expand */}
+
                                                             <div
-                                                                className="p-4 cursor-pointer hover:bg-gray-100 transition-colors duration-200"
+                                                                className="p-3 sm:p-4 cursor-pointer hover:bg-gray-100 transition-colors duration-200"
                                                                 onClick={() => toggleChapter(chapter._id)}
                                                             >
-                                                                <div className="flex items-center justify-between">
-                                                                    <div className="flex items-center space-x-2">
+                                                                <div className="flex items-start justify-between gap-2 sm:gap-4">
+                                                                    <div className="flex items-start space-x-2 flex-1 min-w-0">
                                                                         <motion.div
                                                                             animate={{ rotate: expandedChapters.has(chapter._id) ? 90 : 0 }}
                                                                             transition={{ duration: 0.2 }}
+                                                                            className="flex-shrink-0 mt-1"
                                                                         >
                                                                             {expandedChapters.has(chapter._id) ? (
                                                                                 <FaChevronDown className="text-purple-500 text-xs" />
@@ -542,15 +530,19 @@ const SectionsManager = ({ courseId, courseMainData, refetch }) => {
                                                                                 <FaChevronRight className="text-purple-500 text-xs" />
                                                                             )}
                                                                         </motion.div>
-                                                                        <div className="w-6 h-6 bg-purple-500 rounded flex items-center justify-center">
+                                                                        <div className="w-5 h-5 sm:w-6 sm:h-6 bg-purple-500 rounded flex items-center justify-center flex-shrink-0">
                                                                             <FaList className="text-white text-xs" />
                                                                         </div>
-                                                                        <div>
-                                                                            <h5 className="font-medium text-gray-800">{chapter.title}</h5>
-                                                                            <p className="text-xs text-gray-600">{chapter.description}</p>
+                                                                        <div className="flex-1 min-w-0">
+                                                                            <h5 className="font-medium text-gray-800 text-sm mb-1 line-clamp-1">
+                                                                                {chapter.title}
+                                                                            </h5>
+                                                                            <p className="text-xs text-gray-600 line-clamp-2 leading-relaxed">
+                                                                                {chapter.description}
+                                                                            </p>
                                                                         </div>
                                                                     </div>
-                                                                    <div className="flex items-center space-x-1">
+                                                                    <div className="flex items-center space-x-1 flex-shrink-0">
                                                                         <button
                                                                             onClick={(e) => {
                                                                                 e.stopPropagation();
@@ -584,7 +576,7 @@ const SectionsManager = ({ courseId, courseMainData, refetch }) => {
                                                                 </div>
                                                             </div>
 
-                                                            {/* Chapter Content - Animated Expand/Collapse */}
+
                                                             <AnimatePresence>
                                                                 {expandedChapters.has(chapter._id) && (
                                                                     <motion.div
@@ -595,7 +587,7 @@ const SectionsManager = ({ courseId, courseMainData, refetch }) => {
                                                                         className="overflow-hidden border-t border-gray-200"
                                                                     >
                                                                         <div className="p-4 bg-white">
-                                                                            {/* Videos */}
+
                                                                             <div>
                                                                                 <h6 className="text-sm font-medium text-gray-700 mb-3 flex items-center space-x-1">
                                                                                     <FaPlay className="text-xs" />
@@ -744,7 +736,7 @@ const SectionsManager = ({ courseId, courseMainData, refetch }) => {
                 </div>
             )}
 
-            {/* Modals */}
+
             <AddSectionForm
                 isOpen={isAddSectionOpen}
                 onClose={() => setIsAddSectionOpen(false)}
@@ -782,6 +774,7 @@ const SectionsManager = ({ courseId, courseMainData, refetch }) => {
                 chapter={selectedChapter}
                 courseId={courseId}
                 uploadProgress={uploadProgress}
+                refetch={refetch}
             />
 
             <UpdateVideoForm
@@ -792,6 +785,7 @@ const SectionsManager = ({ courseId, courseMainData, refetch }) => {
                 courseId={courseId}
                 uploadProgress={uploadProgress}
                 videoData={selectedVideoData}
+                refetch={refetch}
             />
 
             <VideoPlayerPopup
