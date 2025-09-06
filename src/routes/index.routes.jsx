@@ -9,6 +9,7 @@ import SupervisorRoutes from "./supervisor.route.jsx";
 import InternRoutes from "./intern.routes.jsx";
 import ProtectedRoute from "../utils/ProtectedRoute.jsx";
 import Overview from "../pages/courses/course/Overview.jsx";
+import ContactUs from "../interns/ContactUs.jsx";
 const Courses = lazy(() => import("../pages/courses/Index.jsx"));
 const Course = lazy(() => import("../pages/courses/course"));
 
@@ -40,7 +41,10 @@ const createRoutes = (userRole, token) => {
         {
           path: "courses/:courseId/overview",
           element: <Overview />,
-        },
+        }, {
+          path: "contact",
+          element: <ContactUs />,
+        }
       ],
     },
 

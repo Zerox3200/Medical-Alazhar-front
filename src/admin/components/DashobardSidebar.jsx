@@ -6,7 +6,7 @@ import { GoHomeFill } from "react-icons/go";
 import { FaHouseMedical, FaVideo } from "react-icons/fa6";
 import { IoCalendarClear } from "react-icons/io5";
 import { BsFillGearFill } from "react-icons/bs";
-import { FaHospital, FaStethoscope, FaUsers, FaGlobe } from "react-icons/fa";
+import { FaHospital, FaStethoscope, FaUsers, FaGlobe, FaEnvelope } from "react-icons/fa";
 import { IoTimeSharp } from "react-icons/io5";
 
 const DashboardLinks = [
@@ -16,12 +16,12 @@ const DashboardLinks = [
     value: "/admin",
     description: "Overview and analytics"
   },
-  {
-    icon: <IoCalendarClear />,
-    label: "Calendar",
-    value: "/admin/calendar",
-    description: "Schedule management"
-  },
+  // {
+  //   icon: <IoCalendarClear />,
+  //   label: "Calendar",
+  //   value: "/admin/calendar",
+  //   description: "Schedule management"
+  // },
   {
     icon: <FaVideo />,
     label: "Courses",
@@ -58,6 +58,12 @@ const DashboardLinks = [
     value: "settings",
     description: "System configuration"
   },
+  {
+    icon: <FaEnvelope />,
+    label: "Messages",
+    value: "/admin/messages",
+    description: "Message management"
+  }
 ];
 
 const MainWebsiteLink = {

@@ -369,3 +369,76 @@ export const QuizesRequests = {
         }
     }
 }
+
+export const ContactUsRequests = {
+    sendMessage: async (messageData, Token) => {
+        try {
+            const { data } = await axios.post(`${API_URL}/messages/sendMessage`, messageData, {
+                headers: {
+                    "Authorization": `Bearer ${Token}`
+                }
+            });
+            return data;
+        }
+        catch (error) {
+            console.error("Error sending message:", error);
+            return
+        }
+    },
+    getAllMessages: async (Token) => {
+        try {
+            const response = await axios.get(`${API_URL}/messages/getAllMessages`, {
+                headers: {
+                    "Authorization": `Bearer ${Token}`
+                }
+            });
+            return response;
+        }
+        catch (error) {
+            console.error("Error getting all messages:", error);
+            return
+        }
+    },
+    markMessageAsRead: async (messageId, Token) => {
+        try {
+            const response = await axios.patch(`${API_URL}/messages/messageSeen/${messageId}`, {}, {
+                headers: {
+                    "Authorization": `Bearer ${Token}`
+                }
+            });
+            return response;
+        }
+        catch (error) {
+            console.error("Error marking message as read:", error);
+            return
+        }
+    },
+    deleteMessage: async (messageId, Token) => {
+        try {
+            const response = await axios.delete(`${API_URL}/messages/deleteMessage/${messageId}`, {
+                headers: {
+                    "Authorization": `Bearer ${Token}`
+                }
+            });
+            return response;
+        }
+        catch (error) {
+            console.error("Error deleting message:", error);
+            return
+        }
+    },
+    getOneMessage: async (messageId, Token) => {
+        try {
+            const response = await axios.get(`${API_URL}/messages/getMessage/${messageId}`, {
+                headers: {
+                    "Authorization": `Bearer ${Token}`
+                }
+            });
+            return response;
+        }
+        catch (error) {
+            console.error("Error getting one message:", error);
+            return
+        }
+    }
+}

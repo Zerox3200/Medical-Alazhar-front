@@ -18,6 +18,9 @@ import UpdateQuizes from "../admin/courses/UpdateQueizzes.jsx";
 const CourseVideos = lazy(() => import("../admin/courses/CourseVedios.jsx"));
 const AddQuizes = lazy(() => import("../admin/courses/AddQuizes.jsx"));
 
+const Messages = lazy(() => import("../admin/Messages/Messages.jsx"));
+
+
 const AdminRoutes = [
   {
     path: "/",
@@ -77,6 +80,10 @@ const AdminRoutes = [
           {
             path: "/admin/update-quiz/:courseId/:quizId",
             element: <UpdateQuizes />,
+          },
+          {
+            path: "/admin/messages",
+            element: <Messages />,
           }
         ],
       },

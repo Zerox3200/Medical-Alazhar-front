@@ -23,7 +23,7 @@ const navLinks = [
     label: "Courses",
   },
   {
-    title: "contact_us",
+    title: "contact",
     label: "Contact Us",
   },
 ];
