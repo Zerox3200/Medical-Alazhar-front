@@ -19,7 +19,7 @@ import { BsThreeDotsVertical } from 'react-icons/bs';
 import { MdOutlinePublishedWithChanges } from 'react-icons/md';
 import { CoursesRequests } from '../../Api/apiRequests';
 import { useCookies } from 'react-cookie';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery } from 'react-query';
 import Loader from '../../components/Loader';
 import { toast } from 'react-hot-toast';
 

@@ -8,8 +8,8 @@ import Loader from "./components/Loader.jsx";
 import "./index.css";
 import { CookiesProvider } from "react-cookie";
 import { Toaster } from "react-hot-toast";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import { QueryClient, QueryClientProvider } from "react-query";
+import { ReactQueryDevtools } from "react-query/devtools";
 
 let query = new QueryClient();
 
