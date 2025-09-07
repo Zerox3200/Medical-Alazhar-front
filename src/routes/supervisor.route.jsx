@@ -5,7 +5,7 @@ import SupervisorLayout from "../layouts/SupervisorLayout.jsx";
 import Profile from "../supervisors/profile/index.jsx";
 import Interns from "../supervisors/interns/index.jsx";
 import Intern from "../supervisors/interns/intern/index.jsx";
-import Assessments from "../supervisors/assessments/index.jsx";
+import Assessments from "../supervisors/assessments/Index.jsx";
 import AddAssessment from "../supervisors/assessments/AddAssessment.jsx";
 const SupervisorHome = lazy(() => import("../supervisors/Home.jsx"));
 
