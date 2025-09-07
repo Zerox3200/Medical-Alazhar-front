@@ -1,7 +1,7 @@
 import React, { lazy } from "react";
 const ProtectedRoute = lazy(() => import("../utils/ProtectedRoute.jsx"));
 const AdminDashboard = lazy(() => import("../admin/dashboard/Dashboard.jsx"));
-const Courses = lazy(() => import("../admin/courses"));
+const Courses = lazy(() => import("../admin/courses/Index.jsx"));
 const AllCourses = lazy(() => import("../admin/courses/AllCourses.jsx"));
 
 import Rounds from "../admin/rounds/index.jsx";
