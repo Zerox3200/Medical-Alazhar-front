@@ -1,7 +1,7 @@
 import React, { lazy } from "react";
 
-import ProtectedRoute from "../utils/ProtectedRoute";
-import SupervisorLayout from "../layouts/SupervisorLayout";
+import ProtectedRoute from "../utils/ProtectedRoute.jsx";
+import SupervisorLayout from "../layouts/SupervisorLayout.jsx";
 import Profile from "../supervisors/profile/index.jsx";
 import Interns from "../supervisors/interns/index.jsx";
 import Intern from "../supervisors/interns/intern/index.jsx";

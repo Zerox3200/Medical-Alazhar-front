@@ -4,14 +4,14 @@ const AdminDashboard = lazy(() => import("../admin/dashboard/Dashboard.jsx"));
 const Courses = lazy(() => import("../admin/courses"));
 const AllCourses = lazy(() => import("../admin/courses/AllCourses.jsx"));
 
-import Rounds from "../admin/rounds";
-import Round from "../admin/rounds/round";
-import Supervisors from "../admin/supervisors";
-import Interns from "../admin/interns";
-import Profile from "../admin/profile";
+import Rounds from "../admin/rounds/index.jsx";
+import Round from "../admin/rounds/round/Index.jsx";
+import Supervisors from "../admin/supervisors/index.jsx";
+import Interns from "../admin/interns/index.jsx";
+import Profile from "../admin/profile/index.jsx";
 import AdminLayout from "../layouts/AdminLayout.jsx";
 
-import SupervisorProfile from "../admin/supervisors/profile";
+import SupervisorProfile from "../admin/supervisors/profile/Index.jsx";
 import UpdateCourse from "../admin/courses/UpdateCourse.jsx";
 import UpdateQuizes from "../admin/courses/UpdateQueizzes.jsx";
 
