@@ -2,7 +2,7 @@ import React from "react";
 import Hero from "./Hero";
 import FacultyOverview from "./FacultyOverview";
 import MissionVision from "./MissionVision";
-import DeanMessage from "./DeanMEssage";
+import DeanMessage from "./DeanMessage";
 import HeadCMEMessage from "./HeadCMEMessage";
 import Statistics from "./Statistics";
 import Awards from "./Awards";
