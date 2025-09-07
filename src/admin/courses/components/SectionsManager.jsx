@@ -10,7 +10,7 @@ import AddVideoForm from './AddVideoForm';
 import VideoPlayerPopup from '../../components/VideoPlayerPopup';
 import { ChaptersRequests, CoursesRequests, CourseVediosRequests, QuizesRequests, SectionsRequests } from '../../../Api/apiRequests';
 import { useCookies } from 'react-cookie';
-import { useQuery } from 'react-query';
+import { useQuery } from '@tanstack/react-query';
 import Loader from '../../../components/Loader';
 import UpdateSectionForm from './UpdateSectionForm';
 import UpdateVideoForm from './UpdateVideoForm';

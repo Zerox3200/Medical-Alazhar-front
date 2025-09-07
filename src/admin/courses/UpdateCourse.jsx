@@ -13,7 +13,7 @@ import { Link, useNavigate, useParams } from "react-router";
 import { CoursesRequests } from "../../Api/apiRequests";
 import { useCookies } from "react-cookie";
 import { toast } from "react-hot-toast";
-import { useQuery } from "react-query";
+import { useQuery } from "@tanstack/react-query";
 import Loader from "../../components/Loader";
 import UpdateCourseImage from "../../components/UpdateCourseImage/UpdateCourseImage";
 

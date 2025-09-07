@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FaEnvelope, FaEnvelopeOpen, FaPhone, FaUser, FaSearch, FaFilter, FaEye, FaReply, FaTrash, FaClock, FaSortAmountDown, FaSortAmountUp } from 'react-icons/fa';
 import { toast } from 'react-hot-toast';
-import { useQuery } from 'react-query';
+import { useQuery } from '@tanstack/react-query';
 import { useCookies } from 'react-cookie';
 import { ContactUsRequests } from '../../Api/apiRequests';
 import Loader from '../../components/Loader';

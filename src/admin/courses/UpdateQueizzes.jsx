@@ -5,7 +5,7 @@ import * as Yup from 'yup';
 import { Link, useNavigate } from 'react-router';
 import { useParams } from 'react-router';
 import { useCookies } from 'react-cookie';
-import { useQuery } from 'react-query';
+import { useQuery } from '@tanstack/react-query';
 import { CoursesRequests, QuizesRequests } from '../../Api/apiRequests';
 import {
     FaBook,

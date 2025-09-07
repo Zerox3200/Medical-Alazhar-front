@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useParams, Link } from 'react-router';
 import { CoursesRequests, QuizesRequests } from '../../Api/apiRequests';
 import { useCookies } from 'react-cookie';
-import { useQuery } from 'react-query';
+import { useQuery } from '@tanstack/react-query';
 import Loader from '../../components/Loader';
 import {
     FaPlay,

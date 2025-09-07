@@ -1,7 +1,7 @@
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FaEnvelope, FaPhone, FaUser, FaClock, FaTimes, FaEnvelopeOpen, FaTrash, FaReply } from 'react-icons/fa';
-import { useQuery } from 'react-query';
+import { useQuery } from '@tanstack/react-query';
 import { useCookies } from 'react-cookie';
 import { ContactUsRequests } from '../../Api/apiRequests';
 import { toast } from 'react-hot-toast';
