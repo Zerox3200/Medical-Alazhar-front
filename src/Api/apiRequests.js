@@ -116,6 +116,23 @@ export const CoursesRequests = {
             console.error("Error updating course status:", error);
             return
         }
+    },
+    updateCoursePaidStatus: async (courseId, paidStatus, Token) => {
+        try {
+            const { data } = await axios.patch(`${API_URL}/admin/courses/${courseId}/paid`, {
+                paid: paidStatus.paid,
+                price: paidStatus.paid ? paidStatus.price : 0
+            }, {
+                headers: {
+                    "Authorization": `Bearer ${Token}`
+                }
+            });
+            return data;
+        }
+        catch (error) {
+            console.error("Error updating course paid status:", error);
+            return
+        }
     }
 }
 

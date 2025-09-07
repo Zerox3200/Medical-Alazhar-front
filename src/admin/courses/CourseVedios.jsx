@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
-import { motion } from 'framer-motion';
+import React, { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { useParams, Link } from 'react-router';
-import { CoursesRequests, CourseVediosRequests, QuizesRequests } from '../../Api/apiRequests';
+import { CoursesRequests, QuizesRequests } from '../../Api/apiRequests';
 import { useCookies } from 'react-cookie';
 import { useQuery } from 'react-query';
 import Loader from '../../components/Loader';
@@ -12,6 +12,9 @@ import {
     FaList,
     FaEdit,
     FaTrash,
+    FaDollarSign,
+    FaLock,
+    FaUnlock,
 } from 'react-icons/fa';
 import { toast } from 'react-hot-toast';
 
@@ -20,11 +23,13 @@ import SectionsManager from './components/SectionsManager';
 import CourseHeader from './components/CourseHeader';
 import CourseStats from './components/CourseStats';
 import VideoPlayerPopup from '../components/VideoPlayerPopup';
+import CoursePricingForm from './components/CoursePricingForm';
 
 export default function CourseVedios() {
     const { courseId } = useParams();
     const [Token] = useCookies(['Al-Azhar']);
     const [activeTab, setActiveTab] = useState('sections');
+    const [isPaidCourse, setIsPaidCourse] = useState(false); // UI state for paid course toggle
 
     const [isVideoPlayerOpen, setIsVideoPlayerOpen] = useState(false);
     const [selectedVideo, setSelectedVideo] = useState(null);
@@ -37,6 +42,13 @@ export default function CourseVedios() {
     const { data: courseMainData, isLoading: courseMainDataLoading, refetch } = useQuery("get course main data", getCourseMainData, {
         enabled: !!courseId && !!Token['Al-Azhar']
     });
+
+    // Synchronize isPaidCourse state with actual course data
+    useEffect(() => {
+        if (courseMainData) {
+            setIsPaidCourse(courseMainData.paid || false);
+        }
+    }, [courseMainData]);
 
     const handleDeleteQuiz = async (quizId) => {
         try {
@@ -51,6 +63,43 @@ export default function CourseVedios() {
             console.error('Error deleting quiz:', error);
             toast.error('Failed to delete quiz');
         }
+    };
+
+    const handleSavePricing = async (pricingData) => {
+
+        console.log('Saving course pricing:', pricingData);
+
+        const neededData = {
+            paid: isPaidCourse,
+            price: pricingData.price
+        }
+
+        const response = await CoursesRequests.updateCoursePaidStatus(courseId, neededData, Token['Al-Azhar']);
+
+        if (response?.success) {
+            toast.success('Course pricing updated successfully');
+            refetch();
+            handleCancelPricing();
+        } else {
+            toast.error('Failed to update course pricing');
+        }
+    };
+
+    const handleMakeCourseFree = async () => {
+        const response = await CoursesRequests.updateCoursePaidStatus(courseId, { paid: false, price: 0 }, Token['Al-Azhar']);
+        if (response?.success) {
+            toast.success('Course be free now');
+            refetch();
+            handleCancelPricing();
+        }
+        else {
+            toast.error('Failed to make course free');
+        }
+    }
+
+    const handleCancelPricing = () => {
+        // Reset to the actual course status from server
+        setIsPaidCourse(courseMainData?.paid || false);
     };
 
     const containerVariants = {
@@ -92,6 +141,75 @@ export default function CourseVedios() {
                     variants={itemVariants}
                 />
 
+                {/* Paid Course Toggle */}
+                <motion.div className="mb-6" variants={itemVariants}>
+                    <div className="bg-white rounded-2xl shadow-lg border border-gray-100 p-4 sm:p-6">
+                        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                            <div className="flex items-center space-x-3">
+                                <div className="w-10 h-10 bg-gradient-to-r from-green-500 to-emerald-500 rounded-lg flex items-center justify-center">
+                                    <FaDollarSign className="text-white" />
+                                </div>
+                                <div>
+                                    <h3 className="text-lg sm:text-xl font-bold text-gray-800">Course Pricing</h3>
+                                    <p className="text-sm text-gray-600">Set whether this course is free or paid</p>
+                                </div>
+                            </div>
+
+                            <div className="flex items-center space-x-4">
+                                <div className="flex items-center space-x-2">
+                                    <span className={`text-sm font-medium ${isPaidCourse ? 'text-gray-500' : 'text-green-600'}`}>
+                                        Free
+                                    </span>
+                                    <button
+                                        onClick={async () => {
+                                            if (isPaidCourse) {
+                                                // If currently paid, make it free
+                                                await handleMakeCourseFree();
+                                            } else {
+                                                // If currently free, set to paid mode
+                                                setIsPaidCourse(true);
+                                            }
+                                        }}
+                                        className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors duration-200 
+                                            focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 
+                                            ${isPaidCourse ? 'bg-blue-600' : 'bg-gray-200'
+                                            }`}
+                                    >
+                                        <span
+                                            className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform duration-200 
+                                                ${isPaidCourse ? 'translate-x-6' : 'translate-x-1'
+                                                }`}
+                                        />
+                                    </button>
+                                    <span className={`text-sm font-medium ${isPaidCourse ? 'text-blue-600' : 'text-gray-500'}`}>
+                                        Paid
+                                    </span>
+                                </div>
+
+                                <div className="flex items-center space-x-2">
+                                    {isPaidCourse ? (
+                                        <>
+                                            <FaLock className="text-blue-500" />
+                                            <span className="text-sm text-blue-600 font-medium">Premium Course</span>
+                                        </>
+                                    ) : (
+                                        <>
+                                            <FaUnlock className="text-green-500" />
+                                            <span className="text-sm text-green-600 font-medium">Free Course</span>
+                                        </>
+                                    )}
+                                </div>
+                            </div>
+                        </div>
+
+                        <CoursePricingForm
+                            isPaidCourse={isPaidCourse}
+                            onSave={handleSavePricing}
+                            onCancel={handleCancelPricing}
+                            price={courseMainData?.price}
+                        />
+                    </div>
+                </motion.div>
 
                 <motion.div className="mb-6" variants={itemVariants}>
                     <div className="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden">
