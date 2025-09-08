@@ -1,6 +1,6 @@
 import React, { Suspense, useEffect, useState } from "react";
 import createRoutes from "./routes/index.routes.jsx";
-import { createBrowserRouter, RouterProvider } from "react-router";
+import { createBrowserRouter, createHashRouter, RouterProvider } from "react-router";
 import Loader from "./components/Loader";
 import { useDispatch, useSelector } from "react-redux";
 import { useGetUserQuery } from "./services/common/authApiSlice.js";
@@ -16,7 +16,7 @@ const App = () => {
   const dispatch = useDispatch();
   const [Token] = useCookies(["Al-Azhar"]);
 
-  const router = createBrowserRouter(createRoutes(user?.role, token));
+  const router = createHashRouter(createRoutes(user?.role, token));
 
   const [UserLoading, setUserLoading] = useState(true);
 
