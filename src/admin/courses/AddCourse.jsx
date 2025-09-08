@@ -103,17 +103,20 @@ const AddCourse = () => {
 
   const HandleCreateCourse = async (values) => {
     try {
-      const { data } = await CoursesRequests.creeteCourse(values, Token["Al-Azhar"]);
+      const response = await CoursesRequests.createCourse(values, Token["Al-Azhar"]);
 
-      console.log(data);
 
-      if (data?.success) {
+      if (response?.success) {
+
         toast.success("Course added successfully!");
         formik.resetForm();
         setPreviewImage(null);
         navigate("/admin/all-courses");
+
       } else {
+
         toast.error("Error adding course. Please try again.");
+
       }
     } catch (error) {
       console.error("Error creating course:", error);

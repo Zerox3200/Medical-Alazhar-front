@@ -1,14 +1,13 @@
 import axios from "axios";
 
-// export const API_URL = "http://localhost:3000/api/v1";
-export const API_URL_ForApp = "https://respectful-radiance-medical-al-azhar.up.railway.app/api/v1";
-export const API_URL = "https://respectful-radiance-medical-al-azhar.up.railway.app/api/v1";
+export const API_URL = "http://localhost:3000/api/v1";
+// export const API_URL = "https://respectful-radiance-medical-al-azhar.up.railway.app/api/v1";
 
 
 export const CoursesRequests = {
-    creeteCourse: async (courseData, Token) => {
-        try {
+    createCourse: async (courseData, Token) => {
 
+        try {
             const formData = new FormData();
 
             formData.append("title", courseData.title);
@@ -21,13 +20,15 @@ export const CoursesRequests = {
 
             formData.append("courseImage", courseData.courseImage);
 
-            const response = await axios.post(`${API_URL}/admin/courses/create`, formData, {
+            const { data } = await axios.post(`${API_URL}/admin/courses/create`, formData, {
                 headers: {
                     "Content-Type": "multipart/form-data",
                     "Authorization": `Bearer ${Token}`
                 }
             });
-            return response;
+
+            return data;
+
         } catch (error) {
             console.error("Error creating course:", error);
             return

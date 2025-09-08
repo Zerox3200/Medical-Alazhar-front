@@ -1,11 +1,11 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { setAuth, clearAuth } from "../slices/authSlice";
+import { API_URL } from "../../Api/apiRequests";
 
-// https://respectful-radiance-medical-al-azhar.up.railway.app/api/v1
-// http://localhost:3000/api/v1
+
 
 const baseQuery = fetchBaseQuery({
-  baseUrl: "https://respectful-radiance-medical-al-azhar.up.railway.app/api/v1",
+  baseUrl: API_URL,
   credentials: "include",
   prepareHeaders: (headers, { getState }) => {
     const token = getState().auth.token;

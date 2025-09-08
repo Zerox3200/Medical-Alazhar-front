@@ -7,7 +7,7 @@ import { useGetUserQuery } from "./services/common/authApiSlice.js";
 import { clearAuth, setAuth } from "./services/slices/authSlice.js";
 import axios from "axios";
 import { useCookies } from "react-cookie";
-import { API_URL, API_URL_ForApp } from "./Api/apiRequests.js";
+import { API_URL } from "./Api/apiRequests.js";
 
 
 const App = () => {
@@ -27,7 +27,7 @@ const App = () => {
     }
 
     try {
-      const { data } = await axios.get(`${API_URL_ForApp}/auth/me`, {
+      const { data } = await axios.get(`${API_URL}/auth/me`, {
         headers: {
           Authorization: `Bearer ${Token["Al-Azhar"]}`
         }
