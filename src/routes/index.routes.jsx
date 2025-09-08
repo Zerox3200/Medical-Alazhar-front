@@ -8,10 +8,12 @@ import AdminRoutes from "./admin.routes.jsx";
 import SupervisorRoutes from "./supervisor.route.jsx";
 import InternRoutes from "./intern.routes.jsx";
 import ProtectedRoute from "../utils/ProtectedRoute.jsx";
-import Overview from "../pages/courses/course/Overview.jsx";
+import Overview from "../pages/courses/AllCourses/Overview.jsx";
 import ContactUs from "../interns/ContactUs.jsx";
-const Courses = lazy(() => import("../pages/courses/Index.jsx"));
-const Course = lazy(() => import("../pages/courses/course/Index.jsx"));
+import CourseDetails from "../pages/courses/CourseDetails/CourseDetails.jsx";
+
+const Courses = lazy(() => import("../pages/courses/AllCourses/AllCourses.jsx"));
+const VideoPlayer = lazy(() => import("../pages/courses/VideoPlayer/VideoPlayer.jsx"));
 
 const ErrorBoundary = lazy(() => import("../pages/ErrorBoundary.jsx"));
 const NotFound = lazy(() => import("../pages/NotFound.jsx"));
@@ -36,12 +38,16 @@ const createRoutes = (userRole, token) => {
         },
         {
           path: "courses/:courseId",
-          element: <Course />,
+          element: <CourseDetails />,
         },
         {
           path: "courses/:courseId/overview",
           element: <Overview />,
         }, {
+          path: "courses/:courseId/video/:videoId",
+          element: <VideoPlayer />,
+        },
+        {
           path: "contact",
           element: <ContactUs />,
         }

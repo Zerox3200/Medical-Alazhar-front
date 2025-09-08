@@ -1,7 +1,7 @@
 import axios from "axios";
 
-// export const API_URL = "http://localhost:3000/api/v1";
-export const API_URL = "https://respectful-radiance-medical-al-azhar.up.railway.app/api/v1";
+export const API_URL = "http://localhost:3000/api/v1";
+// export const API_URL = "https://respectful-radiance-medical-al-azhar.up.railway.app/api/v1";
 
 
 export const CoursesRequests = {
@@ -136,7 +136,28 @@ export const CoursesRequests = {
             console.error("Error updating course paid status:", error);
             return
         }
+    },
+    getAllCoursesForUser: async () => {
+        try {
+            const { data } = await axios.get(`${API_URL}/course/courses`);
+            return data;
+        }
+        catch (error) {
+            console.error("Error getting all courses for user:", error);
+            return
+        }
+    },
+    getCourseByIdForUser: async (courseId) => {
+        try {
+            const { data } = await axios.get(`${API_URL}/course/${courseId}`);
+            return data;
+        }
+        catch (error) {
+            console.error("Error getting course by id for user:", error);
+            return
+        }
     }
+
 }
 
 export const SectionsRequests = {
