@@ -1,22 +1,22 @@
 import React, { Suspense, useEffect, useState } from "react";
 import createRoutes from "./routes/index.routes.jsx";
-import { createBrowserRouter, createHashRouter, RouterProvider } from "react-router";
+import { createBrowserRouter, RouterProvider } from "react-router";
 import Loader from "./components/Loader";
 import { useDispatch, useSelector } from "react-redux";
 import { useGetUserQuery } from "./services/common/authApiSlice.js";
 import { clearAuth, setAuth } from "./services/slices/authSlice.js";
 import axios from "axios";
 import { useCookies } from "react-cookie";
+import { API_URL } from "./Api/apiRequests.js";
 
-export const API_URL = "http://localhost:3000/api/v1";
 
 const App = () => {
 
-  const { token, user } = useSelector((state) => state.auth);
+  const { user } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
   const [Token] = useCookies(["Al-Azhar"]);
 
-  const router = createHashRouter(createRoutes(user?.role, token));
+  const router = createBrowserRouter(createRoutes(user?.role, Token["Al-Azhar"]));
 
   const [UserLoading, setUserLoading] = useState(true);
 
