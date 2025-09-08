@@ -1,6 +1,7 @@
 import axios from "axios";
 
-export const API_URL = "http://localhost:3000/api/v1";
+// export const API_URL = "http://localhost:3000/api/v1";
+export const API_URL = "https://respectful-radiance-medical-al-azhar.up.railway.app/api/v1/";
 
 
 export const CoursesRequests = {
