@@ -1,9 +1,10 @@
 import React, { useState } from "react";
 import { Link } from "react-router";
 import { motion } from "framer-motion";
-import { FaUserMd, FaUserGraduate, FaHome, FaShieldAlt } from "react-icons/fa";
+import { FaUserMd, FaUserGraduate, FaHome, FaShieldAlt, FaUser } from "react-icons/fa";
 import InternSignupForm from "./InternSignupForm";
 import SupervisorSignupForm from "./SupervisorSignupForm";
+import NormalUserSignupForm from "./NormalUserSignupForm";
 
 const Signup = () => {
   const [selectedUser, setSelectedUser] = useState("supervisor");
@@ -93,7 +94,7 @@ const Signup = () => {
           {/* User Type Selection */}
           <div className="p-6 sm:p-8 lg:p-12">
             <div className="mb-8">
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
                 {/* Intern Option */}
                 <motion.div
                   className={`relative p-6 rounded-2xl border-2 cursor-pointer transition-all duration-300 ${selectedUser === "intern"
@@ -165,6 +166,42 @@ const Signup = () => {
                     </div>
                   </div>
                 </motion.div>
+
+                {/* Normal User Option */}
+                <motion.div
+                  className={`relative p-6 rounded-2xl border-2 cursor-pointer transition-all duration-300 ${selectedUser === "normal"
+                    ? "border-purple-500 bg-purple-50 shadow-lg"
+                    : "border-gray-200 bg-gray-50 hover:border-gray-300 hover:bg-gray-100"
+                    }`}
+                  onClick={() => setSelectedUser("normal")}
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                >
+                  <div className="flex items-center space-x-4">
+                    <div className={`w-12 h-12 rounded-xl flex items-center justify-center ${selectedUser === "normal"
+                      ? "bg-purple-500 text-white"
+                      : "bg-gray-200 text-gray-600"
+                      }`}>
+                      <FaUser className="text-xl" />
+                    </div>
+                    <div className="flex-1">
+                      <h3 className="text-lg font-semibold text-gray-800 mb-1">
+                        Regular User
+                      </h3>
+                      <p className="text-sm text-gray-600">
+                        Register as a regular user
+                      </p>
+                    </div>
+                    <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${selectedUser === "normal"
+                      ? "border-purple-500 bg-purple-500"
+                      : "border-gray-300"
+                      }`}>
+                      {selectedUser === "normal" && (
+                        <div className="w-2 h-2 bg-white rounded-full"></div>
+                      )}
+                    </div>
+                  </div>
+                </motion.div>
               </div>
             </div>
 
@@ -177,8 +214,10 @@ const Signup = () => {
             >
               {selectedUser === "intern" ? (
                 <InternSignupForm />
-              ) : (
+              ) : selectedUser === "supervisor" ? (
                 <SupervisorSignupForm />
+              ) : (
+                <NormalUserSignupForm />
               )}
             </motion.div>
           </div>
