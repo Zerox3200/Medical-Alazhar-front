@@ -11,6 +11,7 @@ import ProtectedRoute from "../utils/ProtectedRoute.jsx";
 import Overview from "../pages/courses/AllCourses/Overview.jsx";
 import ContactUs from "../interns/ContactUs.jsx";
 import CourseDetails from "../pages/courses/CourseDetails/CourseDetails.jsx";
+import UserRoutes from "./user.routes.jsx";
 
 const Courses = lazy(() => import("../pages/courses/AllCourses/AllCourses.jsx"));
 const VideoPlayer = lazy(() => import("../pages/courses/VideoPlayer/VideoPlayer.jsx"));
@@ -58,7 +59,7 @@ const createRoutes = (userRole, token) => {
     {
       element: (
         <ProtectedRoute
-          allowedRoles={["admin", "intern", "coordinator", "supervisor"]}
+          allowedRoles={["admin", "intern", "coordinator", "supervisor", "user"]}
         />
       ),
       children: [
@@ -68,6 +69,7 @@ const createRoutes = (userRole, token) => {
           ? SupervisorRoutes
           : []),
         ...(token && userRole === "intern" ? InternRoutes : []),
+        ...(token && userRole === "user" ? UserRoutes : []),
       ],
     },
     {

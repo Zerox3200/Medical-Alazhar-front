@@ -54,6 +54,8 @@ const MainNavbar = () => {
       navigate("/admin");
     } else if (user?.role === "supervisor") {
       navigate("/supervisor/dashboard");
+    } else if (user?.role === "user") {
+      navigate("/user/profile");
     } else {
       navigate("/");
     }
@@ -97,11 +99,20 @@ const MainNavbar = () => {
         </div>
 
         {/* CTA Button */}
+
         <div className="navbar__cta flex items-center gap-4">
           {Token['Al-Azhar'] ? <>
-            <button onClick={handleDashboard} className="navbar__cta-button">
-              Dashboard
-            </button>
+
+            {user?.role === "user" ?
+              <Link to="/user/profile" className="navbar__cta-button">
+                Profile
+              </Link>
+              :
+              <button onClick={handleDashboard} className="navbar__cta-button">
+                Dashboard
+              </button>
+            }
+
             <button onClick={handleLogout} className="navbar__cta-button">
               Logout
             </button>
@@ -114,6 +125,7 @@ const MainNavbar = () => {
             </Link>
           </>
           }
+
           <IoMdMenu className="mobile-icon" onClick={toggleMobileMenu} />
         </div>
       </div>

@@ -1,7 +1,7 @@
 import axios from "axios";
 
-export const API_URL = "http://localhost:3000/api/v1";
-// export const API_URL = "https://respectful-radiance-medical-al-azhar.up.railway.app/api/v1";
+// export const API_URL = "http://localhost:3000/api/v1";
+export const API_URL = "https://respectful-radiance-medical-al-azhar.up.railway.app/api/v1";
 
 
 export const CoursesRequests = {
@@ -482,4 +482,116 @@ export const ContactUsRequests = {
             return
         }
     }
+}
+
+export const NormalUserRequests = {
+    signup: async (userData) => {
+        try {
+            const { data } = await axios.post(`${API_URL}/user/Create-Account`, userData);
+            return data;
+        }
+        catch (error) {
+            console.error("Error signing up:", error);
+            return
+        }
+    },
+    getUserProfile: async (Token) => {
+        try {
+            const { data } = await axios.get(`${API_URL}/user/Get-Profile`, {
+                headers: {
+                    Authorization: `Bearer ${Token}`
+                }
+            });
+
+            return data;
+        }
+        catch (error) {
+            console.error("Error getting user profile:", error);
+            return
+        }
+    },
+    updateUserProfile: async (userData, Token) => {
+        const formData = new FormData();
+
+        formData.append("name", userData.name);
+        formData.append("phone", userData.phone);
+
+        if (userData.profileImage)
+            formData.append("profileImage", userData.profileImage);
+
+        try {
+            const { data } = await axios.patch(`${API_URL}/user/Update-Profile`, formData, {
+                headers: {
+                    Authorization: `Bearer ${Token}`
+                }
+            });
+
+            return data;
+        }
+        catch (error) {
+            console.error("Error updating user profile:", error);
+            return
+        }
+    },
+    subscribeToCourse: async (courseId, Token) => {
+        try {
+            const { data } = await axios.post(`${API_URL}/user/Subscribe-To-Course/${courseId}`, {}, {
+                headers: {
+                    "Authorization": `Bearer ${Token}`
+                }
+            });
+
+            return data;
+        }
+        catch (error) {
+            console.error("Error subscribing to course:", error);
+            return
+        }
+    },
+    getAllUsers: async (Token) => {
+        try {
+            const { data } = await axios.get(`${API_URL}/user/get-all-users`, {
+                headers: {
+                    "Authorization": `Bearer ${Token}`
+                }
+            });
+            return data;
+        }
+        catch (error) {
+            console.error("Error getting all users:", error);
+            return
+        }
+    },
+    deleteUser: async (userId, Token) => {
+        try {
+            const { data } = await axios.delete(`${API_URL}/user/delete-Account/${userId}`, {
+                headers: {
+                    "Authorization": `Bearer ${Token}`
+                }
+            });
+
+            return data;
+        }
+        catch (error) {
+            console.error("Error deleting user:", error);
+            return
+        }
+    },
+    freezeAccount: async (userId, accountFreezedReason, Token) => {
+        try {
+            const { data } = await axios.patch(`${API_URL}/user/freeze-Account/${userId}`, {
+                accountFreezedReason
+            }, {
+                headers: {
+                    "Authorization": `Bearer ${Token}`
+                }
+            });
+
+            return data;
+        }
+        catch (error) {
+            console.error("Error freezing account:", error);
+            return
+        }
+    },
 }

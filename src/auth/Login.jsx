@@ -69,12 +69,14 @@ const Login = () => {
 
         if (data?.user?.role === "admin") {
           navigate("/admin");
-          window.location.reload();
         } else if (data?.user?.role === "supervisor") {
           navigate("/supervisor/dashboard");
         } else {
           navigate("/");
         }
+
+        window.location.reload();
+
       }
 
     } catch (err) {

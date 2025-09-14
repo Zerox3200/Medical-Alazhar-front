@@ -1,14 +1,16 @@
 import React from 'react';
-import { Link } from 'react-router';
+import { Link, useNavigate } from 'react-router';
 import { motion } from 'framer-motion';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { FaUser, FaEnvelope, FaPhone, FaLock, FaEye, FaEyeSlash } from 'react-icons/fa';
+import { NormalUserRequests } from '../../Api/apiRequests';
+import toast from 'react-hot-toast';
 
 const NormalUserSignupForm = () => {
     const [showPassword, setShowPassword] = React.useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = React.useState(false);
-
+    const navigate = useNavigate();
     // Validation schema
     const validationSchema = Yup.object({
         name: Yup.string()
@@ -34,6 +36,27 @@ const NormalUserSignupForm = () => {
             .required('Confirm password is required'),
     });
 
+    const CreateAccount = async (values) => {
+        console.log(values);
+
+        try {
+            const response = await NormalUserRequests.signup(values);
+
+            if (response.success) {
+                toast.success("Account created successfully");
+                formik.resetForm();
+                navigate("/login");
+            }
+            else {
+                toast.error("Failed to create account");
+            }
+        }
+        catch (error) {
+            console.error("Error signing up:", error);
+            return
+        }
+    }
+
     const formik = useFormik({
         initialValues: {
             name: '',
@@ -43,26 +66,7 @@ const NormalUserSignupForm = () => {
             confirmPassword: '',
         },
         validationSchema,
-        onSubmit: async (values, { setSubmitting, setFieldError }) => {
-            try {
-                setSubmitting(true);
-
-                // Here you would typically make an API call to register the user
-                console.log('Normal User Registration Data:', values);
-
-                // Simulate API call
-                await new Promise(resolve => setTimeout(resolve, 2000));
-
-                // Handle success (redirect, show success message, etc.)
-                alert('Registration successful! Please check your email for verification.');
-
-            } catch (error) {
-                console.error('Registration error:', error);
-                setFieldError('email', 'Registration failed. Please try again.');
-            } finally {
-                setSubmitting(false);
-            }
-        },
+        onSubmit: CreateAccount
     });
 
     const inputVariants = {
@@ -110,8 +114,8 @@ const NormalUserSignupForm = () => {
                             onChange={formik.handleChange}
                             onBlur={formik.handleBlur}
                             className={`block w-full pl-10 pr-3 py-3 border rounded-xl shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 ${formik.touched.name && formik.errors.name
-                                    ? 'border-red-300 bg-red-50'
-                                    : 'border-gray-300 bg-white'
+                                ? 'border-red-300 bg-red-50'
+                                : 'border-gray-300 bg-white'
                                 }`}
                             placeholder="Enter your full name"
                         />
@@ -148,8 +152,8 @@ const NormalUserSignupForm = () => {
                             onChange={formik.handleChange}
                             onBlur={formik.handleBlur}
                             className={`block w-full pl-10 pr-3 py-3 border rounded-xl shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 ${formik.touched.email && formik.errors.email
-                                    ? 'border-red-300 bg-red-50'
-                                    : 'border-gray-300 bg-white'
+                                ? 'border-red-300 bg-red-50'
+                                : 'border-gray-300 bg-white'
                                 }`}
                             placeholder="Enter your email address"
                         />
@@ -186,8 +190,8 @@ const NormalUserSignupForm = () => {
                             onChange={formik.handleChange}
                             onBlur={formik.handleBlur}
                             className={`block w-full pl-10 pr-3 py-3 border rounded-xl shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 ${formik.touched.phone && formik.errors.phone
-                                    ? 'border-red-300 bg-red-50'
-                                    : 'border-gray-300 bg-white'
+                                ? 'border-red-300 bg-red-50'
+                                : 'border-gray-300 bg-white'
                                 }`}
                             placeholder="Enter your phone number"
                         />
@@ -224,8 +228,8 @@ const NormalUserSignupForm = () => {
                             onChange={formik.handleChange}
                             onBlur={formik.handleBlur}
                             className={`block w-full pl-10 pr-12 py-3 border rounded-xl shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 ${formik.touched.password && formik.errors.password
-                                    ? 'border-red-300 bg-red-50'
-                                    : 'border-gray-300 bg-white'
+                                ? 'border-red-300 bg-red-50'
+                                : 'border-gray-300 bg-white'
                                 }`}
                             placeholder="Create a strong password"
                         />
@@ -273,8 +277,8 @@ const NormalUserSignupForm = () => {
                             onChange={formik.handleChange}
                             onBlur={formik.handleBlur}
                             className={`block w-full pl-10 pr-12 py-3 border rounded-xl shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 ${formik.touched.confirmPassword && formik.errors.confirmPassword
-                                    ? 'border-red-300 bg-red-50'
-                                    : 'border-gray-300 bg-white'
+                                ? 'border-red-300 bg-red-50'
+                                : 'border-gray-300 bg-white'
                                 }`}
                             placeholder="Confirm your password"
                         />
@@ -308,8 +312,8 @@ const NormalUserSignupForm = () => {
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
                     className={`w-full py-3 px-4 border border-transparent rounded-xl shadow-sm text-sm font-medium text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all duration-200 ${formik.isSubmitting
-                            ? 'bg-gray-400 cursor-not-allowed'
-                            : 'bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700'
+                        ? 'bg-gray-400 cursor-not-allowed'
+                        : 'bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700'
                         }`}
                 >
                     {formik.isSubmitting ? (

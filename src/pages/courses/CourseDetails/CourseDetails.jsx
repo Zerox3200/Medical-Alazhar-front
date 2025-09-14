@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import './CourseDetails.scss'
 import { useQuery } from 'react-query';
-import { CoursesRequests } from '../../../Api/apiRequests';
+import { CoursesRequests, NormalUserRequests } from '../../../Api/apiRequests';
 import Loader from '../../../components/Loader';
 import { useParams, useNavigate, Link } from 'react-router';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -19,12 +19,20 @@ import {
     FaArrowLeft,
     FaChevronRight as FaChevronRightIcon
 } from 'react-icons/fa';
+import { useSelector } from 'react-redux';
+import toast from 'react-hot-toast';
+import { useCookies } from 'react-cookie';
+import { CheckSubscription } from '../../../helpers/CheckSubs';
 
 export default function CourseDetails() {
+
     const { courseId } = useParams();
     const navigate = useNavigate();
     const [expandedSections, setExpandedSections] = useState(new Set());
     const [expandedChapters, setExpandedChapters] = useState(new Set());
+    const [Token] = useCookies(['Al-Azhar']);
+
+    const user = useSelector((state) => state.auth.user);
 
     const { data: course, isLoading, isError, refetch } = useQuery({
         queryKey: ['course', courseId],
@@ -91,6 +99,36 @@ export default function CourseDetails() {
 
         return { totalVideos, totalDuration, totalSections, totalChapters };
     };
+
+
+    const HandleWatchVideoNavigate = (videoId) => {
+        const userId = user?._id;
+        const CheckSubscription = course?.NormalUserSubscriptions?.some(subscription => subscription.userId.toString() === userId.toString());
+
+        if (CheckSubscription) {
+            navigate(`/courses/${courseId}/video/${videoId}`);
+        } else {
+            toast.error("You are not subscribed to this course yet");
+        }
+    }
+
+
+    const HandleSubscribeToCourse = async () => {
+        const userId = user?._id;
+
+        const CheckSubscription = course?.NormalUserSubscriptions?.some(subscription => subscription.userId.toString() === userId.toString());
+        if (CheckSubscription) {
+            return toast.error("You are already subscribed to this course");
+        }
+
+        const response = await NormalUserRequests.subscribeToCourse(courseId, Token['Al-Azhar']);
+        if (response?.success) {
+            toast.success("You are now subscribed to this course");
+            refetch();
+        } else {
+            return toast.error("Failed to subscribe to this course");
+        }
+    }
 
     useEffect(() => {
         window.scrollTo(0, 0);
@@ -300,9 +338,9 @@ export default function CourseDetails() {
                                                                                         </div>
                                                                                     </div>
                                                                                     <div className="video-actions">
-                                                                                        <Link to={`/courses/${courseId}/video/${video._id}`} className="watch-btn">
+                                                                                        <button onClick={() => HandleWatchVideoNavigate(video._id)} className="watch-btn">
                                                                                             <FaPlay />
-                                                                                        </Link>
+                                                                                        </button>
                                                                                     </div>
                                                                                 </div>
                                                                             </div>
@@ -325,26 +363,22 @@ export default function CourseDetails() {
                     <div className="sidebar">
                         <div className="enrollment-card">
                             <div className="price">
-                                {course?.paid ? (
+                                {course?.paid && !CheckSubscription(course?.NormalUserSubscriptions, user?._id) ? (
                                     <span className="price-amount">${course.price}</span>
-                                ) : (
+
+                                ) : !course?.paid ? (
                                     <span className="price-free">Free</span>
-                                )}
+
+                                ) : null}
                             </div>
 
-                            <button className="enroll-button">
-                                {course?.paid ? (
-                                    <>
-                                        <FaCrown />
-                                        Enroll Now
-                                    </>
-                                ) : (
-                                    <>
-                                        <FaUnlock />
-                                        Start Learning
-                                    </>
-                                )}
-                            </button>
+                            {course?.paid ? <button className="enroll-button" onClick={HandleSubscribeToCourse}>
+                                {CheckSubscription(course?.NormalUserSubscriptions, user?._id) ? "Already Enrolled" : "Enroll Now"}
+                            </button> : <button className="enroll-button">
+                                <FaUnlock />
+                                Start Learning
+                            </button>}
+
 
                             <div className="course-includes">
                                 <h4>This course includes:</h4>

@@ -15,6 +15,7 @@ import {
     FaDollarSign,
     FaLock,
     FaUnlock,
+    FaUsers,
 } from 'react-icons/fa';
 import { toast } from 'react-hot-toast';
 
@@ -24,6 +25,7 @@ import CourseHeader from './components/CourseHeader';
 import CourseStats from './components/CourseStats';
 import VideoPlayerPopup from '../components/VideoPlayerPopup';
 import CoursePricingForm from './components/CoursePricingForm';
+import SubscribersTable from './components/SubscribersTable';
 
 export default function CourseVedios() {
     const { courseId } = useParams();
@@ -229,7 +231,7 @@ export default function CourseVedios() {
 
                         {/* Tab Navigation */}
                         <div className="border-b border-gray-200">
-                            <nav className="grid lg:grid-cols-3 grid-cols-1 gap-4  px-6">
+                            <nav className="grid lg:grid-cols-4 grid-cols-2 gap-4  px-6">
                                 <button
                                     onClick={() => setActiveTab('sections')}
                                     className={`py-4 px-1 border-b-2 font-medium text-sm transition-colors duration-200 ${activeTab === 'sections'
@@ -264,6 +266,18 @@ export default function CourseVedios() {
                                     <div className="flex items-center space-x-2">
                                         <FaBook className="text-sm" />
                                         <span>All Quizzes</span>
+                                    </div>
+                                </button>
+                                <button
+                                    onClick={() => setActiveTab('subscribers')}
+                                    className={`py-4 px-1 border-b-2 font-medium text-sm transition-colors duration-200 ${activeTab === 'subscribers'
+                                        ? 'border-blue-500 text-blue-600'
+                                        : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                                        }`}
+                                >
+                                    <div className="flex items-center space-x-2">
+                                        <FaUsers className="text-sm" />
+                                        <span>Subscribers</span>
                                     </div>
                                 </button>
                             </nav>
@@ -486,6 +500,23 @@ export default function CourseVedios() {
                                             ))}
                                         </div>
                                     )}
+                                </div>
+                            )}
+
+                            {activeTab === 'subscribers' && (
+                                <div className="space-y-6">
+                                    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                                        <div>
+                                            <h4 className="text-lg font-semibold text-gray-800 mb-1">Course Subscribers</h4>
+                                            <p className="text-sm text-gray-600">
+                                                View all users who have subscribed to this course
+                                            </p>
+                                        </div>
+                                    </div>
+
+                                    <SubscribersTable
+                                        subscribers={courseMainData?.NormalUserSubscriptions || []}
+                                    />
                                 </div>
                             )}
 

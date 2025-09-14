@@ -8,6 +8,7 @@ import { IoCalendarClear } from "react-icons/io5";
 import { BsFillGearFill } from "react-icons/bs";
 import { FaHospital, FaStethoscope, FaUsers, FaGlobe, FaEnvelope } from "react-icons/fa";
 import { IoTimeSharp } from "react-icons/io5";
+import { FaUserDoctor } from "react-icons/fa6";
 
 const DashboardLinks = [
   {
@@ -42,6 +43,12 @@ const DashboardLinks = [
   },
   {
     icon: <FaUsers />,
+    label: "Users",
+    value: "/admin/users",
+    description: "Normal Users management"
+  },
+  {
+    icon: <FaUserDoctor />,
     label: "Supervisors",
     value: "/admin/supervisors",
     description: "Supervisor management"
@@ -52,12 +59,12 @@ const DashboardLinks = [
     value: "/admin/interns",
     description: "Intern management"
   },
-  {
-    icon: <BsFillGearFill />,
-    label: "Settings",
-    value: "settings",
-    description: "System configuration"
-  },
+  // {
+  //   icon: <BsFillGearFill />,
+  //   label: "Settings",
+  //   value: "settings",
+  //   description: "System configuration"
+  // },
   {
     icon: <FaEnvelope />,
     label: "Messages",

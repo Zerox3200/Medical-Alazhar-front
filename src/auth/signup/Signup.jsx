@@ -7,7 +7,7 @@ import SupervisorSignupForm from "./SupervisorSignupForm";
 import NormalUserSignupForm from "./NormalUserSignupForm";
 
 const Signup = () => {
-  const [selectedUser, setSelectedUser] = useState("supervisor");
+  const [selectedUser, setSelectedUser] = useState("intern");
 
   const containerVariants = {
     hidden: { opacity: 0, y: 20 },

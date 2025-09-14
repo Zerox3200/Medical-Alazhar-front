@@ -14,6 +14,7 @@ import AdminLayout from "../layouts/AdminLayout.jsx";
 import SupervisorProfile from "../admin/supervisors/profile/Index.jsx";
 import UpdateCourse from "../admin/courses/UpdateCourse.jsx";
 import UpdateQuizes from "../admin/courses/UpdateQueizzes.jsx";
+import Users from "../admin/Users/Users.jsx";
 
 const CourseVideos = lazy(() => import("../admin/courses/CourseVedios.jsx"));
 const AddQuizes = lazy(() => import("../admin/courses/AddQuizes.jsx"));
@@ -56,6 +57,10 @@ const AdminRoutes = [
           {
             path: "/admin/supervisors",
             element: <Supervisors />,
+          },
+          {
+            path: "/admin/users",
+            element: <Users />,
           },
           {
             path: "/admin/supervisors/:supervisorId",
