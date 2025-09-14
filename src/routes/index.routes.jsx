@@ -11,7 +11,7 @@ import ProtectedRoute from "../utils/ProtectedRoute.jsx";
 import Overview from "../pages/courses/AllCourses/Overview.jsx";
 import ContactUs from "../interns/ContactUs.jsx";
 import CourseDetails from "../pages/courses/CourseDetails/CourseDetails.jsx";
-import UserRoutes from "./user.routes.jsx";
+import UserRoutes from "./User.routes.jsx";
 
 const Courses = lazy(() => import("../pages/courses/AllCourses/AllCourses.jsx"));
 const VideoPlayer = lazy(() => import("../pages/courses/VideoPlayer/VideoPlayer.jsx"));
