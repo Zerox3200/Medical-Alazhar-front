@@ -66,16 +66,15 @@ const Login = () => {
         toast.success(message);
         dispatch(setAuth({ token: accessToken, user: data?.data }));
         setToken("Al-Azhar", accessToken);
+        window.location.reload();
 
-        if (data?.user?.role === "admin") {
+        if (data?.data?.role === "admin") {
           navigate("/admin");
-        } else if (data?.user?.role === "supervisor") {
+        } else if (data?.data?.role === "supervisor") {
           navigate("/supervisor/dashboard");
         } else {
           navigate("/");
         }
-
-        window.location.reload();
 
       }
 
